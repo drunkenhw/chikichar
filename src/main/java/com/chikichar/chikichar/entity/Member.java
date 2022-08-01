@@ -10,6 +10,14 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  id = 회원 번호 (index)
+ *  email = 회원 email < 로그인 시 사용
+ *  memberRole = 일반, 업체, 관리자
+ *  name = 일반 회원은 자기이름, 업체 회원은 업체 이름 사용
+ *
+ */
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
