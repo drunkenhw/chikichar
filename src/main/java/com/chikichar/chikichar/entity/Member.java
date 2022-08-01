@@ -2,6 +2,7 @@ package com.chikichar.chikichar.entity;
 
 import com.chikichar.chikichar.entity.base.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -38,4 +39,13 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();
+
+    @Builder
+    public Member(String email, MemberRole memberRole, String name, String password, Address address) {
+        this.email = email;
+        this.memberRole = memberRole;
+        this.name = name;
+        this.password = password;
+        this.address = address;
+    }
 }

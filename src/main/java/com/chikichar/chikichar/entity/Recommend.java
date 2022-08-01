@@ -24,5 +24,4 @@ public class Recommend {
     @JoinColumn(name = "article_id")
     private Article article;
 
-
 }
