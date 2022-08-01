@@ -15,11 +15,11 @@ public class Recommend {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "recommend_id")
     private Long id;
-
+//asdadasd
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-//asdasdasdsasdadasdasd
+//asdasdasds
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
