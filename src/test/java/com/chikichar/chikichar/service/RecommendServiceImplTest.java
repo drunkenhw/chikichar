@@ -30,13 +30,15 @@ class RecommendServiceImplTest {
     @Test
     @DisplayName("추천 중복 방지 테스트")
     public void recommendTest(){
-        Member member = Member.builder().email("AAA").build();
-        memberRepository.save(member);
-        Article article = Article.builder().member(member).title("AA").boardType(BoardType.FOOD).content("aa").build();
+        Member writer = Member.builder().email("AAA").build();
+        memberRepository.save(writer);
+        Member reader = Member.builder().email("BBB").build();
+        memberRepository.save(reader);
+        Article article = Article.builder().member(writer).title("AA").boardType(BoardType.FOOD).content("aa").build();
         articleRepository.save(article);
 
-        boolean firstRecommend = recommendService.addRecommend(member.getId(), article.getId());
-        boolean secondRecommend = recommendService.addRecommend(member.getId(), article.getId());
+        boolean firstRecommend = recommendService.addRecommend(reader.getId(), article.getId());
+        boolean secondRecommend = recommendService.addRecommend(reader.getId(), article.getId());
 
         assertThat(firstRecommend).isEqualTo(true);
         assertThat(secondRecommend).isEqualTo(false);
