@@ -28,6 +28,6 @@ public class Recommend {
         this.member = member;
         this.article = article;
         article.getRecommends().add(this);
-        member.pointUp();
+        article.getMember().pointUp();
     }
 }
