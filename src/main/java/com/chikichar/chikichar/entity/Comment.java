@@ -19,7 +19,7 @@ import javax.persistence.*;
 public class Comment extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private Long id;
 
@@ -32,4 +32,10 @@ public class Comment extends BaseEntity {
     private Member member;
 
     private String content;
+
+    public Comment(Article article, Member member, String content) {
+        this.article = article;
+        this.member = member;
+        this.content = content;
+    }
 }

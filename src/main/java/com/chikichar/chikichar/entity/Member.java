@@ -15,7 +15,7 @@ import java.util.List;
  *  email = 회원 email < 로그인 시 사용
  *  memberRole = 일반, 업체, 관리자
  *  name = 일반 회원은 자기이름, 업체 회원은 업체 이름 사용
- *
+ *  point = 회원 포인트 (할인 가능)
  */
 
 @Entity
@@ -24,7 +24,7 @@ import java.util.List;
 public class Member extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
@@ -38,7 +38,7 @@ public class Member extends BaseEntity {
 
     private String password;
 
-
+    private int point;
     @Embedded
     private Address address;
 
@@ -55,5 +55,9 @@ public class Member extends BaseEntity {
         this.name = name;
         this.password = password;
         this.address = address;
+    }
+
+    public void pointUp(){
+        this.point += 1;
     }
 }

@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class Recommend {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "recommend_id")
     private Long id;
 
@@ -24,4 +24,10 @@ public class Recommend {
     @JoinColumn(name = "article_id")
     private Article article;
 
+    public Recommend(Member member, Article article) {
+        this.member = member;
+        this.article = article;
+        article.getRecommends().add(this);
+        member.pointUp();
+    }
 }
