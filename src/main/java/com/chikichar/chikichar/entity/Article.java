@@ -25,7 +25,7 @@ import java.util.List;
 public class Article extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_id")
     private Long id;
 
@@ -56,7 +56,7 @@ public class Article extends BaseEntity {
     @OneToOne(mappedBy = "article")
     private Item item;
 
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article",cascade = CascadeType.ALL)
     private List<ArticleImage> articleImages = new ArrayList<>();
 
     @OneToMany(mappedBy = "article")
@@ -74,6 +74,7 @@ public class Article extends BaseEntity {
         this.locationX = locationX;
         this.locationY = locationY;
     }
+
 
 
 }

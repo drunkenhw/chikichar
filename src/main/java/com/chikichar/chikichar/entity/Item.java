@@ -1,6 +1,7 @@
 package com.chikichar.chikichar.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +20,7 @@ import javax.persistence.*;
 public class Item {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
     private Long id;
 
@@ -35,4 +36,12 @@ public class Item {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
+    @Builder
+    public Item(String itemName, int price, String madeAt, Address address, Article article) {
+        this.itemName = itemName;
+        this.price = price;
+        this.madeAt = madeAt;
+        this.address = address;
+        this.article = article;
+    }
 }
