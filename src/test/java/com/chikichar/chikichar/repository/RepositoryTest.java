@@ -1,11 +1,15 @@
 package com.chikichar.chikichar.repository;
 
 import com.chikichar.chikichar.entity.*;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
+
+import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 class RepositoryTest {
@@ -23,6 +27,7 @@ class RepositoryTest {
     private RecommendRepository recommendRepository;
 
     @Test
+    @DisplayName("더미 데이터 삽입 테스트")
     public void dummyTest(){
         Member member = Member.builder()
                 .email("dummy@dummy.com")
@@ -35,17 +40,16 @@ class RepositoryTest {
                 .password("dsadasdsad")
                 .memberRole(MemberRole.ADMIN)
                 .build();
-        Member savedMember = memberRepository.save(member);
+        Member saveMember = memberRepository.save(member);
 
         Article article = Article.builder()
-                .member(savedMember)
+                .member(saveMember)
                 .title("제목")
                 .content("내용")
                 .boardType(BoardType.FOOD)
                 .locationX(32.2323)
                 .locationY(32.4321312)
                 .build();
-
         Article saveArticle = articleRepository.save(article);
 
         Item item = Item.builder()
@@ -54,11 +58,9 @@ class RepositoryTest {
                 .madeAt("DIY")
                 .price(101000)
                 .build();
-
         Item saveItem = itemRepository.save(item);
 
-        Comment comment = new Comment(saveArticle,savedMember,"!@#!@#!@#!@");
-
+        Comment comment = new Comment(saveArticle,saveMember,"좋아요");
         Comment saveComment = commentRepository.save(comment);
 
         ArticleImage articleImage = ArticleImage.builder()
@@ -67,14 +69,18 @@ class RepositoryTest {
                 .uuid("$#@$@DFSERWER#@$@")
                 .path("//23//s")
                 .build();
-
         ArticleImage saveImage = articleImageRepository.save(articleImage);
 
-        Recommend recommend = new Recommend(savedMember,saveArticle);
-
+        Recommend recommend = new Recommend(saveMember,saveArticle);
         Recommend saveRecommend = recommendRepository.save(recommend);
 
-        System.out.println("saveArticle = " + saveArticle.getRecommends());
+
+        assertThat(saveMember.getId()).isEqualTo(1);
+        assertThat(saveArticle.getId()).isEqualTo(1);
+        assertThat(saveItem.getId()).isEqualTo(1);
+        assertThat(saveComment.getId()).isEqualTo(1);
+        assertThat(saveImage.getId()).isEqualTo(1);
+        assertThat(saveRecommend.getId()).isEqualTo(1);
 
     }
 

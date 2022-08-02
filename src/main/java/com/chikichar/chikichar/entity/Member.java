@@ -48,6 +48,9 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member")
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+    private List<Recommend> recommends = new ArrayList<>();
+
     @Builder
     public Member(String email, MemberRole memberRole, String name, String password, Address address) {
         this.email = email;
