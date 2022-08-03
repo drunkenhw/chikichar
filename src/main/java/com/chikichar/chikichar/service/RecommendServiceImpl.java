@@ -28,7 +28,6 @@ public class RecommendServiceImpl implements RecommendService{
         Article findArticle = articleRepository.findById(articleId).orElseThrow();
 
         if(isAlreadyRecommend(findMember, findArticle)){
-            cancelRecommend(findMember,findArticle);
             return false;
         }
         recommendRepository.save(new Recommend(findMember,findArticle));
@@ -37,13 +36,18 @@ public class RecommendServiceImpl implements RecommendService{
     }
 
     private boolean isAlreadyRecommend(Member member, Article article) {
-        return recommendRepository.findByMemberAndArticle(member,article).isPresent();
+        Optional<Recommend> findRecommend = recommendRepository.findByMemberAndArticle(member, article);
+        if(findRecommend.isPresent()){
+            cancelRecommend(article, findRecommend);
+        }
+        return findRecommend.isPresent();
     }
 
-    private void cancelRecommend(Member member, Article article) {
-        Recommend findArticle = recommendRepository.findByMemberAndArticle(member, article).orElseThrow();
-        recommendRepository.delete(findArticle);
+    private void cancelRecommend(Article article, Optional<Recommend> findRecommend) {
+        Recommend recommend = findRecommend.get();
+        recommendRepository.delete(recommend);
         article.getMember().pointDown();
-
     }
+
+
 }
