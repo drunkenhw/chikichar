@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 
 
 @Service
@@ -27,6 +28,7 @@ public class RecommendServiceImpl implements RecommendService{
         Article findArticle = articleRepository.findById(articleId).orElseThrow();
 
         if(isAlreadyRecommend(findMember, findArticle)){
+            cancelRecommend(findMember,findArticle);
             return false;
         }
         recommendRepository.save(new Recommend(findMember,findArticle));
@@ -36,5 +38,12 @@ public class RecommendServiceImpl implements RecommendService{
 
     private boolean isAlreadyRecommend(Member member, Article article) {
         return recommendRepository.findByMemberAndArticle(member,article).isPresent();
+    }
+
+    private void cancelRecommend(Member member, Article article) {
+        Recommend findArticle = recommendRepository.findByMemberAndArticle(member, article).orElseThrow();
+        recommendRepository.delete(findArticle);
+        article.getMember().pointDown();
+
     }
 }
