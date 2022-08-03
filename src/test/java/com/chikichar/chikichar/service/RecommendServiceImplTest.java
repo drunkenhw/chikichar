@@ -31,14 +31,15 @@ class RecommendServiceImplTest {
         Member saveWriter = memberRepository.save(writer);
         Member reader = Member.builder().email("BBB").build();
         Member saveReader = memberRepository.save(reader);
-        Article article = Article.builder().member(writer).title("AA").boardType(BoardType.FOOD).content("aa").build();
+        Article article = Article.builder().member(saveWriter).title("AA").boardType(BoardType.FOOD).content("aa").build();
         Article saveArticle = articleRepository.save(article);
-
         boolean firstRecommend = recommendService.addRecommend(saveReader.getId(), saveArticle.getId());
         boolean secondRecommend = recommendService.addRecommend(saveReader.getId(), saveArticle.getId());
+        boolean thirdRecommend = recommendService.addRecommend(saveReader.getId(), saveArticle.getId());
 
-        assertThat(firstRecommend).isEqualTo(true);
-        assertThat(secondRecommend).isEqualTo(false);
+        assertThat(firstRecommend).isEqualTo(true);  //처음 추천 시 true 반환 및 회원 포인트 +1
+        assertThat(secondRecommend).isEqualTo(false); //두번째 추천 시 false 반환 및 회원 포인트 -1
+        assertThat(thirdRecommend).isEqualTo(true); //세번째 추천 시 true 반환 및 회원 포인트 +1
 
     }
 }

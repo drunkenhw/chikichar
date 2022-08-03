@@ -66,4 +66,5 @@ public class Member extends BaseEntity {
     public void pointUp(){
         this.point += 1;
     }
+    public void pointDown() { this.point -= 1;}
 }
