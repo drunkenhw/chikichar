@@ -1,4 +1,4 @@
-package com.chikichar.chikichar.entity.base;
+package com.chikichar.chikichar.model;
 
 import java.time.LocalDateTime;
 

@@ -1,5 +1,6 @@
 package com.chikichar.chikichar.entity;
 
+import com.chikichar.chikichar.model.Address;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

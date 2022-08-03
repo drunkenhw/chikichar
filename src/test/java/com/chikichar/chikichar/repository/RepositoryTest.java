@@ -1,13 +1,14 @@
 package com.chikichar.chikichar.repository;
 
 import com.chikichar.chikichar.entity.*;
-import org.assertj.core.api.Assertions;
+import com.chikichar.chikichar.member.domain.Member;
+import com.chikichar.chikichar.member.repository.MemberRepository;
+import com.chikichar.chikichar.model.Address;
+import com.chikichar.chikichar.model.MemberRole;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -16,7 +17,7 @@ class RepositoryTest {
     @Autowired
     private  ArticleRepository articleRepository;
     @Autowired
-    private  MemberRepository memberRepository;
+    private MemberRepository memberRepository;
     @Autowired
     private  ItemRepository itemRepository;
     @Autowired

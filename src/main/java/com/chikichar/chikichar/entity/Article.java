@@ -1,6 +1,7 @@
 package com.chikichar.chikichar.entity;
 
-import com.chikichar.chikichar.entity.base.BaseEntity;
+import com.chikichar.chikichar.model.BaseEntity;
+import com.chikichar.chikichar.member.domain.Member;
 import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -53,8 +54,6 @@ public class Article extends BaseEntity {
     @Column(name = "location_y")
     private double locationY;
 
-    @OneToOne(mappedBy = "article")
-    private Item item;
 
     @OneToMany(mappedBy = "article",cascade = CascadeType.ALL)
     private List<ArticleImage> articleImages = new ArrayList<>();

@@ -1,6 +1,9 @@
-package com.chikichar.chikichar.entity;
+package com.chikichar.chikichar.member.domain;
 
-import com.chikichar.chikichar.entity.base.BaseEntity;
+import com.chikichar.chikichar.entity.*;
+import com.chikichar.chikichar.model.BaseEntity;
+import com.chikichar.chikichar.model.Address;
+import com.chikichar.chikichar.model.MemberRole;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
