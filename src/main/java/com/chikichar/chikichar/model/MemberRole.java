@@ -1,4 +1,4 @@
-package com.chikichar.chikichar.entity;
+package com.chikichar.chikichar.model;
 
 /**
  * USER = 일반 유저
