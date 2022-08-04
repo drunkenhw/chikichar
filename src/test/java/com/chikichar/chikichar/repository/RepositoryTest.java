@@ -47,7 +47,6 @@ class RepositoryTest {
                 .member(saveMember)
                 .title("제목")
                 .content("내용")
-                .boardType(BoardType.FOOD)
                 .locationX(32.2323)
                 .locationY(32.4321312)
                 .build();
@@ -76,12 +75,12 @@ class RepositoryTest {
         Recommend saveRecommend = recommendRepository.save(recommend);
 
 
-        assertThat(saveMember.getId()).isEqualTo(1);
-        assertThat(saveArticle.getId()).isEqualTo(1);
-        assertThat(saveItem.getId()).isEqualTo(1);
-        assertThat(saveComment.getId()).isEqualTo(1);
-        assertThat(saveImage.getId()).isEqualTo(1);
-        assertThat(saveRecommend.getId()).isEqualTo(1);
+        assertThat(saveMember.getId()).isEqualTo(member.getId());
+        assertThat(saveArticle.getId()).isEqualTo(article.getId());
+        assertThat(saveItem.getId()).isEqualTo(item.getId());
+        assertThat(saveComment.getId()).isEqualTo(comment.getId());
+        assertThat(saveImage.getId()).isEqualTo(articleImage.getId());
+        assertThat(saveRecommend.getId()).isEqualTo(recommend.getId());
 
     }
 

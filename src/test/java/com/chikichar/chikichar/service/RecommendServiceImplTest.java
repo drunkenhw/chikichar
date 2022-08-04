@@ -6,10 +6,12 @@ import com.chikichar.chikichar.member.domain.Member;
 import com.chikichar.chikichar.repository.ArticleRepository;
 import com.chikichar.chikichar.member.repository.MemberRepository;
 import com.chikichar.chikichar.repository.RecommendRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -24,21 +26,27 @@ class RecommendServiceImplTest {
     private RecommendRepository recommendRepository;
     @Autowired
     private RecommendService recommendService;
-    
+
+
+    @BeforeEach
+    public void beforeEach(){
+        Member writer = Member.builder().email("AAA").build();
+        Member saveWriter = memberRepository.save(writer);
+        Member reader = Member.builder().email("BBB").build();
+        Member saveReader = memberRepository.save(reader);
+        Article article = Article.builder().member(saveWriter).title("AA").content("aa").build();
+        Article saveArticle = articleRepository.save(article);
+    }
     @Test
     @DisplayName("추천 중복 방지 테스트")
     @Transactional
+    @Commit
     public void recommendTest(){
-        Member writer = Member.builder().email("AAA").build();
-        memberRepository.save(writer);
+
         Member saveWriter = memberRepository.findById(1L).orElseThrow();
-
-        Member reader = Member.builder().email("BBB").build();
-        memberRepository.save(reader);
         Member saveReader = memberRepository.findById(2L).orElseThrow();
+        Article saveArticle = articleRepository.findById(1L).orElseThrow();
 
-        Article article = Article.builder().member(saveWriter).title("AA").boardType(BoardType.FOOD).content("aa").build();
-        Article saveArticle = articleRepository.save(article);
 
         boolean firstRecommend = recommendService.addRecommend(saveReader.getId(), saveArticle.getId());
         assertThat(saveWriter.getPoint()).isEqualTo(1);// 회원 포인트 +1
