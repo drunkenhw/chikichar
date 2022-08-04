@@ -31,6 +31,9 @@ public class Article extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -43,10 +46,6 @@ public class Article extends BaseEntity {
     @Column(nullable = false)
     private String  content;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    @Column(nullable = false)
-    private BoardType boardType;
 
     @Column(name = "location_x")
     private double locationX;
@@ -65,11 +64,10 @@ public class Article extends BaseEntity {
     private  List<Recommend> recommends = new ArrayList<>();
 
     @Builder
-    public Article(Member member, String title, String content, BoardType boardType, double locationX, double locationY) {
+    public Article(Member member, String title, String content,  double locationX, double locationY) {
         this.member = member;
         this.title = title;
         this.content = content;
-        this.boardType = boardType;
         this.locationX = locationX;
         this.locationY = locationY;
     }

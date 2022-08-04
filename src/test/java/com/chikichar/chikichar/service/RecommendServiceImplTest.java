@@ -34,7 +34,7 @@ class RecommendServiceImplTest {
         Member saveWriter = memberRepository.save(writer);
         Member reader = Member.builder().email("BBB").build();
         Member saveReader = memberRepository.save(reader);
-        Article article = Article.builder().member(saveWriter).title("AA").boardType(BoardType.FOOD).content("aa").build();
+        Article article = Article.builder().member(saveWriter).title("AA").content("aa").build();
         Article saveArticle = articleRepository.save(article);
     }
     @Test
