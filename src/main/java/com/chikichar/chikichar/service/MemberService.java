@@ -5,10 +5,11 @@ import com.chikichar.chikichar.member.dto.ModifyForm;
 
 public interface MemberService {
 
-    Long signIn(JoinForm joinForm);
+    Long joinAccount(JoinForm joinForm);
 
-    //TODO 변수명 바꿔야함
-    void signOut(long memberId);
+    void deleteAccount(long memberId);
 
     void modifyInfo(ModifyForm modifyForm);
+
+
 }

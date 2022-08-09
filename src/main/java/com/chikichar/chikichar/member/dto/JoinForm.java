@@ -7,6 +7,7 @@ import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
@@ -36,6 +37,6 @@ public class JoinForm {
     @NonNull
     private Brand brand;
 
-    @NotBlank
+    @NotNull
     private MemberRole memberRole;
 }
