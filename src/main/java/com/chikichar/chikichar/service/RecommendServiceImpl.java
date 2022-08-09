@@ -23,14 +23,15 @@ public class RecommendServiceImpl implements RecommendService{
 
     @Transactional
     @Override
-    public boolean addRecommend(Long memberId, Long articleId) {
+    public boolean clickRecommend(Long memberId, Long articleId) {
+        //TODO Exception 처리 해야함
         Member findMember = memberRepository.findById(memberId).orElseThrow();
         Article findArticle = articleRepository.findById(articleId).orElseThrow();
 
         if(isAlreadyRecommend(findMember, findArticle)){
             return false;
         }
-        recommendRepository.save(new Recommend(findMember,findArticle));
+        recommendRepository.save(Recommend.of(findMember,findArticle));
         return true;
 
     }

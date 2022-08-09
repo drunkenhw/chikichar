@@ -14,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
@@ -27,16 +29,16 @@ class RecommendServiceImplTest {
     @Autowired
     private RecommendService recommendService;
 
-
     @BeforeEach
-    public void beforeEach(){
+    void beforeEach(){
         Member writer = Member.builder().email("AAA").build();
         Member saveWriter = memberRepository.save(writer);
         Member reader = Member.builder().email("BBB").build();
-        Member saveReader = memberRepository.save(reader);
+        memberRepository.save(reader);
         Article article = Article.builder().member(saveWriter).title("AA").content("aa").build();
         Article saveArticle = articleRepository.save(article);
     }
+
     @Test
     @DisplayName("추천 중복 방지 테스트")
     @Transactional
@@ -48,18 +50,19 @@ class RecommendServiceImplTest {
         Article saveArticle = articleRepository.findById(1L).orElseThrow();
 
 
-        boolean firstRecommend = recommendService.addRecommend(saveReader.getId(), saveArticle.getId());
+        boolean firstRecommend = recommendService.clickRecommend(saveReader.getId(), saveArticle.getId());
         assertThat(saveWriter.getPoint()).isEqualTo(1);// 회원 포인트 +1
 
-        boolean secondRecommend = recommendService.addRecommend(saveReader.getId(), saveArticle.getId());
+        boolean secondRecommend = recommendService.clickRecommend(saveReader.getId(), saveArticle.getId());
         assertThat(saveWriter.getPoint()).isEqualTo(0);// 회원 포인트 -1
 
-        boolean thirdRecommend = recommendService.addRecommend(saveReader.getId(), saveArticle.getId());
+        boolean thirdRecommend = recommendService.clickRecommend(saveReader.getId(), saveArticle.getId());
         assertThat(saveWriter.getPoint()).isEqualTo(1);// 회원 포인트 +1
 
         assertThat(firstRecommend).isEqualTo(true);  //처음 추천 시 true 반환
         assertThat(secondRecommend).isEqualTo(false); //두번째 추천 시 false 반환
         assertThat(thirdRecommend).isEqualTo(true); //세번째 추천 시 true 반환
+
 
     }
 }

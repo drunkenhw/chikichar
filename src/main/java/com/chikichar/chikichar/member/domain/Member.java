@@ -3,6 +3,7 @@ package com.chikichar.chikichar.member.domain;
 import com.chikichar.chikichar.entity.*;
 import com.chikichar.chikichar.model.BaseEntity;
 import com.chikichar.chikichar.model.Address;
+import com.chikichar.chikichar.model.Brand;
 import com.chikichar.chikichar.model.MemberRole;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import java.util.List;
 
 /**
  *  id = 회원 번호 (index)
- *  email = 회원 email < 로그인 시 사용
+ *  email = 회원 email < 로그인 시 사용 (아이디)
  *  memberRole = 일반, 업체, 관리자
  *  name = 일반 회원은 자기이름, 업체 회원은 업체 이름 사용
  *  point = 회원 포인트 (할인 가능)
@@ -34,34 +35,47 @@ public class Member extends BaseEntity {
     @Column(unique = true)
     private String email;
 
-    @Enumerated(EnumType.STRING)
-    private MemberRole memberRole;
-
     private String name;
 
     private String password;
 
-    private int point;
+    @Column(unique = true)
+    private String nickname;
+
+    private String phone;
+
     @Embedded
     private Address address;
 
-    @OneToMany(mappedBy = "member")
-    private List<Article> articles = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    private Brand brand;
 
-    @OneToMany(mappedBy = "member")
-    private List<Comment> comments = new ArrayList<>();
+    private int point;
 
-    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
-    private List<Recommend> recommends = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    private MemberRole memberRole;
 
     @Builder
-    public Member(String email, MemberRole memberRole, String name, String password, Address address) {
+    public Member(String email, String name, String password, String nickname, String phone, Address address, Brand brand, MemberRole memberRole) {
         this.email = email;
-        this.memberRole = memberRole;
         this.name = name;
         this.password = password;
+        this.nickname = nickname;
+        this.phone = phone;
         this.address = address;
+        this.brand = brand;
+        this.memberRole = memberRole;
     }
+
+    public void modifyMember(String password,String nickname,Address address, String phone,Brand brand){
+        this.password = password;
+        this.nickname = nickname;
+        this.address = address;
+        this.phone = phone;
+        this.brand = brand;
+    }
+
+
 
     public void pointUp(){
         this.point += 1;

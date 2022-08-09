@@ -54,14 +54,6 @@ public class Article extends BaseEntity {
     private double locationY;
 
 
-    @OneToMany(mappedBy = "article",cascade = CascadeType.ALL)
-    private List<ArticleImage> articleImages = new ArrayList<>();
-
-    @OneToMany(mappedBy = "article")
-    private List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "article")
-    private  List<Recommend> recommends = new ArrayList<>();
 
     @Builder
     public Article(Member member, String title, String content,  double locationX, double locationY) {
@@ -71,6 +63,8 @@ public class Article extends BaseEntity {
         this.locationX = locationX;
         this.locationY = locationY;
     }
+
+
 
 
 
