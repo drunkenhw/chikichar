@@ -39,19 +39,18 @@ class MemberServiceImplTest {
                 .name("han")
                 .build();
 
-        Long saveMemberId = memberService.signIn(joinForm);
+        Long saveMemberId = memberService.joinAccount(joinForm);
         Optional<Member> saveMember = memberRepository.findById(saveMemberId);
         //가입 테스트
         Assertions.assertThat(saveMember.isPresent()).isEqualTo(true);
-
-        memberService.signOut(saveMemberId);
+        memberService.deleteAccount(saveMemberId);
         Optional<Member> deleteMember = memberRepository.findById(saveMemberId);
         //탈퇴 테스트
         Assertions.assertThat(deleteMember.isPresent()).isEqualTo(false);
     }
     @Test
     @DisplayName("회원 정보 수정 테스트")
-    void modifyTest() throws InterruptedException {
+    void modifyTest()  {
         JoinForm joinForm = JoinForm.builder()
                 .address(new Address("a","a","a"))
                 .brand(Brand.AUDI)
@@ -63,7 +62,7 @@ class MemberServiceImplTest {
                 .name("han")
                 .build();
 
-        Long saveMemberId = memberService.signIn(joinForm);
+        Long saveMemberId = memberService.joinAccount(joinForm);
 
         ModifyForm modifyForm = ModifyForm.builder()
                 .id(saveMemberId)

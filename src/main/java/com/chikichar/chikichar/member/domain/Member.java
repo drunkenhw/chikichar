@@ -1,18 +1,13 @@
 package com.chikichar.chikichar.member.domain;
 
-import com.chikichar.chikichar.entity.*;
 import com.chikichar.chikichar.model.BaseEntity;
 import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.Brand;
 import com.chikichar.chikichar.model.MemberRole;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  *  id = 회원 번호 (index)
@@ -24,6 +19,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 

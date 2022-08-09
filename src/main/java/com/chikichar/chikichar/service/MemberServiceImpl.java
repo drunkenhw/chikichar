@@ -5,11 +5,13 @@ import com.chikichar.chikichar.member.dto.JoinForm;
 import com.chikichar.chikichar.member.dto.ModifyForm;
 import com.chikichar.chikichar.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly=true)
@@ -18,7 +20,7 @@ public class MemberServiceImpl implements MemberService{
 
     @Transactional
     @Override
-    public Long signIn(JoinForm joinForm) {
+    public Long joinAccount(JoinForm joinForm) {
         //TODO password Encoding 해야함
         Member member = Member.builder()
                 .email(joinForm.getEmail())
@@ -31,14 +33,13 @@ public class MemberServiceImpl implements MemberService{
                 .memberRole(joinForm.getMemberRole())
                 .build();
         Member savedMember = memberRepository.save(member);
-
         return savedMember.getId();
 
     }
 
     @Transactional
     @Override
-    public void signOut(long memberId) {
+    public void deleteAccount(long memberId) {
         memberRepository.deleteById(memberId);
     }
 
