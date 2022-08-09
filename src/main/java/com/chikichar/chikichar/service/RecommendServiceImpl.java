@@ -38,13 +38,13 @@ public class RecommendServiceImpl implements RecommendService{
     private boolean isAlreadyRecommend(Member member, Article article) {
         Optional<Recommend> findRecommend = recommendRepository.findByMemberAndArticle(member, article);
         if(findRecommend.isPresent()){
-            cancelRecommend(article, findRecommend);
+            Recommend recommend = findRecommend.get();
+            cancelRecommend(article, recommend);
         }
         return findRecommend.isPresent();
     }
 
-    private void cancelRecommend(Article article, Optional<Recommend> findRecommend) {
-        Recommend recommend = findRecommend.get();
+    private void cancelRecommend(Article article, Recommend recommend) {
         recommendRepository.delete(recommend);
         article.getMember().pointDown();
     }
