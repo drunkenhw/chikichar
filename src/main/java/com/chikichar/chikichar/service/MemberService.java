@@ -1,15 +1,16 @@
 package com.chikichar.chikichar.service;
 
-import com.chikichar.chikichar.member.dto.JoinForm;
-import com.chikichar.chikichar.member.dto.ModifyForm;
+import com.chikichar.chikichar.member.dto.MemberRequestDto;
 
 public interface MemberService {
 
-    Long joinAccount(JoinForm joinForm);
+    Long joinAccount(MemberRequestDto memberRequestDto);
 
     void deleteAccount(long memberId);
 
-    void modifyInfo(ModifyForm modifyForm);
+    void modifyInfo(Long id,MemberRequestDto memberRequestDto);
 
+    boolean isDuplicateEmail(String email);
 
+    boolean isDuplicateNickname(String nickname);
 }

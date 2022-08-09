@@ -1,8 +1,7 @@
 package com.chikichar.chikichar.service;
 
 import com.chikichar.chikichar.member.domain.Member;
-import com.chikichar.chikichar.member.dto.JoinForm;
-import com.chikichar.chikichar.member.dto.ModifyForm;
+import com.chikichar.chikichar.member.dto.MemberRequestDto;
 import com.chikichar.chikichar.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,18 +19,9 @@ public class MemberServiceImpl implements MemberService{
 
     @Transactional
     @Override
-    public Long joinAccount(JoinForm joinForm) {
+    public Long joinAccount(MemberRequestDto memberRequestDto) {
         //TODO password Encoding 해야함
-        Member member = Member.builder()
-                .email(joinForm.getEmail())
-                .password(joinForm.getPassword())
-                .name(joinForm.getName())
-                .address(joinForm.getAddress())
-                .nickname(joinForm.getNickname())
-                .phone(joinForm.getPhone())
-                .brand(joinForm.getBrand())
-                .memberRole(joinForm.getMemberRole())
-                .build();
+        Member member = memberRequestDto.toEntity();
         Member savedMember = memberRepository.save(member);
         return savedMember.getId();
 
@@ -45,11 +35,23 @@ public class MemberServiceImpl implements MemberService{
 
     @Transactional
     @Override
-    public void modifyInfo(ModifyForm modifyForm) {
+    public void modifyInfo(Long id,MemberRequestDto memberRequestDto) {
         //TODO Exception 처리 해야함
-        Member findMember = memberRepository.findById(modifyForm.getId()).orElseThrow();
-        findMember.modifyMember(modifyForm.getPassword(), modifyForm.getNickname(),
-                modifyForm.getAddress(), modifyForm.getPhone(), modifyForm.getBrand());
+        Member findMember = memberRepository.findById(id).orElseThrow();
 
+        findMember.modifyMember(memberRequestDto);
+
+    }
+
+    @Override
+    public boolean isDuplicateEmail(String email) {
+        Optional<Member> member = memberRepository.findByEmail(email);
+        return member.isPresent();
+    }
+
+    @Override
+    public boolean isDuplicateNickname(String nickname) {
+        Optional<Member> member = memberRepository.findByNickname(nickname);
+        return member.isPresent();
     }
 }

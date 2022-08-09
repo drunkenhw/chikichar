@@ -1,8 +1,7 @@
 package com.chikichar.chikichar.service;
 
 import com.chikichar.chikichar.member.domain.Member;
-import com.chikichar.chikichar.member.dto.JoinForm;
-import com.chikichar.chikichar.member.dto.ModifyForm;
+import com.chikichar.chikichar.member.dto.MemberRequestDto;
 import com.chikichar.chikichar.member.repository.MemberRepository;
 import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.Brand;
@@ -12,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -28,7 +28,7 @@ class MemberServiceImplTest {
     @Test
     @DisplayName("회원가입, 탈퇴 테스트")
     void joinWithdrawalTest(){
-        JoinForm joinForm = JoinForm.builder()
+        MemberRequestDto memberRequestDto = MemberRequestDto.builder()
                 .address(new Address("a","a","a"))
                 .brand(Brand.AUDI)
                 .memberRole(MemberRole.USER)
@@ -39,7 +39,7 @@ class MemberServiceImplTest {
                 .name("han")
                 .build();
 
-        Long saveMemberId = memberService.joinAccount(joinForm);
+        Long saveMemberId = memberService.joinAccount(memberRequestDto);
         Optional<Member> saveMember = memberRepository.findById(saveMemberId);
         //가입 테스트
         Assertions.assertThat(saveMember.isPresent()).isEqualTo(true);
@@ -51,7 +51,7 @@ class MemberServiceImplTest {
     @Test
     @DisplayName("회원 정보 수정 테스트")
     void modifyTest()  {
-        JoinForm joinForm = JoinForm.builder()
+        MemberRequestDto memberRequestDto = MemberRequestDto.builder()
                 .address(new Address("a","a","a"))
                 .brand(Brand.AUDI)
                 .memberRole(MemberRole.USER)
@@ -62,10 +62,9 @@ class MemberServiceImplTest {
                 .name("han")
                 .build();
 
-        Long saveMemberId = memberService.joinAccount(joinForm);
+        Long saveMemberId = memberService.joinAccount(memberRequestDto);
 
-        ModifyForm modifyForm = ModifyForm.builder()
-                .id(saveMemberId)
+        MemberRequestDto modifyMember = MemberRequestDto.builder()
                 .address(new Address("b","b","b"))
                 .brand(Brand.BMW)
                 .nickname("aa")
@@ -73,10 +72,22 @@ class MemberServiceImplTest {
                 .phone("01033334444")
                 .build();
 
-        memberService.modifyInfo(modifyForm);
+        System.out.println(saveMemberId);
+        memberService.modifyInfo(saveMemberId,modifyMember);
 
         Member member = memberRepository.findById(saveMemberId).orElseThrow();
 
         Assertions.assertThat(member.getNickname()).isEqualTo("aa");
+    }
+
+    @Test
+    @DisplayName("이메일 중복학인 테스트")
+    void emailDuplicateTest(){
+        Member member = Member.builder().email("han@naver.com").build();
+        memberRepository.save(member);
+
+        boolean duplicateEmail = memberService.isDuplicateEmail("han@naver.com");
+
+        Assertions.assertThat(duplicateEmail).isEqualTo(true);
     }
 }
