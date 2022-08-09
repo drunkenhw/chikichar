@@ -20,8 +20,6 @@ public class Board {
     @Column(name = "board_name", nullable = false)
     private String name;
 
-
-
     @Enumerated(EnumType.STRING)
     @NotNull
     @Column(nullable = false)

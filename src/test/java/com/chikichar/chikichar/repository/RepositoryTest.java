@@ -71,7 +71,7 @@ class RepositoryTest {
                 .build();
         ArticleImage saveImage = articleImageRepository.save(articleImage);
 
-        Recommend recommend = new Recommend(saveMember,saveArticle);
+        Recommend recommend =Recommend.of(saveMember,saveArticle);
         Recommend saveRecommend = recommendRepository.save(recommend);
 
 
