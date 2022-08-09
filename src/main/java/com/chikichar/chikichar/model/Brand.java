@@ -3,9 +3,10 @@ package com.chikichar.chikichar.model;
 public enum Brand {
     HYUNDAI,
     SSANGYONG,
-    CHEVOLET,
+    CHEVROLET,
     BENZ,
     BMW,
     AUDI,
     ETC
+    ;
 }

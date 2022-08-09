@@ -1,5 +1,6 @@
 package com.chikichar.chikichar.member.domain;
 
+import com.chikichar.chikichar.member.dto.MemberRequestDto;
 import com.chikichar.chikichar.model.BaseEntity;
 import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.Brand;
@@ -63,12 +64,12 @@ public class Member extends BaseEntity {
         this.memberRole = memberRole;
     }
 
-    public void modifyMember(String password,String nickname,Address address, String phone,Brand brand){
-        this.password = password;
-        this.nickname = nickname;
-        this.address = address;
-        this.phone = phone;
-        this.brand = brand;
+    public void modifyMember(MemberRequestDto memberRequestDto){
+        this.password = memberRequestDto.getPassword();
+        this.nickname = memberRequestDto.getNickname();
+        this.address = memberRequestDto.getAddress();
+        this.phone = memberRequestDto.getPhone();
+        this.brand = memberRequestDto.getBrand();
     }
 
 

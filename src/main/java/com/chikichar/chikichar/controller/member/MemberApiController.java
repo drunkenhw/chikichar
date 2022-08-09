@@ -1,7 +1,7 @@
 package com.chikichar.chikichar.controller.member;
 
 
-import com.chikichar.chikichar.member.dto.JoinForm;
+import com.chikichar.chikichar.member.dto.MemberRequestDto;
 import com.chikichar.chikichar.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 
 @Slf4j
 @RestController
@@ -23,11 +24,25 @@ public class MemberApiController {
     private final MemberService memberService;
 
     @PostMapping("/join")
-    public ResponseEntity<Long> join(@Valid @RequestBody JoinForm joinForm, BindingResult bindingResult){
-        //TODO 유효성 검사 에러처리 해야함
-        Long joinMemberId = memberService.joinAccount(joinForm);
+    public ResponseEntity<Long> join(@Valid @RequestBody MemberRequestDto memberRequestDto, BindingResult bindingResult){
+        //TODO 유효성 검사 에러처리 해야함 ,세션도 줘야함
+        Long joinMemberId = memberService.joinAccount(memberRequestDto);
         return new ResponseEntity<>(joinMemberId, HttpStatus.OK);
     }
+
+    @GetMapping("/email-check")
+    public ResponseEntity<Boolean> emailCheck(@RequestBody HashMap<String,String> param){
+        String email = param.get("email");
+        return new ResponseEntity<>(memberService.isDuplicateEmail(email),HttpStatus.OK);
+    }
+    @GetMapping("/nickname-check")
+    public ResponseEntity<Boolean> nicknameCheck(@RequestBody HashMap<String,String > param){
+        String nickname = param.get("nickname");
+        return new ResponseEntity<>(memberService.isDuplicateNickname(nickname),HttpStatus.OK);
+    }
+
+
+
 
 
 }
