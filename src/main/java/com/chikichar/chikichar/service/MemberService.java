@@ -15,4 +15,6 @@ public interface MemberService {
     boolean isDuplicateNickname(String nickname);
 
     String findEmail(String name, String phone);
+
+    void changePassword(String password);
 }

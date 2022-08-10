@@ -17,8 +17,8 @@ import java.util.Optional;
 @Transactional(readOnly=true)
 public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
-
     private final PasswordEncoder passwordEncoder;
+
     @Transactional
     @Override
     public Long joinAccount(MemberRequestDto memberRequestDto) {
@@ -62,5 +62,10 @@ public class MemberServiceImpl implements MemberService{
     public String findEmail(String name, String phone) {
         //TODO 예외처리 해야됨
         return memberRepository.findEmailByNameAndPhone(name, phone).orElseThrow();
+    }
+
+    @Override
+    public void changePassword(String password) {
+
     }
 }

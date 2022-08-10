@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * member = 글쓴이
@@ -28,11 +30,11 @@ public class Article extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
+    @JoinColumn(name = "board_id",nullable = false)
     private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id",nullable = false)
     private Member member;
 
     @NotNull
@@ -44,6 +46,7 @@ public class Article extends BaseEntity {
     @Column(nullable = false)
     private String  content;
 
+    private int viewCount;
 
     @Column(name = "location_x")
     private double locationX;
@@ -51,19 +54,14 @@ public class Article extends BaseEntity {
     @Column(name = "location_y")
     private double locationY;
 
-
-
     @Builder
-    public Article(Member member, String title, String content,  double locationX, double locationY) {
+    public Article(Board board, Member member, String title, String content, double locationX, double locationY) {
+        this.board = board;
         this.member = member;
         this.title = title;
         this.content = content;
         this.locationX = locationX;
         this.locationY = locationY;
+
     }
-
-
-
-
-
 }
