@@ -1,6 +1,6 @@
-package com.chikichar.chikichar.member.dto;
+package com.chikichar.chikichar.dto;
 
-import com.chikichar.chikichar.member.domain.Member;
+import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.Brand;
 import com.chikichar.chikichar.model.MemberRole;
@@ -30,18 +30,15 @@ public class MemberRequestDto {
     @NotBlank(message = "공백은 허용하지 않습니다.")
     private String nickname;
 
-    @NonNull
-    private Address address;
-
-    @NonNull
+    @NotBlank
     private String phone;
 
-    @NonNull
+    private Address address;
+
     private Brand brand;
 
     private int point;
 
-    @NotNull
     private MemberRole memberRole;
 
     public Member toEntity(){

@@ -3,6 +3,7 @@ package com.chikichar.chikichar.model;
 import lombok.*;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotBlank;
 
 /**
  * city = 도시
@@ -15,10 +16,10 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 public class Address {
-
+    @NotBlank
     private String city;
-
+    @NotBlank
     private String street;
-
+    @NotBlank
     private String zipcode;
 }

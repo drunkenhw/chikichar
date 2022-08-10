@@ -1,7 +1,7 @@
 package com.chikichar.chikichar.repository;
 
 import com.chikichar.chikichar.entity.Article;
-import com.chikichar.chikichar.member.domain.Member;
+import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.entity.Recommend;
 import org.springframework.data.jpa.repository.JpaRepository;
 

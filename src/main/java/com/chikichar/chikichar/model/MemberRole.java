@@ -9,10 +9,16 @@ package com.chikichar.chikichar.model;
  */
 
 public enum MemberRole {
-    USER,
-    COMPANY,
-    ADMIN
+    USER("일반회원"),
+    COMPANY("업체회원"),
+    ADMIN("관리자")
     ;
+
+    private String value;
+
+    MemberRole(String value){
+        this.value = value;
+    }
 
 }
 

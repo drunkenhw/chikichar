@@ -1,8 +1,5 @@
 package com.chikichar.chikichar.entity;
 
-import com.chikichar.chikichar.member.domain.Member;
-import com.chikichar.chikichar.model.Address;
-import com.chikichar.chikichar.model.MemberRole;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
