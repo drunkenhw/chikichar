@@ -31,18 +31,15 @@ public class Item {
 
     private String madeAt;
 
-    @Embedded
-    private Address address;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
     @Builder
-    public Item(String itemName, int price, String madeAt, Address address, Article article) {
+    public Item(String itemName, int price, String madeAt, Article article) {
         this.itemName = itemName;
         this.price = price;
         this.madeAt = madeAt;
-        this.address = address;
         this.article = article;
     }
 }

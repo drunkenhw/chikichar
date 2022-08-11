@@ -1,15 +1,13 @@
 package com.chikichar.chikichar.entity;
 
+import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.BaseEntity;
-import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * member = 글쓴이
@@ -37,16 +35,17 @@ public class Article extends BaseEntity {
     @JoinColumn(name = "member_id",nullable = false)
     private Member member;
 
-    @NotNull
     @Column(nullable = false)
     private String title;
 
     @Lob
-    @NotNull
     @Column(nullable = false)
     private String  content;
 
     private int viewCount;
+
+    @Embedded
+    private Address address;
 
     @Column(name = "location_x")
     private double locationX;
@@ -55,13 +54,14 @@ public class Article extends BaseEntity {
     private double locationY;
 
     @Builder
-    public Article(Board board, Member member, String title, String content, double locationX, double locationY) {
+    public Article(Board board, Member member, String title, String content, int viewCount, Address address, double locationX, double locationY) {
         this.board = board;
         this.member = member;
         this.title = title;
         this.content = content;
+        this.viewCount = viewCount;
+        this.address = address;
         this.locationX = locationX;
         this.locationY = locationY;
-
     }
 }

@@ -17,27 +17,29 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class MemberRequestDto {
 
-    @NotBlank(message = "공백은 허용하지 않습니다.")
+    @NotBlank(message = "이름은 필수 입력 항목입니다.")
     private String name;
 
-    @NotBlank(message = "공백은 허용하지 않습니다.")
+    @NotBlank(message = "Email은 필수 입력 항목입니다.")
     @Email
     private String email;
 
-    @NotBlank(message = "공백은 허용하지 않습니다.")
+    @NotBlank(message = "비밀번호는 필수 입력 항목입니다.")
     private String password;
 
-    @NotBlank(message = "공백은 허용하지 않습니다.")
+    @NotBlank(message = "닉네임은 필수 입력 항목입니다.")
     private String nickname;
 
-    @NotBlank
+    @NotBlank(message = "전화번호는 필수 입력 항목입니다.")
     private String phone;
 
-    private Address address;
+    private String city;
+
+    private String street;
+
+    private String zipcode;
 
     private Brand brand;
-
-    private int point;
 
     private MemberRole memberRole;
 
@@ -49,8 +51,9 @@ public class MemberRequestDto {
                 .email(email)
                 .phone(phone)
                 .nickname(nickname)
-                .address(address)
-                .memberRole(memberRole).build();
+                .address(new Address(city, street, zipcode))
+                .memberRole(memberRole)
+                .build();
     }
 
 }

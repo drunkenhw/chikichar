@@ -25,4 +25,9 @@ public class Board {
     @NotNull
     @Column(nullable = false)
     private BoardType boardType;
+
+    public Board(String name, BoardType boardType) {
+        this.name = name;
+        this.boardType = boardType;
+    }
 }

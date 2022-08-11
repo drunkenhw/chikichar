@@ -43,6 +43,7 @@ class RepositoryTest {
         Member saveMember = memberRepository.save(member);
 
         Article article = Article.builder()
+                .address(Address.builder().zipcode("12313").street("거리").city("서울").build())
                 .member(saveMember)
                 .title("제목")
                 .content("내용")
@@ -52,7 +53,6 @@ class RepositoryTest {
         Article saveArticle = articleRepository.save(article);
 
         Item item = Item.builder()
-                .address(Address.builder().zipcode("12313").street("거리").city("서울").build())
                 .article(saveArticle)
                 .madeAt("DIY")
                 .price(101000)

@@ -1,8 +1,12 @@
 package com.chikichar.chikichar.service;
 
 import com.chikichar.chikichar.entity.Article;
+import com.chikichar.chikichar.entity.Board;
 import com.chikichar.chikichar.entity.Member;
+import com.chikichar.chikichar.model.BoardType;
+import com.chikichar.chikichar.model.MemberRole;
 import com.chikichar.chikichar.repository.ArticleRepository;
+import com.chikichar.chikichar.repository.BoardRepository;
 import com.chikichar.chikichar.repository.MemberRepository;
 import com.chikichar.chikichar.repository.RecommendRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +18,7 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
-
+@Transactional
 @SpringBootTest
 class RecommendServiceImplTest {
     @Autowired
@@ -25,21 +29,26 @@ class RecommendServiceImplTest {
     private RecommendRepository recommendRepository;
     @Autowired
     private RecommendService recommendService;
+    @Autowired
+    private BoardRepository boardRepository;
 
     @BeforeEach
     void beforeEach(){
-         Member writer = Member.builder().email("AAA").build();
+         Member writer = Member.builder().email("AAA").memberRole(MemberRole.ADMIN).build();
         Member saveWriter = memberRepository.save(writer);
-        Member reader = Member.builder().email("BBB").build();
+        Member reader = Member.builder().email("BBB").memberRole(MemberRole.USER).build();
         memberRepository.save(reader);
-        Article article = Article.builder().member(saveWriter).title("AA").content("aa").build();
+        Board board = new Board("benz", BoardType.NORMAL);
+        Board saveBoard = boardRepository.save(board);
+        Article article = Article.builder().member(saveWriter).title("AA").content("aa").board(saveBoard).build();
         Article saveArticle = articleRepository.save(article);
+
+        System.out.println("------------------beforeEach---------------------------");
+
     }
 
     @Test
     @DisplayName("추천 중복 방지 테스트")
-    @Transactional
-    @Commit
     public void recommendTest(){
 
         Member saveWriter = memberRepository.findById(1L).orElseThrow();

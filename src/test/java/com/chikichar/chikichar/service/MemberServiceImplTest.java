@@ -12,11 +12,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindException;
 
 import java.util.Optional;
 
 
-
+@Transactional
 @SpringBootTest
 class MemberServiceImplTest {
 
@@ -28,8 +30,8 @@ class MemberServiceImplTest {
     void createMember(){
         Member member = Member.builder()
                 .memberRole(MemberRole.USER)
-                .email("aaa@naver.com")
-                .nickname("han")
+                .email("before@naver.com")
+                .nickname("beforeNickname")
                 .address(new Address("busan","simin","213234"))
                 .brand(Brand.BENZ)
                 .name("han")
@@ -43,7 +45,9 @@ class MemberServiceImplTest {
     @DisplayName("회원가입, 탈퇴 테스트")
     void joinWithdrawalTest(){
         MemberRequestDto memberRequestDto = MemberRequestDto.builder()
-                .address(new Address("a","a","a"))
+                .city("b")
+                .street("b")
+                .zipcode("b")
                 .brand(Brand.AUDI)
                 .memberRole(MemberRole.USER)
                 .email("aaa@naver.com")
@@ -66,22 +70,26 @@ class MemberServiceImplTest {
     @DisplayName("회원 정보 수정 테스트")
     void modifyTest()  {
         MemberRequestDto memberRequestDto = MemberRequestDto.builder()
-                .address(new Address("a","a","a"))
+                .city("b")
+                .street("b")
+                .zipcode("b")
                 .brand(Brand.AUDI)
                 .memberRole(MemberRole.USER)
-                .email("bbb@naver.com")
-                .nickname("bb")
+                .email("old@naver.com")
+                .nickname("old")
                 .password("bbbb")
                 .phone("01044443333")
-                .name("han")
+                .name("old")
                 .build();
 
         Long saveMemberId = memberService.joinAccount(memberRequestDto);
 
         MemberRequestDto modifyMember = MemberRequestDto.builder()
-                .address(new Address("b","b","b"))
+                .city("b")
+                .street("b")
+                .zipcode("b")
                 .brand(Brand.BMW)
-                .nickname("aa")
+                .nickname("change")
                 .password("aaaa")
                 .phone("01033334444")
                 .build();
@@ -91,16 +99,14 @@ class MemberServiceImplTest {
 
         Member member = memberRepository.findById(saveMemberId).orElseThrow();
 
-        Assertions.assertThat(member.getNickname()).isEqualTo("aa");
+        Assertions.assertThat(member.getNickname()).isEqualTo("change");
     }
 
     @Test
     @DisplayName("이메일 중복학인 테스트")
     void emailDuplicateTest(){
-        Member member = Member.builder().email("han@naver.com").build();
-        memberRepository.save(member);
 
-        boolean duplicateEmail = memberService.isDuplicateEmail("han@naver.com");
+        boolean duplicateEmail = memberService.isDuplicateEmail("before@naver.com");
 
         Assertions.assertThat(duplicateEmail).isEqualTo(true);
     }
@@ -110,6 +116,7 @@ class MemberServiceImplTest {
     void findEmailTest(){
         String han = memberService.findEmail("han", "01044443333");
 
-        Assertions.assertThat(han).isEqualTo("aaa@naver.com");
+        Assertions.assertThat(han).isEqualTo("before@naver.com");
     }
+
 }

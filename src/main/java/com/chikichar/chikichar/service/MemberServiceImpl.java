@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
@@ -38,8 +39,8 @@ public class MemberServiceImpl implements MemberService{
     @Transactional
     @Override
     public void modifyInfo(Long id,MemberRequestDto memberRequestDto) {
-        //TODO Exception 처리 해야함
-        Member findMember = memberRepository.findById(id).orElseThrow();
+        //TODO Exception custom
+        Member findMember = memberRepository.findById(id).orElseThrow(()->new IllegalArgumentException("잘못된 사용자입니다."));
         memberRequestDto.setPassword(passwordEncoder.encode(memberRequestDto.getPassword()));
 
         findMember.modifyMember(memberRequestDto);
@@ -48,20 +49,20 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public boolean isDuplicateEmail(String email) {
-        Optional<Member> member = memberRepository.findByEmail(email);
-        return member.isPresent();
+        return memberRepository.existsByEmail(email);
+
     }
 
     @Override
     public boolean isDuplicateNickname(String nickname) {
-        Optional<Member> member = memberRepository.findByNickname(nickname);
-        return member.isPresent();
+        return memberRepository.existsByNickname(nickname);
     }
 
     @Override
     public String findEmail(String name, String phone) {
-        //TODO 예외처리 해야됨
-        return memberRepository.findEmailByNameAndPhone(name, phone).orElseThrow();
+        //TODO Exception Custom
+        return memberRepository.findEmailByNameAndPhone(name, phone)
+                .orElseThrow(()->new IllegalArgumentException("해당 정보가 존재하지 않습니다."));
     }
 
     @Override
