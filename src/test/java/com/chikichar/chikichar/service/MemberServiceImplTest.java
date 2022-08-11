@@ -1,17 +1,17 @@
 package com.chikichar.chikichar.service;
 
-import com.chikichar.chikichar.member.domain.Member;
-import com.chikichar.chikichar.member.dto.MemberRequestDto;
-import com.chikichar.chikichar.member.repository.MemberRepository;
+import com.chikichar.chikichar.entity.Member;
+import com.chikichar.chikichar.dto.MemberRequestDto;
+import com.chikichar.chikichar.repository.MemberRepository;
 import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.Brand;
 import com.chikichar.chikichar.model.MemberRole;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -24,6 +24,20 @@ class MemberServiceImplTest {
     MemberService memberService;
     @Autowired
     MemberRepository memberRepository;
+    @BeforeEach
+    void createMember(){
+        Member member = Member.builder()
+                .memberRole(MemberRole.USER)
+                .email("aaa@naver.com")
+                .nickname("han")
+                .address(new Address("busan","simin","213234"))
+                .brand(Brand.BENZ)
+                .name("han")
+                .password("secret")
+                .phone("01044443333")
+                .build();
+        memberRepository.save(member);
+    }
 
     @Test
     @DisplayName("회원가입, 탈퇴 테스트")
@@ -89,5 +103,13 @@ class MemberServiceImplTest {
         boolean duplicateEmail = memberService.isDuplicateEmail("han@naver.com");
 
         Assertions.assertThat(duplicateEmail).isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("전화번호, 이름으로 이메일 찾기")
+    void findEmailTest(){
+        String han = memberService.findEmail("han", "01044443333");
+
+        Assertions.assertThat(han).isEqualTo("aaa@naver.com");
     }
 }

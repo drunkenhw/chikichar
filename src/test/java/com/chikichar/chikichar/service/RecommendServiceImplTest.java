@@ -1,10 +1,9 @@
 package com.chikichar.chikichar.service;
 
 import com.chikichar.chikichar.entity.Article;
-import com.chikichar.chikichar.entity.BoardType;
-import com.chikichar.chikichar.member.domain.Member;
+import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.repository.ArticleRepository;
-import com.chikichar.chikichar.member.repository.MemberRepository;
+import com.chikichar.chikichar.repository.MemberRepository;
 import com.chikichar.chikichar.repository.RecommendRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -31,7 +28,7 @@ class RecommendServiceImplTest {
 
     @BeforeEach
     void beforeEach(){
-        Member writer = Member.builder().email("AAA").build();
+         Member writer = Member.builder().email("AAA").build();
         Member saveWriter = memberRepository.save(writer);
         Member reader = Member.builder().email("BBB").build();
         memberRepository.save(reader);

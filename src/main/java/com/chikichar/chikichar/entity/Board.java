@@ -1,5 +1,6 @@
 package com.chikichar.chikichar.entity;
 
+import com.chikichar.chikichar.model.BoardType;
 import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;

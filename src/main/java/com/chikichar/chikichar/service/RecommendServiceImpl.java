@@ -1,10 +1,10 @@
 package com.chikichar.chikichar.service;
 
 import com.chikichar.chikichar.entity.Article;
-import com.chikichar.chikichar.member.domain.Member;
+import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.entity.Recommend;
 import com.chikichar.chikichar.repository.ArticleRepository;
-import com.chikichar.chikichar.member.repository.MemberRepository;
+import com.chikichar.chikichar.repository.MemberRepository;
 import com.chikichar.chikichar.repository.RecommendRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.chikichar.chikichar.service;
 
-import com.chikichar.chikichar.member.dto.MemberRequestDto;
+import com.chikichar.chikichar.dto.MemberRequestDto;
 
 public interface MemberService {
 
@@ -13,4 +13,8 @@ public interface MemberService {
     boolean isDuplicateEmail(String email);
 
     boolean isDuplicateNickname(String nickname);
+
+    String findEmail(String name, String phone);
+
+    void changePassword(String password);
 }

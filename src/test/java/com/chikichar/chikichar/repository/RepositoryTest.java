@@ -1,8 +1,7 @@
 package com.chikichar.chikichar.repository;
 
 import com.chikichar.chikichar.entity.*;
-import com.chikichar.chikichar.member.domain.Member;
-import com.chikichar.chikichar.member.repository.MemberRepository;
+import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.MemberRole;
 import org.junit.jupiter.api.DisplayName;

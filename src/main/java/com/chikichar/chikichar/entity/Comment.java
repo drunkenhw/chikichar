@@ -1,7 +1,6 @@
 package com.chikichar.chikichar.entity;
 
 import com.chikichar.chikichar.model.BaseEntity;
-import com.chikichar.chikichar.member.domain.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

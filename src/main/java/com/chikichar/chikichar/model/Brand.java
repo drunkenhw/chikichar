@@ -1,12 +1,18 @@
 package com.chikichar.chikichar.model;
 
 public enum Brand {
-    HYUNDAI,
-    SSANGYONG,
-    CHEVROLET,
-    BENZ,
-    BMW,
-    AUDI,
-    ETC
+    HYUNDAI("현대"),
+    SSANGYONG("쌍용"),
+    CHEVROLET("쉐보레"),
+    BENZ("BENZ"),
+    BMW("BMW"),
+    AUDI("AUDI"),
+    ETC("기타")
     ;
+
+    private String value;
+
+    Brand(String value){
+        this.value = value;
+    }
 }

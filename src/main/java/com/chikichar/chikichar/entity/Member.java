@@ -1,6 +1,6 @@
-package com.chikichar.chikichar.member.domain;
+package com.chikichar.chikichar.entity;
 
-import com.chikichar.chikichar.member.dto.MemberRequestDto;
+import com.chikichar.chikichar.dto.MemberRequestDto;
 import com.chikichar.chikichar.model.BaseEntity;
 import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.Brand;
@@ -49,6 +49,7 @@ public class Member extends BaseEntity {
 
     private int point;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
@@ -73,7 +74,9 @@ public class Member extends BaseEntity {
     }
 
 
-
+    public void changePassword(String password){
+        this.password = password;
+    }
     public void pointUp(){
         this.point += 1;
     }
