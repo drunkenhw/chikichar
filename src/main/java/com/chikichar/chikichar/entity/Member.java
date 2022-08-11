@@ -68,7 +68,7 @@ public class Member extends BaseEntity {
     public void modifyMember(MemberRequestDto memberRequestDto){
         this.password = memberRequestDto.getPassword();
         this.nickname = memberRequestDto.getNickname();
-        this.address = memberRequestDto.getAddress();
+        this.address = new Address(memberRequestDto.getCity(), memberRequestDto.getStreet(), memberRequestDto.getZipcode());
         this.phone = memberRequestDto.getPhone();
         this.brand = memberRequestDto.getBrand();
     }
