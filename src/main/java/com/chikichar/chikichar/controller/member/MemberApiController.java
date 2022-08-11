@@ -5,6 +5,7 @@ import com.chikichar.chikichar.dto.MemberRequestDto;
 import com.chikichar.chikichar.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,32 +20,29 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
-    @GetMapping("/join")
-    public String join(){
-        return "join";
-    }
     @PostMapping("/join")
-    public Long join(@Valid @RequestBody MemberRequestDto memberRequestDto, BindingResult bindingResult){
-        //TODO 유효성 검사 에러처리 해야함 ,세션도 줘야함
+    public Long join(@Valid @RequestBody MemberRequestDto memberRequestDto, BindingResult bindingResult) throws BindException {
+        //TODO 세션도 줘야함
+        if(bindingResult.hasErrors()){
+            throw new BindException(bindingResult);
+        }
         Long joinMemberId = memberService.joinAccount(memberRequestDto);
         return joinMemberId;
     }
 
     @GetMapping(value = "/email-check")
-    public Boolean emailCheck(@RequestBody HashMap<String,String> param){
-        String email = param.get("email");
+    public Boolean emailCheck(String email){
         return memberService.isDuplicateEmail(email);
     }
     @GetMapping("/nickname-check")
-    public Boolean nicknameCheck(@RequestBody HashMap<String,String > param){
-        String nickname = param.get("nickname");
+    public Boolean nicknameCheck(String nickname){
         return memberService.isDuplicateNickname(nickname);
     }
 
-    @PostMapping("/findEmail")
-    public Map<String ,String> findEmail(@RequestBody Map<String, String> param){
+    @GetMapping("/find-email")
+    public Map<String ,String> findEmail(String name, String phone){
         Map<String ,String> result = new HashMap<>();
-        String email = memberService.findEmail(param.get("name"), param.get("phone"));
+        String email = memberService.findEmail(name, phone);
         result.put("email",email);
         return result;
     }
