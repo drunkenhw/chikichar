@@ -22,6 +22,12 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.csrf().disable();
+//        http.headers().frameOptions().disable()
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers("/","/css/**","/js/**").permitAll()
+//                .antMatchers("/api/user/**").hasRole(MemberRole.USER.name())
+//                .anyRequest().authenticated();
         return http.build();
     }
 }

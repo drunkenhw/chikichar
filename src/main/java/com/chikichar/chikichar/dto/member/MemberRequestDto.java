@@ -1,4 +1,4 @@
-package com.chikichar.chikichar.dto;
+package com.chikichar.chikichar.dto.member;
 
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.model.Address;

@@ -1,11 +1,12 @@
 package com.chikichar.chikichar.service;
 
-import com.chikichar.chikichar.dto.MemberRequestDto;
+import com.chikichar.chikichar.dto.member.MemberRequestDto;
 
 public interface MemberService {
 
     Long joinAccount(MemberRequestDto memberRequestDto);
 
+    String login(String email, String password);
     void deleteAccount(long memberId);
 
     void modifyInfo(Long id,MemberRequestDto memberRequestDto);

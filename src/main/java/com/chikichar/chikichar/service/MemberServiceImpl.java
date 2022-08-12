@@ -1,16 +1,14 @@
 package com.chikichar.chikichar.service;
 
 import com.chikichar.chikichar.entity.Member;
-import com.chikichar.chikichar.dto.MemberRequestDto;
+import com.chikichar.chikichar.dto.member.MemberRequestDto;
 import com.chikichar.chikichar.repository.MemberRepository;
+import com.chikichar.chikichar.security.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -19,14 +17,25 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
     @Transactional
     @Override
     public Long joinAccount(MemberRequestDto memberRequestDto) {
         memberRequestDto.setPassword(passwordEncoder.encode(memberRequestDto.getPassword()));
-        Member member = memberRequestDto.toEntity();
-        Member savedMember = memberRepository.save(member);
+        Member savedMember = memberRepository.save(memberRequestDto.toEntity());
         return savedMember.getId();
+
+    }
+
+    @Override
+    public String login(String email, String password) {
+        //TODO Exception 처리 2개 해야함
+        Member member = memberRepository.findByEmail(email).orElseThrow();
+        if(!passwordEncoder.matches(password, member.getPassword())){
+            throw new IllegalArgumentException("");
+        }
+        return jwtProvider.createToken(member.getEmail(),member.getMemberRole().getKey());
 
     }
 
@@ -67,6 +76,8 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public void changePassword(String password) {
-
+        //TODO 메서드 완성해야함
     }
+
+
 }

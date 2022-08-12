@@ -1,6 +1,6 @@
 package com.chikichar.chikichar.entity;
 
-import com.chikichar.chikichar.dto.MemberRequestDto;
+import com.chikichar.chikichar.dto.member.MemberRequestDto;
 import com.chikichar.chikichar.model.BaseEntity;
 import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.Brand;
