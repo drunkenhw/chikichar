@@ -1,7 +1,7 @@
 package com.chikichar.chikichar.service;
 
 import com.chikichar.chikichar.entity.Member;
-import com.chikichar.chikichar.dto.MemberRequestDto;
+import com.chikichar.chikichar.dto.member.MemberRequestDto;
 import com.chikichar.chikichar.repository.MemberRepository;
 import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.Brand;
@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindException;
 
 import java.util.Optional;
 

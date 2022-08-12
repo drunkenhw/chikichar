@@ -1,10 +1,14 @@
 package com.chikichar.chikichar.controller.member;
 
 
-import com.chikichar.chikichar.dto.MemberRequestDto;
+import com.chikichar.chikichar.dto.member.LoginRequestDto;
+import com.chikichar.chikichar.dto.member.LoginResponseDto;
+import com.chikichar.chikichar.dto.member.MemberRequestDto;
 import com.chikichar.chikichar.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +32,13 @@ public class MemberApiController {
         }
         Long joinMemberId = memberService.joinAccount(memberRequestDto);
         return joinMemberId;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginDto){
+        log.info("login={}",loginDto);
+        String token = memberService.login(loginDto.getEmail(), loginDto.getPassword());
+        return new ResponseEntity<>(new LoginResponseDto(token), HttpStatus.OK);
     }
 
     @GetMapping(value = "/email-check")
