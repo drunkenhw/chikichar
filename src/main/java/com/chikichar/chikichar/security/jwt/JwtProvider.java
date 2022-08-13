@@ -1,14 +1,19 @@
 package com.chikichar.chikichar.security.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.nio.charset.StandardCharsets;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
 
@@ -16,16 +21,18 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtProvider {
 
+
     @Value("${spring.jwt.secret-key}")
     private String SECRET_KEY;
     private static final Long TOKEN_VALID_TIME = 1000L * 60 * 3;
 
+
     @PostConstruct
-    protected void init(){
+    protected void init() {
         SECRET_KEY = Base64.getEncoder().encodeToString(SECRET_KEY.getBytes());
     }
 
-    public String createToken(String userId, String role){
+    public String createToken(String userId, String role) {
         Claims claims = Jwts.claims().setSubject(userId);
         claims.put("role", role);
         Date now = new Date();
@@ -36,5 +43,4 @@ public class JwtProvider {
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
-
 }

@@ -1,9 +1,9 @@
 package com.chikichar.chikichar.service;
 
+import com.chikichar.chikichar.EntityBuilder;
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.dto.member.MemberRequestDto;
 import com.chikichar.chikichar.repository.MemberRepository;
-import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.Brand;
 import com.chikichar.chikichar.model.MemberRole;
 import org.assertj.core.api.Assertions;
@@ -27,18 +27,12 @@ class MemberServiceImplTest {
     MemberRepository memberRepository;
     @BeforeEach
     void createMember(){
-        Member member = Member.builder()
-                .memberRole(MemberRole.USER)
-                .email("before@naver.com")
-                .nickname("beforeNickname")
-                .address(new Address("busan","simin","213234"))
-                .brand(Brand.BENZ)
-                .name("han")
-                .password("secret")
-                .phone("01044443333")
-                .build();
+        Member member = EntityBuilder.createMember();
         memberRepository.save(member);
     }
+
+
+
 
     @Test
     @DisplayName("회원가입, 탈퇴 테스트")
