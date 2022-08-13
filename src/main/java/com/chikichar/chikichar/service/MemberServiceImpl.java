@@ -31,7 +31,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public String login(String email, String password) {
         //TODO Exception 처리 2개 해야함
-        Member member = memberRepository.findByEmail(email).orElseThrow();
+        Member member = memberRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("email 없음"));
         if(!passwordEncoder.matches(password, member.getPassword())){
             throw new IllegalArgumentException("");
         }

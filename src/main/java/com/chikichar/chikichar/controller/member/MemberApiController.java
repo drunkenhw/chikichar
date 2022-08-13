@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +39,7 @@ public class MemberApiController {
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginDto){
         log.info("login={}",loginDto);
         String token = memberService.login(loginDto.getEmail(), loginDto.getPassword());
+
         return new ResponseEntity<>(new LoginResponseDto(token), HttpStatus.OK);
     }
 
@@ -45,6 +47,7 @@ public class MemberApiController {
     public Boolean emailCheck(String email){
         return memberService.isDuplicateEmail(email);
     }
+
     @GetMapping("/nickname-check")
     public Boolean nicknameCheck(String nickname){
         return memberService.isDuplicateNickname(nickname);

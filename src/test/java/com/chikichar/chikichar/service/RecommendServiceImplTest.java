@@ -1,5 +1,6 @@
 package com.chikichar.chikichar.service;
 
+import com.chikichar.chikichar.EntityBuilder;
 import com.chikichar.chikichar.entity.Article;
 import com.chikichar.chikichar.entity.Board;
 import com.chikichar.chikichar.entity.Member;
@@ -34,12 +35,15 @@ class RecommendServiceImplTest {
 
     @BeforeEach
     void beforeEach(){
-         Member writer = Member.builder().email("AAA").memberRole(MemberRole.ADMIN).build();
+        Member writer = EntityBuilder.createMember();
         Member saveWriter = memberRepository.save(writer);
+
         Member reader = Member.builder().email("BBB").memberRole(MemberRole.USER).build();
         memberRepository.save(reader);
-        Board board = new Board("benz", BoardType.NORMAL);
+
+        Board board = EntityBuilder.createBoard();
         Board saveBoard = boardRepository.save(board);
+
         Article article = Article.builder().member(saveWriter).title("AA").content("aa").board(saveBoard).build();
         Article saveArticle = articleRepository.save(article);
 
