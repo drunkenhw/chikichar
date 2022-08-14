@@ -16,12 +16,16 @@ public class UserRefreshToken {
     private Long id;
 
     @Column(name = "user_id", unique = true)
-    private String userId;
+    private String userEmail;
 
     private String refreshToken;
 
-    public UserRefreshToken(String userId, String refreshToken) {
-        this.userId = userId;
+    public UserRefreshToken(String userEmail, String refreshToken) {
+        this.userEmail = userEmail;
+        this.refreshToken = refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
 }
