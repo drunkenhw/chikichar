@@ -1,6 +1,7 @@
 package com.chikichar.chikichar.model;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -10,6 +11,7 @@ import lombok.Getter;
  */
 
 @Getter
+@AllArgsConstructor
 public enum MemberRole {
     USER("ROLE_USER","일반회원"),
     COMPANY("ROLE_COMPANY","업체회원"),
@@ -18,10 +20,6 @@ public enum MemberRole {
     private String key;
     private String value;
 
-    MemberRole(String key, String value) {
-        this.key = key;
-        this.value = value;
-    }
 
 }
 

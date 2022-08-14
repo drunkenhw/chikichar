@@ -1,10 +1,7 @@
 package com.chikichar.chikichar.entity;
 
 import com.chikichar.chikichar.dto.member.MemberRequestDto;
-import com.chikichar.chikichar.model.BaseEntity;
-import com.chikichar.chikichar.model.Address;
-import com.chikichar.chikichar.model.Brand;
-import com.chikichar.chikichar.model.MemberRole;
+import com.chikichar.chikichar.model.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -53,10 +50,12 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
+    @Enumerated(EnumType.STRING)
+    private Social social;
 
 
     @Builder
-    public Member(String email, String name, String password, String nickname, String phone, Address address, Brand brand, MemberRole memberRole) {
+    public Member(String email, String name, String password, String nickname, String phone, Address address, Brand brand, MemberRole memberRole, Social social) {
         this.email = email;
         this.name = name;
         this.password = password;
@@ -65,6 +64,7 @@ public class Member extends BaseEntity {
         this.address = address;
         this.brand = brand;
         this.memberRole = memberRole;
+        this.social = social;
     }
 
     public void modifyMember(MemberRequestDto memberRequestDto){
