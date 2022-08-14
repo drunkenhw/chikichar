@@ -2,9 +2,9 @@ package com.chikichar.chikichar.security.oauthinfo;
 
 import java.util.Map;
 
-public class GoogleOAuth2MemberInfo extends OAuth2MemberInfo {
+public class GoogleOAuth2UserInfo extends OAuth2UserInfo {
 
-    public GoogleOAuth2MemberInfo(Map<String ,Object> attr){
+    public GoogleOAuth2UserInfo(Map<String ,Object> attr){
         super(attr);
     }
 

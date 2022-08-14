@@ -38,7 +38,7 @@ public class MemberRequestDto {
     private String street;
 
     private String zipcode;
-    @NotBlank(message = "Brand는 필수 선택 항목입니다.")
+
     private Brand brand;
 
     private MemberRole memberRole;

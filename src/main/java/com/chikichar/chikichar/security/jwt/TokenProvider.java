@@ -36,7 +36,7 @@ public class TokenProvider {
         return new AuthToken(id, role, expireDate, key);
     }
 
-    public AuthToken converterAuthToke(String token){
+    public AuthToken converterAuthToken(String token){
         return new AuthToken(token, key);
     }
 
@@ -45,7 +45,7 @@ public class TokenProvider {
             Claims claims = authToken.getTokenClaims();
             Collection<? extends GrantedAuthority> authorities =
                     Arrays.stream(new String[]{claims.get(AUTHORITIES_KEY).toString()})
-                            .map(role -> new SimpleGrantedAuthority(role))
+                            .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList());
             User user = new User(claims.getSubject(), "",authorities);
             return new UsernamePasswordAuthenticationToken(user, authToken, authorities);

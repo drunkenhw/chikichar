@@ -2,9 +2,9 @@ package com.chikichar.chikichar.security.oauthinfo;
 
 import java.util.Map;
 
-public class NaverOAuth2MemberInfo extends OAuth2MemberInfo{
+public class NaverOAuth2UserInfo extends OAuth2UserInfo {
 
-    public NaverOAuth2MemberInfo(Map<String, Object> attr) {
+    public NaverOAuth2UserInfo(Map<String, Object> attr) {
         super(attr);
     }
 
