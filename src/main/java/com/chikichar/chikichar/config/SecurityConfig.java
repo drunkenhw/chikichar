@@ -1,7 +1,5 @@
 package com.chikichar.chikichar.config;
 
-import com.chikichar.chikichar.model.MemberRole;
-import com.chikichar.chikichar.security.handler.LoginSuccessHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,26 +25,11 @@ public class SecurityConfig {
                 .antMatchers("/sample/all").permitAll()
                 .antMatchers("/sample/member").access("hasRole('USER') or hasRole('ADMIN')");
         http.formLogin();
-        http.oauth2Login().successHandler(loginSuccessHandler());
+        http.oauth2Login();
         http.logout();
 
         return http.build();
     }
 
-    @Bean
-    public LoginSuccessHandler loginSuccessHandler(){
-        return new LoginSuccessHandler(passwordEncoder());
-    }
 
-
-//    @Bean
-//    public LoginFilter apiLoginFilter(AuthenticationManager authenticationManager) throws Exception {
-//        LoginFilter loginFilter = new LoginFilter("/login", jwtProvider);
-//        loginFilter.setAuthenticationManager(authenticationManager);
-//        return loginFilter;
-//    }
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//        return authenticationConfiguration.getAuthenticationManager();
-//    }
 }

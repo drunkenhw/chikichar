@@ -39,7 +39,7 @@ spring:
       enabled: 'true'
 
   jwt:
-    secret-key: 'han'
+    secret-key: 'adssdadasdaeijqriqejriejqirjeiwjrwqieiqjeiqwejiqwjeiqjweijqweijqwiejqwiejiq'
 
   profiles:
     include: oauth
