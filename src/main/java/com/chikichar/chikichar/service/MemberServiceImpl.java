@@ -2,13 +2,17 @@ package com.chikichar.chikichar.service;
 
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.dto.member.MemberRequestDto;
+import com.chikichar.chikichar.model.MemberRole;
 import com.chikichar.chikichar.repository.MemberRepository;
 import com.chikichar.chikichar.security.jwt.TokenProvider;
+import com.chikichar.chikichar.security.properties.AppProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 @Slf4j
 @Service
@@ -18,13 +22,16 @@ public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
+    private final AppProperties appProperties;
 
     @Transactional
     @Override
-    public Long joinAccount(MemberRequestDto memberRequestDto) {
+    public String joinAccount(MemberRequestDto memberRequestDto) {
         memberRequestDto.setPassword(passwordEncoder.encode(memberRequestDto.getPassword()));
         Member savedMember = memberRepository.save(memberRequestDto.toEntity());
-        return savedMember.getId();
+        Date now = new Date();
+        return tokenProvider.createAuthToken(savedMember.getEmail(), savedMember.getMemberRole(),new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())).getToken();
+
 
     }
 

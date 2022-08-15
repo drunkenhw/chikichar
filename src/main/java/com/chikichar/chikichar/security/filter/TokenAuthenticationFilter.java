@@ -24,14 +24,20 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        //헤더에서 토큰 꺼내옴
         String token = getAccessToken(request);
+
         AuthToken authToken = tokenProvider.converterAuthToken(token);
 
-            log.info("token임={}",token);
         if(authToken.validateToken()){
             Authentication authentication = tokenProvider.getAuthentication(authToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
+
+            log.info("token임={}",token);
+
+
         filterChain.doFilter(request, response);
 
     }
