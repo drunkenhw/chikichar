@@ -26,13 +26,13 @@ public class MemberApiController {
     private final MemberService memberService;
 
     @PostMapping("/join")
-    public Long join(@Valid @RequestBody MemberRequestDto memberRequestDto, BindingResult bindingResult) throws BindException {
+    public LoginResponseDto join(@Valid @RequestBody MemberRequestDto memberRequestDto, BindingResult bindingResult) throws BindException {
         //TODO 세션도 줘야함
         if(bindingResult.hasErrors()){
             throw new BindException(bindingResult);
         }
-        Long joinMemberId = memberService.joinAccount(memberRequestDto);
-        return joinMemberId;
+        String token = memberService.joinAccount(memberRequestDto);
+        return new LoginResponseDto(token);
     }
 
     @PostMapping("/login")

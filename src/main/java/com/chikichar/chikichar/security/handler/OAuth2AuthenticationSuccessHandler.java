@@ -2,15 +2,13 @@ package com.chikichar.chikichar.security.handler;
 
 import com.chikichar.chikichar.model.MemberRole;
 import com.chikichar.chikichar.model.Social;
-import com.chikichar.chikichar.security.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.chikichar.chikichar.security.jwt.AuthToken;
 import com.chikichar.chikichar.security.jwt.TokenProvider;
 import com.chikichar.chikichar.security.oauthinfo.OAuth2UserInfo;
 import com.chikichar.chikichar.security.properties.AppProperties;
-import com.chikichar.chikichar.security.refreshtoken.UserRefreshToken;
-import com.chikichar.chikichar.security.refreshtoken.UserRefreshTokenRepository;
 import com.chikichar.chikichar.security.util.CookieUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -24,21 +22,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 
-import static com.chikichar.chikichar.security.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
-import static com.chikichar.chikichar.security.HttpCookieOAuth2AuthorizationRequestRepository.REFRESH_TOKEN;
-
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final TokenProvider tokenProvider;
     private final AppProperties appProperties;
-    private final UserRefreshTokenRepository userRefreshTokenRepository;
-    private final HttpCookieOAuth2AuthorizationRequestRepository authorizationRequestRepository;
 
 
     @Override
@@ -50,20 +43,19 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             return;
         }
 
-        clearAuthenticationAttributes(request, response);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
 
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
+        Optional<String> redirectUri = CookieUtil.getCookie(request, "redirect_uri")
                 .map(Cookie::getValue);
 
         if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
             throw new IllegalArgumentException("유효하지 않은 URL");
         }
 
-        String targetUrl = redirectUri.orElse("/");
+        String targetUrl = redirectUri.orElseGet(()->getDefaultTargetUrl());
 
         OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
         Social social = Social.valueOf(authToken.getAuthorizedClientRegistrationId().toUpperCase());
@@ -79,26 +71,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
 
-        // refresh 토큰 설정
-        long refreshTokenExpireDate = appProperties.getAuth().getRefreshTokenExpireDate();
 
-        AuthToken refreshToken = tokenProvider.createAuthToken(
-                appProperties.getAuth().getTokenSecret(),
-                new Date(now.getTime() + refreshTokenExpireDate)
-        );
-
-        // DB 저장
-        Optional<UserRefreshToken> userRefreshToken = userRefreshTokenRepository.findByUserEmail(userInfo.getEmail());
-        if (userRefreshToken.isPresent()) {
-            userRefreshToken.get().setRefreshToken(refreshToken.getToken());
-        } else {
-            userRefreshTokenRepository.saveAndFlush(new UserRefreshToken(userInfo.getEmail(), refreshToken.getToken()));
-        }
-
-        int cookieMaxAge = (int) refreshTokenExpireDate / 60;
-
-        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-        CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
+        log.info("handler access token={}",accessToken.getToken());
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", accessToken.getToken())
@@ -121,8 +95,5 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 });
     }
 
-    protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
-        super.clearAuthenticationAttributes(request);
-        authorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
-    }
+
 }
