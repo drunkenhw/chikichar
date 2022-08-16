@@ -2,7 +2,7 @@ package com.chikichar.chikichar.security;
 
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.model.MemberRole;
-import com.chikichar.chikichar.model.Social;
+import com.chikichar.chikichar.model.SocialType;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,7 +24,7 @@ public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
 
     private final String email;
     private final String password;
-    private final Social social;
+    private final SocialType socialType;
     private final MemberRole memberRole;
     private final Collection<GrantedAuthority> authorities;
     private Map<String, Object> attr;
@@ -33,7 +33,7 @@ public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
         return new UserPrincipal(
                 member.getEmail(),
                 member.getPassword(),
-                member.getSocial(),
+                member.getSocialType(),
                 MemberRole.USER,
                 Collections.singletonList(new SimpleGrantedAuthority(MemberRole.USER.getKey()))
         );

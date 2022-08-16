@@ -51,11 +51,11 @@ public class Member extends BaseEntity {
     private MemberRole memberRole;
 
     @Enumerated(EnumType.STRING)
-    private Social social;
+    private SocialType socialType;
 
 
     @Builder
-    public Member(String email, String name, String password, String nickname, String phone, Address address, Brand brand, MemberRole memberRole, Social social) {
+    public Member(String email, String name, String password, String nickname, String phone, Address address, Brand brand, MemberRole memberRole, SocialType socialType) {
         this.email = email;
         this.name = name;
         this.password = password;
@@ -64,7 +64,7 @@ public class Member extends BaseEntity {
         this.address = address;
         this.brand = brand;
         this.memberRole = memberRole;
-        this.social = social;
+        this.socialType = socialType;
     }
 
     public void modifyMember(MemberRequestDto memberRequestDto){

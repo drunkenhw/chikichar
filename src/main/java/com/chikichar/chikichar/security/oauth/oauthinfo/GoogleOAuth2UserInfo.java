@@ -1,4 +1,4 @@
-package com.chikichar.chikichar.security.oauthinfo;
+package com.chikichar.chikichar.security.oauth.oauthinfo;
 
 import java.util.Map;
 
