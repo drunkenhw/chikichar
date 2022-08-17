@@ -1,11 +1,16 @@
 package com.chikichar.chikichar.security.filter;
 
+import com.chikichar.chikichar.security.UserPrincipal;
 import com.chikichar.chikichar.security.jwt.AuthToken;
 import com.chikichar.chikichar.security.jwt.TokenProvider;
+import com.chikichar.chikichar.security.service.MemberDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -19,6 +24,7 @@ import java.io.IOException;
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
+    private final MemberDetailsService memberDetailsService;
     private final static String HEADER_AUTHORIZATION = "Authorization";
     private final static String PREFIX = "Bearer ";
 
@@ -30,8 +36,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         AuthToken authToken = tokenProvider.converterAuthToken(token);
 
         if(authToken.validateToken()){
-            Authentication authentication = tokenProvider.getAuthentication(authToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetails userDetails = memberDetailsService.loadUserByUsername(authToken.getTokenClaims().getSubject());
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                    userDetails,null,userDetails.getAuthorities()
+            );
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
 
 

@@ -16,27 +16,24 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@RequiredArgsConstructor
+
 public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
 
-    private final String email;
-    private final String password;
-    private final SocialType socialType;
-    private final MemberRole memberRole;
-    private final Collection<GrantedAuthority> authorities;
+//    private final String email;
+//    private final String password;
+//    private final SocialType socialType;
+//    private final MemberRole memberRole;
+//    private final Collection<GrantedAuthority> authorities;
+    private Member member;
     private Map<String, Object> attr;
 
+
+    private UserPrincipal(Member member) {
+        this.member = member;
+    }
+
     public static UserPrincipal create(Member member) {
-        return new UserPrincipal(
-                member.getEmail(),
-                member.getPassword(),
-                member.getSocialType(),
-                MemberRole.USER,
-                Collections.singletonList(new SimpleGrantedAuthority(MemberRole.USER.getKey()))
-        );
+        return new UserPrincipal(member);
     }
     public static UserPrincipal create(Member member, Map<String, Object> attributes) {
         UserPrincipal userPrincipal = create(member);
@@ -45,6 +42,13 @@ public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
         return userPrincipal;
     }
 
+    public Member getMember(){
+        return member;
+    }
+
+    public void setAttr(Map<String, Object> attr){
+        this.attr = attr;
+    }
 
 
     @Override
@@ -54,17 +58,23 @@ public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return Collections.singletonList(new SimpleGrantedAuthority(MemberRole.USER.getKey()));
+
+    }
+
+    @Override
+    public String getPassword() {
+        return member.getPassword();
     }
 
     @Override
     public String getName() {
-        return email;
+        return member.getName();
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return member.getEmail();
     }
 
     @Override
@@ -101,5 +111,7 @@ public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
     public OidcIdToken getIdToken() {
         return null;
     }
+
+
 
 }

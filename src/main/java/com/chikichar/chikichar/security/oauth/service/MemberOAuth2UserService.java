@@ -1,6 +1,7 @@
 package com.chikichar.chikichar.security.oauth.service;
 
 import com.chikichar.chikichar.entity.Member;
+import com.chikichar.chikichar.model.Brand;
 import com.chikichar.chikichar.model.MemberRole;
 import com.chikichar.chikichar.model.SocialType;
 import com.chikichar.chikichar.repository.MemberRepository;
@@ -59,6 +60,7 @@ public class MemberOAuth2UserService extends DefaultOAuth2UserService {
                 .nickname(userInfo.getNickname())
                 .password(UUID.randomUUID().toString())
                 .phone(userInfo.getPhone())
+                .brand(Brand.ETC)
                 .socialType(socialType)
                 .build();
 

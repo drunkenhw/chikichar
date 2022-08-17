@@ -4,6 +4,7 @@ import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.Brand;
 import com.chikichar.chikichar.model.MemberRole;
+import com.chikichar.chikichar.model.SocialType;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -43,6 +44,10 @@ public class MemberRequestDto {
 
     private MemberRole memberRole;
 
+    public Address getAddress(){
+        return new Address(city, street, zipcode);
+    }
+
     public Member toEntity(){
         return Member.builder()
                 .name(name)
@@ -53,6 +58,7 @@ public class MemberRequestDto {
                 .nickname(nickname)
                 .address(new Address(city, street, zipcode))
                 .memberRole(memberRole)
+                .socialType(SocialType.LOCAL)
                 .build();
     }
 

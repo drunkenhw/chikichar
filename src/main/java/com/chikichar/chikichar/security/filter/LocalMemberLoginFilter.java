@@ -32,7 +32,7 @@ public class LocalMemberLoginFilter extends AbstractAuthenticationProcessingFilt
     @Override
         public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException {
-            log.info("JsonUsernamePasswordAuthenticationFilter 이 동작합니다!!!");
+            log.info("LocalMemberLoginFilter !!!");
 
             if (!request.getMethod().equals(HTTP_METHOD) || !request.getContentType().equals("application/json")) {
                 log.error("POST 요청이 아니거나 JSON이 아닙니다!");

@@ -1,6 +1,7 @@
 package com.chikichar.chikichar.security.handler;
 
 import com.chikichar.chikichar.model.MemberRole;
+import com.chikichar.chikichar.security.UserPrincipal;
 import com.chikichar.chikichar.security.jwt.AuthToken;
 import com.chikichar.chikichar.security.jwt.TokenProvider;
 import com.chikichar.chikichar.security.properties.AppProperties;
@@ -31,11 +32,11 @@ public class LocalMemberSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
         //TODO redirect 경로 지정
-        OidcUser principal = (OidcUser) authentication.getPrincipal();
+        UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
 
         Date now = new Date();
         AuthToken accessToken = tokenProvider.createAuthToken(
-                principal.getEmail(),
+                principal.getMember().getEmail(),
                 MemberRole.USER,
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );

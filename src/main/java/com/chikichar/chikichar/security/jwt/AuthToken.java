@@ -37,6 +37,7 @@ public class AuthToken {
                 .compact();
     }
 
+
     public String createToken(String id, MemberRole memberRole , Date expireDate){
         return Jwts.builder()
                 .setSubject(id)
