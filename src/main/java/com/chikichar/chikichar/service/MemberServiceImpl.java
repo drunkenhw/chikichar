@@ -2,10 +2,7 @@ package com.chikichar.chikichar.service;
 
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.dto.member.MemberRequestDto;
-import com.chikichar.chikichar.model.MemberRole;
 import com.chikichar.chikichar.repository.MemberRepository;
-import com.chikichar.chikichar.security.jwt.TokenProvider;
-import com.chikichar.chikichar.security.properties.AppProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,31 +18,17 @@ import java.util.Date;
 public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final TokenProvider tokenProvider;
-    private final AppProperties appProperties;
 
     @Transactional
     @Override
-    public String joinAccount(MemberRequestDto memberRequestDto) {
+    public Long joinAccount(MemberRequestDto memberRequestDto) {
         memberRequestDto.setPassword(passwordEncoder.encode(memberRequestDto.getPassword()));
         Member savedMember = memberRepository.save(memberRequestDto.toEntity());
-        Date now = new Date();
-        return tokenProvider.createAuthToken(savedMember.getEmail(), savedMember.getMemberRole(),new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())).getToken();
+        return savedMember.getId();
 
 
     }
 
-    @Override
-    public String login(String email, String password) {
-//        //TODO Exception 처리 2개 해야함
-//        Member member = memberRepository.findByEmail(email).orElseThrow(()-> new IllegalArgumentException("email 없음"));
-//        if(!passwordEncoder.matches(password, member.getPassword())){
-//            throw new IllegalArgumentException("");
-//        }
-//        return tokenProvider.createToken(member.getEmail(),member.getMemberRole().getKey());
-//
-        return null;
-    }
 
     @Transactional
     @Override

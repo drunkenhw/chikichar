@@ -4,6 +4,7 @@ import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.repository.MemberRepository;
 import com.chikichar.chikichar.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MemberDetailsService implements UserDetailsService {
 
@@ -23,6 +25,7 @@ public class MemberDetailsService implements UserDetailsService {
         if(findMember.isEmpty()){
             throw new UsernameNotFoundException("이메일을 확인하세요");
         }
+        log.info("MemberDetailsService");
         return UserPrincipal.create(findMember.get());
     }
 }

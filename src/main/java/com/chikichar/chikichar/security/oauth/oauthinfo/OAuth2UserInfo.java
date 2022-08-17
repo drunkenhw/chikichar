@@ -1,6 +1,6 @@
-package com.chikichar.chikichar.security.oauthinfo;
+package com.chikichar.chikichar.security.oauth.oauthinfo;
 
-import com.chikichar.chikichar.model.Social;
+import com.chikichar.chikichar.model.SocialType;
 import lombok.Getter;
 
 import java.util.Map;
@@ -19,8 +19,8 @@ public abstract class OAuth2UserInfo {
     public abstract String getNickname();
     public abstract String getPhone();
 
-    public static OAuth2UserInfo getOAuth2UserInfo(Social social, Map<String, Object> attr) {
-        switch (social) {
+    public static OAuth2UserInfo getOAuth2UserInfo(SocialType socialType, Map<String, Object> attr) {
+        switch (socialType) {
             case GOOGLE: return new GoogleOAuth2UserInfo(attr);
             case NAVER: return new NaverOAuth2UserInfo(attr);
             default: throw new IllegalArgumentException("소셜 로그인 지원 불가");

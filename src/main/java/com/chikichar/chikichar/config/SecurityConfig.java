@@ -1,14 +1,16 @@
 package com.chikichar.chikichar.config;
 
-import com.chikichar.chikichar.model.MemberRole;
+import com.chikichar.chikichar.security.filter.LocalMemberLoginFilter;
 import com.chikichar.chikichar.security.filter.TokenAuthenticationFilter;
-import com.chikichar.chikichar.security.handler.OAuth2AuthenticationFailureHandler;
-import com.chikichar.chikichar.security.handler.OAuth2AuthenticationSuccessHandler;
+import com.chikichar.chikichar.security.handler.LocalMemberSuccessHandler;
+import com.chikichar.chikichar.security.oauth.handler.OAuth2AuthenticationFailureHandler;
+import com.chikichar.chikichar.security.oauth.handler.OAuth2AuthenticationSuccessHandler;
 import com.chikichar.chikichar.security.handler.TokenAccessDeniedHandler;
 import com.chikichar.chikichar.security.jwt.TokenProvider;
 import com.chikichar.chikichar.security.properties.AppProperties;
 import com.chikichar.chikichar.security.service.MemberDetailsService;
-import com.chikichar.chikichar.security.service.MemberOAuth2UserService;
+import com.chikichar.chikichar.security.oauth.service.MemberOAuth2UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final MemberDetailsService memberDetailsService;
     private final MemberOAuth2UserService oAuth2UserService;
     private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
+    private final LocalMemberSuccessHandler localMemberSuccessHandler;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -53,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/sample/all",
                         "/",
+                        "/login",
                         "/error",
                         "/favicon.ico",
                         "/**/*.png",
@@ -62,9 +66,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js").permitAll()
+
                 .antMatchers("/auth/**", "/oauth2/**").permitAll()
                 .antMatchers("/sample/member").hasRole("USER");
-        http.formLogin();
+        http.formLogin().disable();
 
         http.oauth2Login()
                 .authorizationEndpoint()
@@ -78,13 +83,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(oAuth2AuthenticationSuccessHandler())
                 .failureHandler(oAuth2AuthenticationFailureHandler());
 
+        http.exceptionHandling().accessDeniedHandler(tokenAccessDeniedHandler);
+
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(localMemberLoginFilter(), UsernamePasswordAuthenticationFilter.class);
         http.logout();
 
     }
-    @Override
     @Bean
-    protected AuthenticationManager authenticationManager() throws Exception {
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManager();
     }
     /*
@@ -95,6 +103,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new TokenAuthenticationFilter(tokenProvider);
     }
 
+    @Bean
+    public LocalMemberLoginFilter localMemberLoginFilter() throws Exception {
+        LocalMemberLoginFilter filter = new LocalMemberLoginFilter(new ObjectMapper());
+        filter.setAuthenticationManager(authenticationManagerBean());
+        filter.setAuthenticationSuccessHandler(localMemberSuccessHandler);
+        return filter;
+    }
 
     /*
      * Oauth 인증 성공 핸들러

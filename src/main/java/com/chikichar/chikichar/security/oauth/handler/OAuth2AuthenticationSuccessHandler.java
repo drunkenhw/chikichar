@@ -1,10 +1,10 @@
-package com.chikichar.chikichar.security.handler;
+package com.chikichar.chikichar.security.oauth.handler;
 
 import com.chikichar.chikichar.model.MemberRole;
-import com.chikichar.chikichar.model.Social;
+import com.chikichar.chikichar.model.SocialType;
 import com.chikichar.chikichar.security.jwt.AuthToken;
 import com.chikichar.chikichar.security.jwt.TokenProvider;
-import com.chikichar.chikichar.security.oauthinfo.OAuth2UserInfo;
+import com.chikichar.chikichar.security.oauth.oauthinfo.OAuth2UserInfo;
 import com.chikichar.chikichar.security.properties.AppProperties;
 import com.chikichar.chikichar.security.util.CookieUtil;
 import lombok.RequiredArgsConstructor;
@@ -36,12 +36,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        String targetUrl = determineTargetUrl(request, response, authentication);
+        //TODO redirect 경로 지정
 
+        String targetUrl = determineTargetUrl(request, response, authentication);
+        String requestURI = request.getRequestURI();
         if (response.isCommitted()) {
             logger.debug("이미 요청됨 " + targetUrl);
             return;
         }
+        log.info("성공");
 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
@@ -58,10 +61,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String targetUrl = redirectUri.orElseGet(()->getDefaultTargetUrl());
 
         OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
-        Social social = Social.valueOf(authToken.getAuthorizedClientRegistrationId().toUpperCase());
+        SocialType socialType = SocialType.valueOf(authToken.getAuthorizedClientRegistrationId().toUpperCase());
 
         OidcUser user = (OidcUser) authentication.getPrincipal();
-        OAuth2UserInfo userInfo = OAuth2UserInfo.getOAuth2UserInfo(social, user.getAttributes());
+        OAuth2UserInfo userInfo = OAuth2UserInfo.getOAuth2UserInfo(socialType, user.getAttributes());
 
 
         Date now = new Date();

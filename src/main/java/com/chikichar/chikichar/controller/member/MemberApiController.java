@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,22 +27,15 @@ public class MemberApiController {
     private final MemberService memberService;
 
     @PostMapping("/join")
-    public LoginResponseDto join(@Valid @RequestBody MemberRequestDto memberRequestDto, BindingResult bindingResult) throws BindException {
-        //TODO 세션도 줘야함
+    public ResponseEntity<Void> join(@Valid @RequestBody MemberRequestDto memberRequestDto, BindingResult bindingResult) throws BindException {
         if(bindingResult.hasErrors()){
             throw new BindException(bindingResult);
         }
-        String token = memberService.joinAccount(memberRequestDto);
-        return new LoginResponseDto(token);
+        Long memberId = memberService.joinAccount(memberRequestDto);
+        return ResponseEntity.created(URI.create("/api/user/" + memberId)).build();
+
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginDto){
-        log.info("login={}",loginDto);
-        String token = memberService.login(loginDto.getEmail(), loginDto.getPassword());
-
-        return new ResponseEntity<>(new LoginResponseDto(token), HttpStatus.OK);
-    }
 
     @GetMapping(value = "/email-check")
     public Boolean emailCheck(String email){

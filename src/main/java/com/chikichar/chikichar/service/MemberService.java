@@ -4,9 +4,8 @@ import com.chikichar.chikichar.dto.member.MemberRequestDto;
 
 public interface MemberService {
 
-    String joinAccount(MemberRequestDto memberRequestDto);
+    Long joinAccount(MemberRequestDto memberRequestDto);
 
-    String login(String email, String password);
     void deleteAccount(long memberId);
 
     void modifyInfo(Long id,MemberRequestDto memberRequestDto);
