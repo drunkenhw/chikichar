@@ -67,12 +67,12 @@ public class Member extends BaseEntity {
         this.socialType = socialType;
     }
 
-    public void modifyMember(MemberRequestDto memberRequestDto){
-        this.password = memberRequestDto.getPassword();
-        this.nickname = memberRequestDto.getNickname();
-        this.address = new Address(memberRequestDto.getCity(), memberRequestDto.getStreet(), memberRequestDto.getZipcode());
-        this.phone = memberRequestDto.getPhone();
-        this.brand = memberRequestDto.getBrand();
+    public void modifyMember( String nickname, String phone, Address address, Brand brand){
+        this.nickname = nickname;
+        this.phone = phone;
+        this.address = address;
+        this.brand = brand;
+
     }
 
 

@@ -32,6 +32,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AppProperties appProperties;
     private final TokenProvider tokenProvider;
+    private final ObjectMapper objectMapper;
     private final MemberDetailsService memberDetailsService;
     private final MemberOAuth2UserService oAuth2UserService;
     private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
@@ -66,9 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js").permitAll()
-
                 .antMatchers("/auth/**", "/oauth2/**").permitAll()
-                .antMatchers("/sample/member").hasRole("USER");
+                .antMatchers("/sample/member","/api/v1/auth/**").hasRole("USER");
         http.formLogin().disable();
 
         http.oauth2Login()
@@ -100,12 +100,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * */
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter() {
-        return new TokenAuthenticationFilter(tokenProvider);
+        return new TokenAuthenticationFilter(tokenProvider,memberDetailsService);
     }
 
     @Bean
     public LocalMemberLoginFilter localMemberLoginFilter() throws Exception {
-        LocalMemberLoginFilter filter = new LocalMemberLoginFilter(new ObjectMapper());
+        LocalMemberLoginFilter filter = new LocalMemberLoginFilter(objectMapper);
         filter.setAuthenticationManager(authenticationManagerBean());
         filter.setAuthenticationSuccessHandler(localMemberSuccessHandler);
         return filter;

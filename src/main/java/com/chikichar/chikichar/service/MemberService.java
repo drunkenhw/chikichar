@@ -1,14 +1,16 @@
 package com.chikichar.chikichar.service;
 
+import com.chikichar.chikichar.dto.member.OAuth2MemberRequestDto;
 import com.chikichar.chikichar.dto.member.MemberRequestDto;
+import com.chikichar.chikichar.entity.Member;
 
 public interface MemberService {
 
     Long joinAccount(MemberRequestDto memberRequestDto);
 
-    void deleteAccount(long memberId);
+    void deleteAccount(Member member);
 
-    void modifyInfo(Long id,MemberRequestDto memberRequestDto);
+    void modifyInfo(Member member ,MemberRequestDto memberRequestDto);
 
     boolean isDuplicateEmail(String email);
 
@@ -16,5 +18,7 @@ public interface MemberService {
 
     String findEmail(String name, String phone);
 
-    void changePassword(String password);
+    void changePassword(Member member,MemberRequestDto memberRequestDto);
+
+    void oAuthMemberAddProfile(Member member, OAuth2MemberRequestDto OAuth2MemberRequestDto);
 }

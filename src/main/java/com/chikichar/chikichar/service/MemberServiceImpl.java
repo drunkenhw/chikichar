@@ -1,15 +1,15 @@
 package com.chikichar.chikichar.service;
 
+import com.chikichar.chikichar.dto.member.OAuth2MemberRequestDto;
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.dto.member.MemberRequestDto;
+import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
 
 @Slf4j
 @Service
@@ -32,18 +32,20 @@ public class MemberServiceImpl implements MemberService{
 
     @Transactional
     @Override
-    public void deleteAccount(long memberId) {
-        memberRepository.deleteById(memberId);
+    public void deleteAccount(Member member) {
+        memberRepository.deleteById(member.getId());
     }
 
     @Transactional
     @Override
-    public void modifyInfo(Long id,MemberRequestDto memberRequestDto) {
+    public void modifyInfo(Member member,MemberRequestDto memberRequestDto) {
         //TODO Exception custom
-        Member findMember = memberRepository.findById(id).orElseThrow(()->new IllegalArgumentException("잘못된 사용자입니다."));
-        memberRequestDto.setPassword(passwordEncoder.encode(memberRequestDto.getPassword()));
 
-        findMember.modifyMember(memberRequestDto);
+        member.changePassword(passwordEncoder.encode(memberRequestDto.getPassword()));
+        member.modifyMember(memberRequestDto.getNickname(),memberRequestDto.getPhone(),
+                memberRequestDto.getAddress(),memberRequestDto.getBrand());
+        memberRepository.save(member);
+
 
     }
 
@@ -65,9 +67,25 @@ public class MemberServiceImpl implements MemberService{
                 .orElseThrow(()->new IllegalArgumentException("해당 정보가 존재하지 않습니다."));
     }
 
+    @Transactional
     @Override
-    public void changePassword(String password) {
+    public void changePassword(Member member,MemberRequestDto requestDto) {
         //TODO 메서드 완성해야함
+        member.changePassword(passwordEncoder.encode(requestDto.getPassword()));
+        memberRepository.save(member);
+    }
+
+    @Transactional
+    @Override
+    public void oAuthMemberAddProfile(Member member, OAuth2MemberRequestDto OAuth2MemberRequestDto) {
+
+        //TODO 메서드 완성해야함
+        member.modifyMember(
+                OAuth2MemberRequestDto.getNickname(),
+                OAuth2MemberRequestDto.getPhone(),
+                new Address(OAuth2MemberRequestDto.getCity(),OAuth2MemberRequestDto.getStreet(),OAuth2MemberRequestDto.getZipcode()),
+                OAuth2MemberRequestDto.getBrand());
+        memberRepository.save(member);
     }
 
 
