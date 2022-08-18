@@ -11,11 +11,11 @@ public class EntityBuilder {
     public static Member createMember() {
         Member member = Member.builder()
                 .memberRole(MemberRole.USER)
-                .email("before@naver.com")
-                .nickname("beforeNickname")
+                .email("before1@naver.com")
+                .nickname("beforeNickname1")
                 .address(new Address("busan","simin","213234"))
                 .brand(Brand.BENZ)
-                .name("han")
+                .name("before")
                 .password("secret")
                 .phone("01044443333")
                 .build();

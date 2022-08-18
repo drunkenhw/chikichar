@@ -33,7 +33,6 @@ public class OAuth2MemberRequestDto {
 
     private Brand brand;
 
-    private MemberRole memberRole;
 
 
 

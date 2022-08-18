@@ -33,7 +33,7 @@ class RecommendServiceImplTest {
     @Autowired
     private BoardRepository boardRepository;
 
-    @BeforeEach
+//    @BeforeEach
     void beforeEach(){
         Member writer = EntityBuilder.createMember();
         Member saveWriter = memberRepository.save(writer);
@@ -52,12 +52,23 @@ class RecommendServiceImplTest {
     }
 
     @Test
-    @DisplayName("추천 중복 방지 테스트")
+    @DisplayName("처음 추천할 때는 true를 반환하지만 두번째는 false를 반환한다.")
     public void recommendTest(){
+        Member writer = EntityBuilder.createMember();
+        Member saveWriter = memberRepository.save(writer);
 
-        Member saveWriter = memberRepository.findById(1L).orElseThrow();
-        Member saveReader = memberRepository.findById(2L).orElseThrow();
-        Article saveArticle = articleRepository.findById(1L).orElseThrow();
+        Member reader = Member.builder().email("BBB").memberRole(MemberRole.USER).build();
+        Member saveReader = memberRepository.save(reader);
+
+        Board board = EntityBuilder.createBoard();
+        Board saveBoard = boardRepository.save(board);
+
+        Article article = Article.builder().member(saveWriter).title("AA").content("aa").board(saveBoard).build();
+        Article saveArticle = articleRepository.save(article);
+
+//        Member saveWriter = memberRepository.findById(3L).orElseThrow();
+//        Member saveReader = memberRepository.findById(2L).orElseThrow();
+//        Article saveArticle = articleRepository.findById(1L).orElseThrow();
 
 
         boolean firstRecommend = recommendService.clickRecommend(saveReader.getId(), saveArticle.getId());

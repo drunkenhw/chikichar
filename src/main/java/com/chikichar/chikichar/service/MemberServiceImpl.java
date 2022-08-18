@@ -11,6 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -70,7 +73,6 @@ public class MemberServiceImpl implements MemberService{
     @Transactional
     @Override
     public void changePassword(Member member,MemberRequestDto requestDto) {
-        //TODO 메서드 완성해야함
         member.changePassword(passwordEncoder.encode(requestDto.getPassword()));
         memberRepository.save(member);
     }
@@ -88,5 +90,17 @@ public class MemberServiceImpl implements MemberService{
         memberRepository.save(member);
     }
 
+    @Override
+    public List<Member> getMemberList() {
+        return memberRepository.findAll();
+    }
 
+    @Override
+    public void banMember(Long memberId) {
+        Member banMember = memberRepository.findById(memberId).orElseThrow(
+                //TODO Exception 처리 해야함
+                () -> new NoSuchElementException()
+        );
+        banMember.ban();
+    }
 }

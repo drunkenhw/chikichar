@@ -4,6 +4,8 @@ import com.chikichar.chikichar.dto.member.OAuth2MemberRequestDto;
 import com.chikichar.chikichar.dto.member.MemberRequestDto;
 import com.chikichar.chikichar.entity.Member;
 
+import java.util.List;
+
 public interface MemberService {
 
     Long joinAccount(MemberRequestDto memberRequestDto);
@@ -21,4 +23,9 @@ public interface MemberService {
     void changePassword(Member member,MemberRequestDto memberRequestDto);
 
     void oAuthMemberAddProfile(Member member, OAuth2MemberRequestDto OAuth2MemberRequestDto);
+
+    List<Member> getMemberList();
+
+    void banMember(Long memberId);
+
 }
