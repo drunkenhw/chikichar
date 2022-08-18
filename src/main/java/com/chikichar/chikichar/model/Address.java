@@ -11,6 +11,7 @@ import javax.validation.constraints.NotBlank;
  * zipcode = 우편번호
  */
 @Getter
+@ToString
 @Embeddable
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

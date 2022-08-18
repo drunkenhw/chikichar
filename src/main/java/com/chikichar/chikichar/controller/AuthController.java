@@ -21,7 +21,7 @@ public class AuthController {
     private final MemberService memberService;
 
     @PatchMapping("/me")
-    public String  oAuthMemberModify(@CurrentUser Member member, OAuth2MemberRequestDto oAuth2MemberRequestDto){
+    public String  oAuthMemberModify(@CurrentUser Member member,@RequestBody OAuth2MemberRequestDto oAuth2MemberRequestDto){
 
         memberService.oAuthMemberAddProfile(member,oAuth2MemberRequestDto);
 

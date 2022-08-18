@@ -55,7 +55,7 @@ class MemberServiceImplTest {
         //가입 테스트
         Assertions.assertThat(saveMember.isPresent()).isEqualTo(true);
         //TODO 테스트 수정
-//        memberService.deleteAccount(saveMemberId);
+        memberService.deleteAccount(saveMember.get());
         Optional<Member> deleteMember = memberRepository.findById(saveMemberId);
         //탈퇴 테스트
         Assertions.assertThat(deleteMember.isPresent()).isEqualTo(false);
@@ -89,10 +89,9 @@ class MemberServiceImplTest {
                 .build();
 
         System.out.println(saveMemberId);
-        //TODO 테스트 완성해야함
-//        memberService.modifyInfo(saveMemberId,modifyMember);
 
         Member member = memberRepository.findById(saveMemberId).orElseThrow();
+        memberService.modifyInfo(member,modifyMember);
 
         Assertions.assertThat(member.getNickname()).isEqualTo("change");
     }

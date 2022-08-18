@@ -67,7 +67,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js").permitAll()
-
                 .antMatchers("/auth/**", "/oauth2/**").permitAll()
                 .antMatchers("/sample/member","/api/v1/auth/**").hasRole("USER");
         http.formLogin().disable();

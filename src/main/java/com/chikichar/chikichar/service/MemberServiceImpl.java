@@ -3,6 +3,7 @@ package com.chikichar.chikichar.service;
 import com.chikichar.chikichar.dto.member.OAuth2MemberRequestDto;
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.dto.member.MemberRequestDto;
+import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,6 +80,12 @@ public class MemberServiceImpl implements MemberService{
     public void oAuthMemberAddProfile(Member member, OAuth2MemberRequestDto OAuth2MemberRequestDto) {
 
         //TODO 메서드 완성해야함
+        member.modifyMember(
+                OAuth2MemberRequestDto.getNickname(),
+                OAuth2MemberRequestDto.getPhone(),
+                new Address(OAuth2MemberRequestDto.getCity(),OAuth2MemberRequestDto.getStreet(),OAuth2MemberRequestDto.getZipcode()),
+                OAuth2MemberRequestDto.getBrand());
+        memberRepository.save(member);
     }
 
 

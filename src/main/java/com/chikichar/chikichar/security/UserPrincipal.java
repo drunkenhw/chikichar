@@ -16,14 +16,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-
+@ToString
 public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
 
-//    private final String email;
-//    private final String password;
-//    private final SocialType socialType;
-//    private final MemberRole memberRole;
-//    private final Collection<GrantedAuthority> authorities;
     private Member member;
     private Map<String, Object> attr;
 
