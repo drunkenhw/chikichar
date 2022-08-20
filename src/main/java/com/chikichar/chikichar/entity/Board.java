@@ -5,9 +5,13 @@ import com.sun.istack.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
+import static javax.persistence.EnumType.*;
+
+@ToString
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,8 +25,8 @@ public class Board {
     @Column(name = "board_name", nullable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
     @NotNull
+    @Enumerated(STRING)
     @Column(nullable = false)
     private BoardType boardType;
 

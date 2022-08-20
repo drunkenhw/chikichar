@@ -29,7 +29,7 @@ public class MemberOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         log.info("MemberOAuth2UserService");
-
+        log.info("userRequest={}",oAuth2User.getAttributes());
         try {
             return process(userRequest, oAuth2User);
         } catch (Exception ex) {
@@ -37,14 +37,15 @@ public class MemberOAuth2UserService extends DefaultOAuth2UserService {
             throw new InternalAuthenticationServiceException(ex.getMessage(), ex.getCause());
         }
     }
-
+    //TODO 메서드 이름 변경해야함
     private OAuth2User process(OAuth2UserRequest userRequest, OAuth2User oAuth2User) {
         SocialType socialType = SocialType.valueOf(userRequest.getClientRegistration().getRegistrationId().toUpperCase());
+
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.getOAuth2UserInfo(socialType, oAuth2User.getAttributes());
-        log.info("email~~={}",oAuth2UserInfo.getEmail());
+
         Member findMember = memberRepository.findByEmail(oAuth2UserInfo.getEmail())
                 .orElseGet(()-> createMember(oAuth2UserInfo, socialType));
-        log.info("findmember={}",findMember.getSocialType());
+
         if(findMember.getSocialType() != socialType){
             throw new OAuth2AuthenticationException(socialType +"로 가입하신 같은 이메일이 존재합니다. ");
         }
@@ -57,7 +58,6 @@ public class MemberOAuth2UserService extends DefaultOAuth2UserService {
                 .email(userInfo.getEmail())
                 .name(userInfo.getName())
                 .memberRole(MemberRole.USER)
-                .nickname(userInfo.getNickname())
                 .password(UUID.randomUUID().toString())
                 .phone(userInfo.getPhone())
                 .brand(Brand.ETC)

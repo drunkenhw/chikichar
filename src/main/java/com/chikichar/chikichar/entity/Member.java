@@ -2,9 +2,14 @@ package com.chikichar.chikichar.entity;
 
 import com.chikichar.chikichar.dto.member.MemberRequestDto;
 import com.chikichar.chikichar.model.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.EnumType.*;
 
 
 /**
@@ -17,7 +22,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@ToString
+@ToString(exclude = {"articles","comments","recommends"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 
@@ -41,18 +46,29 @@ public class Member extends BaseEntity {
     @Embedded
     private Address address;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     private Brand brand;
 
     private int point;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     private MemberRole memberRole;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     private SocialType socialType;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "member")
+    private List<Article> articles = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "member")
+    private List<Comment> comments = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "member")
+    private List<Recommend> recommends = new ArrayList<>();
 
     @Builder
     public Member(String email, String name, String password, String nickname, String phone, Address address, Brand brand, MemberRole memberRole, SocialType socialType) {
@@ -65,6 +81,7 @@ public class Member extends BaseEntity {
         this.brand = brand;
         this.memberRole = memberRole;
         this.socialType = socialType;
+
     }
 
     public void modifyMember( String nickname, String phone, Address address, Brand brand){
@@ -83,4 +100,9 @@ public class Member extends BaseEntity {
         this.point += 1;
     }
     public void pointDown() { this.point -= 1;}
+
+    public void ban(){
+        this.memberRole = MemberRole.BAN;
+    }
+
 }

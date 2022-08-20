@@ -1,13 +1,10 @@
 package com.chikichar.chikichar.controller.member;
 
 
-import com.chikichar.chikichar.dto.member.LoginRequestDto;
-import com.chikichar.chikichar.dto.member.LoginResponseDto;
 import com.chikichar.chikichar.dto.member.MemberRequestDto;
 import com.chikichar.chikichar.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 

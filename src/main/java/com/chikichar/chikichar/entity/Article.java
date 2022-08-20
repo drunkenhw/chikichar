@@ -2,12 +2,15 @@ package com.chikichar.chikichar.entity;
 
 import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * member = 글쓴이
@@ -53,6 +56,7 @@ public class Article extends BaseEntity {
     @Column(name = "location_y")
     private double locationY;
 
+
     @Builder
     public Article(Board board, Member member, String title, String content, int viewCount, Address address, double locationX, double locationY) {
         this.board = board;
@@ -64,4 +68,5 @@ public class Article extends BaseEntity {
         this.locationX = locationX;
         this.locationY = locationY;
     }
+
 }

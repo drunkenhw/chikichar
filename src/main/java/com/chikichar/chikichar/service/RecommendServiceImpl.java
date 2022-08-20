@@ -23,15 +23,14 @@ public class RecommendServiceImpl implements RecommendService{
 
     @Transactional
     @Override
-    public boolean clickRecommend(Long memberId, Long articleId) {
+    public boolean clickRecommend(Member member, Long articleId) {
         //TODO Exception 처리 해야함
-        Member findMember = memberRepository.findById(memberId).orElseThrow();
         Article findArticle = articleRepository.findById(articleId).orElseThrow();
 
-        if(isAlreadyRecommend(findMember, findArticle)){
+        if(isAlreadyRecommend(member, findArticle)){
             return false;
         }
-        recommendRepository.save(Recommend.of(findMember,findArticle));
+        recommendRepository.save(Recommend.of(member,findArticle));
         return true;
 
     }
@@ -47,6 +46,7 @@ public class RecommendServiceImpl implements RecommendService{
 
     private void cancelRecommend(Article article, Recommend recommend) {
         recommendRepository.delete(recommend);
+        recommend.getMember().getRecommends().remove(recommend);
         article.getMember().pointDown();
     }
 

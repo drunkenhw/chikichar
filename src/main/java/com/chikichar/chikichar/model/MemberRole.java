@@ -15,7 +15,8 @@ import lombok.Getter;
 public enum MemberRole {
     USER("ROLE_USER","일반회원"),
     COMPANY("ROLE_COMPANY","업체회원"),
-    ADMIN("ROLE_ADMIN","관리자")
+    ADMIN("ROLE_ADMIN","관리자"),
+    BAN("ROLE_BAN","정지회원")
     ;
     private String key;
     private String value;

@@ -37,5 +37,14 @@ public class Comment extends BaseEntity {
         this.article = article;
         this.member = member;
         this.content = content;
+        this.setCommenter(member);
+    }
+
+    private void setCommenter(Member member) {
+        if(this.member.getComments() != null){
+            this.member.getComments().remove(this);
+        }
+        this.member = member;
+        member.getComments().add(this);
     }
 }

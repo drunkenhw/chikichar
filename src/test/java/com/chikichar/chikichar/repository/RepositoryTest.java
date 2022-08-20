@@ -3,11 +3,14 @@ package com.chikichar.chikichar.repository;
 import com.chikichar.chikichar.entity.*;
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.model.Address;
+import com.chikichar.chikichar.model.BoardType;
 import com.chikichar.chikichar.model.MemberRole;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import javax.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -25,12 +28,15 @@ class RepositoryTest {
     private ArticleImageRepository articleImageRepository;
     @Autowired
     private RecommendRepository recommendRepository;
+    @Autowired
+    private BoardRepository boardRepository;
 
     @Test
+    @Transactional
     @DisplayName("더미 데이터 삽입 테스트")
     public void dummyTest(){
         Member member = Member.builder()
-                .email("dummy@dummy.com")
+                .email("dumm3y@dummy.com")
                 .name("han")
                 .address(Address.builder()
                         .city("busan")
@@ -42,9 +48,14 @@ class RepositoryTest {
                 .build();
         Member saveMember = memberRepository.save(member);
 
+        Board board = new Board("드라이브코스", BoardType.MAP);
+
+         boardRepository.save(board);
+
         Article article = Article.builder()
                 .address(Address.builder().zipcode("12313").street("거리").city("서울").build())
                 .member(saveMember)
+                .board(board)
                 .title("제목")
                 .content("내용")
                 .locationX(32.2323)
@@ -72,6 +83,7 @@ class RepositoryTest {
 
         Recommend recommend =Recommend.of(saveMember,saveArticle);
         Recommend saveRecommend = recommendRepository.save(recommend);
+
 
 
         assertThat(saveMember.getId()).isEqualTo(member.getId());
