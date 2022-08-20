@@ -63,7 +63,6 @@ class MemberServiceImplTest {
         Optional<Member> saveMember = memberRepository.findById(saveMemberId);
         //가입 테스트
         assertThat(saveMember.isPresent()).isEqualTo(true);
-        //TODO 테스트 수정
         memberService.deleteAccount(saveMember.get());
         Optional<Member> deleteMember = memberRepository.findById(saveMemberId);
         //탈퇴 테스트
