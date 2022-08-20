@@ -21,15 +21,9 @@ import java.util.stream.Collectors;
 public class TokenProvider {
 
     private final Key key;
-    private static final String AUTHORITIES_KEY = "role";
-
 
     public TokenProvider(String secret){
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
-    }
-
-    public AuthToken createAuthToken(String id, Date expireDate) {
-        return new AuthToken(id, expireDate, key);
     }
 
     public AuthToken createAuthToken(String id, MemberRole role , Date expireDate){
@@ -40,17 +34,4 @@ public class TokenProvider {
         return new AuthToken(token, key);
     }
 
-    public Authentication getAuthentication(AuthToken authToken){
-        if(authToken.validateToken()){
-            Claims claims = authToken.getTokenClaims();
-            Collection<? extends GrantedAuthority> authorities =
-                    Arrays.stream(new String[]{claims.get(AUTHORITIES_KEY).toString()})
-                            .map(SimpleGrantedAuthority::new)
-                            .collect(Collectors.toList());
-            User user = new User(claims.getSubject(), "",authorities);
-            return new UsernamePasswordAuthenticationToken(user, authToken, authorities);
-        }else {
-            throw new TokenValidFailedException();
-        }
-    }
 }

@@ -1,6 +1,7 @@
 package com.chikichar.chikichar.service;
 
 import com.chikichar.chikichar.EntityBuilder;
+import com.chikichar.chikichar.dto.member.ChangePasswordDto;
 import com.chikichar.chikichar.dto.member.OAuth2MemberRequestDto;
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.dto.member.MemberRequestDto;
@@ -20,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.*;
+
 
 @Transactional
 @SpringBootTest
@@ -33,7 +36,7 @@ class MemberServiceImplTest {
     PasswordEncoder passwordEncoder;
     @BeforeEach
     void createMember(){
-        Member member = EntityBuilder.createMember();
+        Member member = EntityBuilder.createMember("before","before");
         memberRepository.save(member);
     }
 
@@ -59,12 +62,12 @@ class MemberServiceImplTest {
         Long saveMemberId = memberService.joinAccount(memberRequestDto);
         Optional<Member> saveMember = memberRepository.findById(saveMemberId);
         //가입 테스트
-        Assertions.assertThat(saveMember.isPresent()).isEqualTo(true);
+        assertThat(saveMember.isPresent()).isEqualTo(true);
         //TODO 테스트 수정
         memberService.deleteAccount(saveMember.get());
         Optional<Member> deleteMember = memberRepository.findById(saveMemberId);
         //탈퇴 테스트
-        Assertions.assertThat(deleteMember.isPresent()).isEqualTo(false);
+        assertThat(deleteMember.isPresent()).isEqualTo(false);
     }
     @Test
     @DisplayName("DTO로 회원 정보를 수정 한다.")
@@ -99,7 +102,7 @@ class MemberServiceImplTest {
         Member member = memberRepository.findById(saveMemberId).orElseThrow();
         memberService.modifyInfo(member,modifyMember);
 
-        Assertions.assertThat(member.getNickname()).isEqualTo("change");
+        assertThat(member.getNickname()).isEqualTo("change");
     }
 
     @Test
@@ -108,24 +111,32 @@ class MemberServiceImplTest {
 
         boolean duplicateEmail = memberService.isDuplicateEmail("before@naver.com");
 
-        Assertions.assertThat(duplicateEmail).isEqualTo(true);
+        assertThat(duplicateEmail).isEqualTo(true);
     }
 
     @Test
     @DisplayName("전화번호, 이름으로 이메일을 반환한다.")
     void findEmailTest(){
-        String han = memberService.findEmail("han", "01044443333");
+        String han = memberService.findEmail("han", "01044444444");
 
-        Assertions.assertThat(han).isEqualTo("before@naver.com");
+        assertThat(han).isEqualTo("before@naver.com");
     }
 
     @Test
     @DisplayName("비밀번호를 변경한다.")
     void changePasswordTest(){
-        Member member = memberRepository.findByEmail("before1@naver.com").orElseThrow();
-        MemberRequestDto memberRequestDto = MemberRequestDto.builder().password("1").build();
-        memberService.changePassword(member, memberRequestDto);
-        Assertions.assertThat(passwordEncoder.matches("1",member.getPassword())).isTrue();
+        Member member = memberRepository.findByEmail("before@naver.com").orElseThrow();
+        ChangePasswordDto changePasswordDto = new ChangePasswordDto("1","2");
+        memberService.changePassword(member, changePasswordDto);
+        assertThat(passwordEncoder.matches("2",member.getPassword())).isTrue();
+    }
+    @Test
+    @DisplayName("현재 비밀번호가 맞지않으면 Exception이 발생한다.")
+    void changePasswordExceptionTest(){
+        Member member = memberRepository.findByEmail("before@naver.com").orElseThrow();
+        ChangePasswordDto changePasswordDto = new ChangePasswordDto("2","3");
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class,
+                () -> memberService.changePassword(member, changePasswordDto));
     }
 
     @Test
@@ -140,12 +151,12 @@ class MemberServiceImplTest {
     @Test
     @DisplayName("소셜 로그인 회원정보를 추가한다.")
     public void modifyOAuth2(){
-        Member member = memberRepository.findByEmail("drunkenhw@gmail.com").orElseThrow();
+        Member member = memberRepository.findByEmail("before@naver.com").orElseThrow();
         OAuth2MemberRequestDto oAuth2MemberRequestDto = OAuth2MemberRequestDto.builder()
                 .brand(Brand.CHEVROLET).city("seoul").name("kim").phone("01021010101")
                 .street("gangnam").nickname("kent").zipcode("1233").build();
         memberService.oAuthMemberAddProfile(member,oAuth2MemberRequestDto);
-        Assertions.assertThat(member.getAddress().getCity()).isEqualTo("seoul");
+        assertThat(member.getAddress().getCity()).isEqualTo("seoul");
     }
 
     @Test
@@ -153,6 +164,6 @@ class MemberServiceImplTest {
     void bannedMember(){
         Member member = memberRepository.findByEmail("before@naver.com").orElseThrow();
         memberService.banMember(member.getId());
-        Assertions.assertThat(member.getMemberRole()).isEqualTo(MemberRole.BAN);
+        assertThat(member.getMemberRole()).isEqualTo(MemberRole.BAN);
     }
 }

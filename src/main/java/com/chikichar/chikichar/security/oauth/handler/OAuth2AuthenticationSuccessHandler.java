@@ -2,6 +2,7 @@ package com.chikichar.chikichar.security.oauth.handler;
 
 import com.chikichar.chikichar.model.MemberRole;
 import com.chikichar.chikichar.model.SocialType;
+import com.chikichar.chikichar.security.UserPrincipal;
 import com.chikichar.chikichar.security.jwt.AuthToken;
 import com.chikichar.chikichar.security.jwt.TokenProvider;
 import com.chikichar.chikichar.security.oauth.oauthinfo.OAuth2UserInfo;
@@ -39,7 +40,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         //TODO redirect 경로 지정
 
         String targetUrl = determineTargetUrl(request, response, authentication);
-        String requestURI = request.getRequestURI();
         if (response.isCommitted()) {
             logger.debug("이미 요청됨 " + targetUrl);
             return;
@@ -63,7 +63,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
         SocialType socialType = SocialType.valueOf(authToken.getAuthorizedClientRegistrationId().toUpperCase());
 
-        OidcUser user = (OidcUser) authentication.getPrincipal();
+        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+
+        //닉네임이 없으면 개인정보 수정화면으로 넘어감 /modify
+        if(user.getMember().getNickname() == null){
+            targetUrl = "/modify";
+            return UriComponentsBuilder.fromUriString(targetUrl)
+                    .build().toUriString();
+        }
+
         OAuth2UserInfo userInfo = OAuth2UserInfo.getOAuth2UserInfo(socialType, user.getAttributes());
 
 
@@ -74,8 +82,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
 
-
-        log.info("handler access token={}",accessToken.getToken());
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", accessToken.getToken())

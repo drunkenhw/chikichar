@@ -9,6 +9,8 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+import static javax.persistence.EnumType.*;
+
 @ToString
 @Entity
 @Getter
@@ -23,8 +25,8 @@ public class Board {
     @Column(name = "board_name", nullable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
     @NotNull
+    @Enumerated(STRING)
     @Column(nullable = false)
     private BoardType boardType;
 

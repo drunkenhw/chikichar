@@ -1,11 +1,12 @@
 package com.chikichar.chikichar.dto.member;
 
+import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.model.Brand;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Data
@@ -35,4 +36,5 @@ public class MemberResponseDto {
     private int articleCount;
 
     private int recommendCount;
+
 }

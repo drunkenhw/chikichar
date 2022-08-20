@@ -1,5 +1,7 @@
 package com.chikichar.chikichar.service;
 
+import com.chikichar.chikichar.dto.member.ChangePasswordDto;
+import com.chikichar.chikichar.dto.member.MemberResponseDto;
 import com.chikichar.chikichar.dto.member.OAuth2MemberRequestDto;
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.dto.member.MemberRequestDto;
@@ -28,7 +30,6 @@ public class MemberServiceImpl implements MemberService{
         memberRequestDto.setPassword(passwordEncoder.encode(memberRequestDto.getPassword()));
         Member savedMember = memberRepository.save(memberRequestDto.toEntity());
         return savedMember.getId();
-
 
     }
 
@@ -72,9 +73,16 @@ public class MemberServiceImpl implements MemberService{
 
     @Transactional
     @Override
-    public void changePassword(Member member,MemberRequestDto requestDto) {
-        member.changePassword(passwordEncoder.encode(requestDto.getPassword()));
+    public void changePassword(Member member, ChangePasswordDto changePasswordDto) {
+        if(isNotMatchPassword(member, changePasswordDto)){
+            throw new IllegalArgumentException("원래 비밀번호가 맞지 않습니다");
+        }
+        member.changePassword(passwordEncoder.encode(changePasswordDto.getChangePassword()));
         memberRepository.save(member);
+    }
+
+    private boolean isNotMatchPassword(Member member, ChangePasswordDto changePasswordDto) {
+        return !passwordEncoder.matches(changePasswordDto.getCurrentPassword(), member.getPassword());
     }
 
     @Transactional
@@ -95,6 +103,7 @@ public class MemberServiceImpl implements MemberService{
         return memberRepository.findAll();
     }
 
+    @Transactional
     @Override
     public void banMember(Long memberId) {
         Member banMember = memberRepository.findById(memberId).orElseThrow(
@@ -103,4 +112,10 @@ public class MemberServiceImpl implements MemberService{
         );
         banMember.ban();
     }
+
+//    @Override
+//    public MemberResponseDto getMyPage(Member member) {
+//
+//        return
+//    }
 }

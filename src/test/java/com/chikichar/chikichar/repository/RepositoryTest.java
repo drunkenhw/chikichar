@@ -85,6 +85,7 @@ class RepositoryTest {
         Recommend saveRecommend = recommendRepository.save(recommend);
 
 
+
         assertThat(saveMember.getId()).isEqualTo(member.getId());
         assertThat(saveArticle.getId()).isEqualTo(article.getId());
         assertThat(saveItem.getId()).isEqualTo(item.getId());

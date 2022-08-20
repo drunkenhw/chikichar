@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum SocialType {
     GOOGLE,
     NAVER,
-    LOCAL
+    LOCAL,
+    KAKAO
     ;
 }

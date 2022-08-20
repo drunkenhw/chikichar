@@ -1,5 +1,6 @@
 package com.chikichar.chikichar.security.filter;
 
+import com.chikichar.chikichar.model.MemberRole;
 import com.chikichar.chikichar.security.UserPrincipal;
 import com.chikichar.chikichar.security.jwt.AuthToken;
 import com.chikichar.chikichar.security.jwt.TokenProvider;
@@ -37,9 +38,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
         if(authToken.validateToken()){
             UserDetails userDetails = memberDetailsService.loadUserByUsername(authToken.getTokenClaims().getSubject());
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    userDetails,null,userDetails.getAuthorities()
-            );
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+
+            log.info("authenticationToken.getAuthorities()={}",authenticationToken.getAuthorities());
+
+            //로그인한 Ip, SessoionId 가져와서 저장함.
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }

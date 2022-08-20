@@ -19,8 +19,8 @@ import java.io.IOException;
 @Slf4j
 public class LocalMemberLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-    private static final String HTTP_METHOD = "POST";
-    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/login", HTTP_METHOD);
+    private static final String HTTP_POST = "POST";
+    private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/login", HTTP_POST);
     private final ObjectMapper objectMapper;
 
     public LocalMemberLoginFilter(ObjectMapper objectMapper) {
@@ -34,25 +34,23 @@ public class LocalMemberLoginFilter extends AbstractAuthenticationProcessingFilt
             throws AuthenticationException, IOException {
             log.info("LocalMemberLoginFilter !!!");
 
-            if (!request.getMethod().equals(HTTP_METHOD) || !request.getContentType().equals("application/json")) {
-                log.error("POST 요청이 아니거나 JSON이 아닙니다!");
+            if (!request.getMethod().equals(HTTP_POST) || !request.getContentType().equals("application/json")) {
+                log.info("POST 요청이 아니거나 JSON이 아닙니다!");
                 throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
             }
 
         LoginRequestDto loginRequestDto = objectMapper
                 .readValue(StreamUtils.copyToString(request.getInputStream(), StandardCharset.UTF_8), LoginRequestDto.class);
 
-
         String username = loginRequestDto.getEmail();
         String password = loginRequestDto.getPassword();
 
             if(username ==null || password == null){
-                throw new AuthenticationServiceException("DATA IS MISS");
+                throw new AuthenticationServiceException("아이디, 혹은 패스워드를 입력하세요");
             }
 
             UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
-
-            return super.getAuthenticationManager().authenticate(authRequest);//getAuthenticationManager를 커스텀해줌
+            return super.getAuthenticationManager().authenticate(authRequest);
         }
 
 }
