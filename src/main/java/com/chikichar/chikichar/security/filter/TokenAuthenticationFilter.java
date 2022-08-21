@@ -31,7 +31,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        //헤더에서 토큰 꺼내옴
+        //헤더에서 토큰 꺼냄
         String token = getAccessToken(request);
 
         AuthToken authToken = tokenProvider.converterAuthToken(token);
@@ -47,10 +47,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
-
-
-            log.info("token임={}",token);
-
 
         filterChain.doFilter(request, response);
 

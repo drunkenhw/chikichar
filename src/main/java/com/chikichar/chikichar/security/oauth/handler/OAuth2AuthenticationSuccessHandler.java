@@ -61,19 +61,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String targetUrl = redirectUri.orElseGet(()->getDefaultTargetUrl());
 
         OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
-        SocialType socialType = SocialType.valueOf(authToken.getAuthorizedClientRegistrationId().toUpperCase());
 
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
 
-        //닉네임이 없으면 개인정보 수정화면으로 넘어감 /modify
+        //닉네임이 없으면 개인정보 수정화면으로 넘어감 -> /modify
         if(user.getMember().getNickname() == null){
             targetUrl = "/modify";
             return UriComponentsBuilder.fromUriString(targetUrl)
                     .build().toUriString();
         }
 
-        OAuth2UserInfo userInfo = OAuth2UserInfo.getOAuth2UserInfo(socialType, user.getAttributes());
-
+        OAuth2UserInfo userInfo = OAuth2UserInfo.getOAuth2UserInfo(getSocialType(authToken), user.getAttributes());
 
         Date now = new Date();
         AuthToken accessToken = tokenProvider.createAuthToken(
@@ -82,10 +80,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
 
-
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", accessToken.getToken())
                 .build().toUriString();
+    }
+
+    private SocialType getSocialType(OAuth2AuthenticationToken authToken) {
+        return SocialType.valueOf(authToken.getAuthorizedClientRegistrationId().toUpperCase());
     }
 
     private boolean isAuthorizedRedirectUri(String uri) {
