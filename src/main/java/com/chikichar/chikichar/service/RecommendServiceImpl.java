@@ -4,7 +4,6 @@ import com.chikichar.chikichar.entity.Article;
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.entity.Recommend;
 import com.chikichar.chikichar.repository.ArticleRepository;
-import com.chikichar.chikichar.repository.MemberRepository;
 import com.chikichar.chikichar.repository.RecommendRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional(readOnly=true)
 public class RecommendServiceImpl implements RecommendService{
-    private final MemberRepository memberRepository;
     private final ArticleRepository articleRepository;
     private final RecommendRepository recommendRepository;
 

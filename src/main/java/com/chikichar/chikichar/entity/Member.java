@@ -1,6 +1,5 @@
 package com.chikichar.chikichar.entity;
 
-import com.chikichar.chikichar.dto.member.MemberRequestDto;
 import com.chikichar.chikichar.model.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -24,7 +23,7 @@ import static javax.persistence.EnumType.*;
 @Getter
 @ToString(exclude = {"articles","comments","recommends"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends BaseEntity {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -32,25 +32,27 @@ public class LocalMemberLoginFilter extends AbstractAuthenticationProcessingFilt
     @Override
         public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException {
-            log.info("LocalMemberLoginFilter !!!");
+
 
             if (!request.getMethod().equals(HTTP_POST) || !request.getContentType().equals("application/json")) {
                 log.info("POST 요청이 아니거나 JSON이 아닙니다!");
                 throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
             }
+            LoginRequestDto emailAndPassword = getEmailAndPassword(request);
+            String email = emailAndPassword.getEmail();
+            String password = emailAndPassword.getPassword();
 
-        LoginRequestDto loginRequestDto = objectMapper
-                .readValue(StreamUtils.copyToString(request.getInputStream(), StandardCharset.UTF_8), LoginRequestDto.class);
-
-        String username = loginRequestDto.getEmail();
-        String password = loginRequestDto.getPassword();
-
-            if(username ==null || password == null){
+            if(email ==null || password == null){
                 throw new AuthenticationServiceException("아이디, 혹은 패스워드를 입력하세요");
             }
 
-            UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
+            UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);
             return super.getAuthenticationManager().authenticate(authRequest);
         }
+
+    private LoginRequestDto getEmailAndPassword(HttpServletRequest request) throws IOException {
+        return objectMapper
+                .readValue(StreamUtils.copyToString(request.getInputStream(), StandardCharset.UTF_8), LoginRequestDto.class);
+    }
 
 }

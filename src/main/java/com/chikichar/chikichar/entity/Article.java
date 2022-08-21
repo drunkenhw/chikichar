@@ -1,16 +1,13 @@
 package com.chikichar.chikichar.entity;
 
 import com.chikichar.chikichar.model.Address;
-import com.chikichar.chikichar.model.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.chikichar.chikichar.model.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * member = 글쓴이
@@ -23,7 +20,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Article extends BaseEntity {
+public class Article extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
