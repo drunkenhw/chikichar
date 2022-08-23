@@ -40,18 +40,9 @@ public class SecurityConfig  {
     private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
     private final LocalMemberSuccessHandler localMemberSuccessHandler;
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(memberDetailsService)
-//                .passwordEncoder(passwordEncoder());
-//    }
 
     @Bean
-    PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http,AuthenticationManager authenticationManager) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
         http.csrf().disable();
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -89,10 +80,17 @@ public class SecurityConfig  {
         http.exceptionHandling().accessDeniedHandler(tokenAccessDeniedHandler);
 
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(localMemberLoginFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(localMemberLoginFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class)
+                .authenticationManager(authenticationManager);
         http.logout();
         return http.build();
     }
+
+    @Bean
+    PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
     @Bean
     public AuthenticationManager authenticationManagerBean(
             AuthenticationConfiguration authenticationConfiguration) throws Exception {
