@@ -22,6 +22,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public Long addBoard(String boardName, BoardType boardType) {
         Board board = new Board(boardName, boardType);
         Board saveBoard = boardRepository.save(board);

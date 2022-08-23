@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -60,33 +59,27 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElseGet(()->getDefaultTargetUrl());
 
-        OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
-
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
 
+        Date now = new Date();
+        AuthToken accessToken = tokenProvider.createAuthToken(
+                user.getMember().getEmail(),
+                MemberRole.USER,
+                new Date(now.getTime() + appProperties.getAuth().getTokenExpireDate())
+        );
         //닉네임이 없으면 개인정보 수정화면으로 넘어감 -> /modify
         if(user.getMember().getNickname() == null){
             targetUrl = "/modify";
             return UriComponentsBuilder.fromUriString(targetUrl)
+                    .queryParam("token", accessToken.getToken())
                     .build().toUriString();
         }
+        response.setHeader("Authorization", "Bearer "+accessToken.getToken());
 
-        OAuth2UserInfo userInfo = OAuth2UserInfo.getOAuth2UserInfo(getSocialType(authToken), user.getAttributes());
-
-        Date now = new Date();
-        AuthToken accessToken = tokenProvider.createAuthToken(
-                userInfo.getEmail(),
-                MemberRole.USER,
-                new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
-        );
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", accessToken.getToken())
                 .build().toUriString();
-    }
-
-    private SocialType getSocialType(OAuth2AuthenticationToken authToken) {
-        return SocialType.valueOf(authToken.getAuthorizedClientRegistrationId().toUpperCase());
     }
 
     private boolean isAuthorizedRedirectUri(String uri) {

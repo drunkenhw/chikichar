@@ -1,6 +1,10 @@
-package com.chikichar.chikichar.entity;
+package com.chikichar.chikichar.service;
 
 import com.chikichar.chikichar.EntityBuilder;
+import com.chikichar.chikichar.entity.Article;
+import com.chikichar.chikichar.entity.Board;
+import com.chikichar.chikichar.entity.Comment;
+import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.repository.ArticleRepository;
 import com.chikichar.chikichar.repository.BoardRepository;
 import com.chikichar.chikichar.repository.CommentRepository;
@@ -14,7 +18,7 @@ import static org.assertj.core.api.Assertions.*;
 
 
 @SpringBootTest
-class CommentTest {
+class CommentServiceTest {
 
     @Autowired
     MemberRepository memberRepository;
@@ -28,7 +32,7 @@ class CommentTest {
     @Test
     @DisplayName("댓글을 달면 회원의 Comment 리스트에 추가한다.")
     void memberCommentListTest(){
-        Member member = EntityBuilder.createMember("before","before");
+        Member member = EntityBuilder.createMember("comment","comment");
         memberRepository.save(member);
         Board board = EntityBuilder.createBoard();
         boardRepository.save(board);

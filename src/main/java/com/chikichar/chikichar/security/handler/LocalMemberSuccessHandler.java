@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -47,7 +46,7 @@ public class LocalMemberSuccessHandler implements AuthenticationSuccessHandler {
         AuthToken accessToken = tokenProvider.createAuthToken(
                 principal.getMember().getEmail(),
                 MemberRole.USER,
-                new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
+                new Date(now.getTime() + appProperties.getAuth().getTokenExpireDate())
         );
         response.setHeader(AUTHORIZATION, TOKEN_PREFIX+accessToken.getToken());
 

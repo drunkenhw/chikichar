@@ -58,14 +58,15 @@ class MemberServiceImplTest {
                 .phone("101010100")
                 .name("han")
                 .build();
-
+        //가입 테스트
         Long saveMemberId = memberService.joinAccount(memberRequestDto);
         Optional<Member> saveMember = memberRepository.findById(saveMemberId);
-        //가입 테스트
         assertThat(saveMember.isPresent()).isEqualTo(true);
+
+        //탈퇴 테스트
+
         memberService.deleteAccount(saveMember.get());
         Optional<Member> deleteMember = memberRepository.findById(saveMemberId);
-        //탈퇴 테스트
         assertThat(deleteMember.isPresent()).isEqualTo(false);
     }
     @Test

@@ -28,27 +28,27 @@ public class MemberOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
+        SocialType socialType = getSocialType(userRequest);
 
         try {
-            return process(userRequest, oAuth2User);
+            return findMemberBySocialType(socialType, oAuth2User);
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new InternalAuthenticationServiceException(ex.getMessage(), ex.getCause());
         }
     }
     //TODO 메서드 이름 변경해야함
-    private OAuth2User process(OAuth2UserRequest userRequest, OAuth2User oAuth2User) {
-        SocialType socialType = getSocialType(userRequest);
+    private OAuth2User findMemberBySocialType(SocialType socialType, OAuth2User oAuth2User) {
 
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.getOAuth2UserInfo(socialType, oAuth2User.getAttributes());
 
-        Member findMember = findMemberOrElseCreateMember(socialType, oAuth2UserInfo);
+        Member member = findMemberOrElseCreateMember(socialType, oAuth2UserInfo);
 
-        if(findMember.getSocialType() != socialType){
+        if(member.getSocialType() != socialType){
             throw new OAuth2AuthenticationException(socialType +"로 가입하신 같은 이메일이 존재합니다. ");
         }
 
-        return UserPrincipal.create(findMember,oAuth2User.getAttributes());
+        return UserPrincipal.create(member,oAuth2User.getAttributes());
     }
 
     private Member findMemberOrElseCreateMember(SocialType socialType, OAuth2UserInfo oAuth2UserInfo) {
