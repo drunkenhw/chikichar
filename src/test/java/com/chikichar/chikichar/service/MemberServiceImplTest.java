@@ -114,13 +114,13 @@ class MemberServiceImplTest {
         assertThat(duplicateEmail).isEqualTo(true);
     }
 
-    @Test
-    @DisplayName("전화번호, 이름으로 이메일을 반환한다.")
-    void findEmailTest(){
-        String han = memberService.findEmail("han", "01044444444");
-
-        assertThat(han).isEqualTo("before@naver.com");
-    }
+//    @Test
+//    @DisplayName("전화번호, 이름으로 이메일을 반환한다.")
+//    void findEmailTest(){
+//        String han = memberService.findEmail("han", "01044444444");
+//
+//        assertThat(han).isEqualTo("before@naver.com");
+//    }
 
     @Test
     @DisplayName("비밀번호를 변경한다.")

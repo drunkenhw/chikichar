@@ -23,4 +23,8 @@ public class TestController {
     public String member(){
         return "sample/member";
     }
+    @GetMapping("/modify")
+    public String modify() {
+        return "modify";
+    }
 }

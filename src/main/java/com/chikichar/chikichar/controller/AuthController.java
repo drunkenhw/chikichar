@@ -27,17 +27,19 @@ public class AuthController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity oAuthMemberModify(@CurrentUser Member member, @RequestBody OAuth2MemberRequestDto oAuth2MemberRequestDto){
+    public ResponseEntity oAuthMemberModify(@CurrentUser Member member, @RequestBody OAuth2MemberRequestDto oAuth2MemberRequestDto) {
 
-        memberService.oAuthMemberAddProfile(member,oAuth2MemberRequestDto);
+        memberService.oAuthMemberAddProfile(member, oAuth2MemberRequestDto);
 
         return ResponseEntity.ok().body("회원 정보 수정 완료");
     }
+
     @PatchMapping("/change-password")
     public ResponseEntity changePassword(@CurrentUser Member member,
-                                 @RequestBody ChangePasswordDto changePasswordDto){
-        memberService.changePassword(member,changePasswordDto);
+                                         @RequestBody ChangePasswordDto changePasswordDto) {
+        memberService.changePassword(member, changePasswordDto);
         return ResponseEntity.ok().body("비밀번호 변경 완료");
     }
+
 
 }

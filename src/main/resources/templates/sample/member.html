@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -21,6 +21,7 @@
 <body>
 <div class="container">
     <h1>For Member</h1>
+
     <div sec:authorize="hasRole('USER')">Has USER ROLE</div>
     <div sec:authorize="hasRole('MANAGER')">Has USER MANAGER</div>
     <div sec:authorize="hasRole('ADMIN')">Has USER ADMIN</div>

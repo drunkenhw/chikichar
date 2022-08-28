@@ -40,7 +40,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = determineTargetUrl(request, response, authentication);
         if (response.isCommitted()) {
-            logger.debug("이미 요청됨 " + targetUrl);
+            log.debug("이미 요청됨 " + targetUrl);
             return;
         }
         log.info("성공");

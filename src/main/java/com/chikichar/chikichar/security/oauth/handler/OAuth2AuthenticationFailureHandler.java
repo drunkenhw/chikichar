@@ -19,12 +19,12 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-
+    private static final String INDEX_PAGE = "/sample/member";
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         String targetUrlFromCookie = CookieUtil.getCookie(request, "redirect_uri")
                 .map(Cookie::getValue)
-                .orElseGet(()->"/sample/member");
+                .orElseGet(()->INDEX_PAGE);
 
         exception.printStackTrace();
         log.info("실패");

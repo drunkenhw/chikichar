@@ -20,6 +20,8 @@ import java.io.IOException;
 public class LocalMemberLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     private static final String HTTP_POST = "POST";
+    private static final String APPLICATION_JSON = "application/json";
+
     private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/login", HTTP_POST);
     private final ObjectMapper objectMapper;
 
@@ -33,22 +35,23 @@ public class LocalMemberLoginFilter extends AbstractAuthenticationProcessingFilt
         public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException, IOException {
 
-
-            if (!request.getMethod().equals(HTTP_POST) || !request.getContentType().equals("application/json")) {
-                log.info("POST 요청이 아니거나 JSON이 아닙니다!");
+        if (!isPostAndJson(request)) {
                 throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
             }
             LoginRequestDto emailAndPassword = getEmailAndPassword(request);
             String email = emailAndPassword.getEmail();
             String password = emailAndPassword.getPassword();
 
-            if(email ==null || password == null){
-                throw new AuthenticationServiceException("아이디, 혹은 패스워드를 입력하세요");
-            }
-
+        if (email == null || password == null) {
+            throw new AuthenticationServiceException("아이디, 혹은 패스워드를 입력하세요");
+        }
             UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);
             return super.getAuthenticationManager().authenticate(authRequest);
         }
+
+    private boolean isPostAndJson(HttpServletRequest request) {
+        return request.getMethod().equals(HTTP_POST) || request.getContentType().equals(APPLICATION_JSON);
+    }
 
     private LoginRequestDto getEmailAndPassword(HttpServletRequest request) throws IOException {
         return objectMapper
