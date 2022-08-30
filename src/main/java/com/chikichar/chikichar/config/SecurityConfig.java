@@ -1,5 +1,6 @@
 package com.chikichar.chikichar.config;
 
+import com.chikichar.chikichar.security.handler.LoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,6 +23,7 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .antMatchers("/**.js").permitAll();
         http.formLogin();
+        http.oauth2Login().successHandler(new LoginSuccessHandler());
         return http.build();
     }
 

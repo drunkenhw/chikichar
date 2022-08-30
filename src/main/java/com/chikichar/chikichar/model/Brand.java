@@ -1,5 +1,8 @@
 package com.chikichar.chikichar.model;
 
+import lombok.Getter;
+
+@Getter
 public enum Brand {
     HYUNDAI("현대"),
     SSANGYONG("쌍용"),
