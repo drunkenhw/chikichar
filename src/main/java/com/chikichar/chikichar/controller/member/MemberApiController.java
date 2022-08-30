@@ -22,24 +22,17 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
-    @PostMapping("/join")
-    public ResponseEntity<Void> join(@Valid @RequestBody MemberRequestDto memberRequestDto, BindingResult bindingResult) throws BindException {
-        if(bindingResult.hasErrors()){
-            throw new BindException(bindingResult);
-        }
-        Long memberId = memberService.joinAccount(memberRequestDto);
-        return ResponseEntity.created(URI.create("/api/user/" + memberId)).build();
-
-    }
 
 
     @GetMapping(value = "/email-check")
     public Boolean emailCheck(String email){
+        log.info("email={}" ,email);
         return memberService.isDuplicateEmail(email);
     }
 
     @GetMapping("/nickname-check")
     public Boolean nicknameCheck(String nickname){
+        log.info("nickname={}",nickname);
         return memberService.isDuplicateNickname(nickname);
     }
 

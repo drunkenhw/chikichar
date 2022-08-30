@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chikichar - Join</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -49,8 +50,10 @@
           </div>
           <div class="col-md-6 mb-3">
             <label for="nickname">닉네임</label>
-            <input type="text" th:field="*{nickname}" class="form-control" id="nickname" placeholder="" value="" required>
-            <div class="invalid-feedback">
+            <input type="text" th:field="*{nickname}" class="form-control" id="nickname" placeholder="" value=""
+                   required>
+                   <input type="button" onclick="validNickname()" value="닉네임 중복확인"><br>
+                   <div class="invalid-feedback">
               닉네임을 입력해주세요.
             </div>
           </div>
@@ -58,61 +61,76 @@
 
         <div class="mb-3">
           <label for="email">이메일</label>
-          <input type="email" th:field="*{email}" class="form-control" id="email" placeholder="you@example.com" required>
+          <input type="email" th:field="*{email}" class="form-control" id="email" placeholder="you@example.com"
+                 required>
+                 <input type="button" onclick="validEmail()" value="이메일 중복확인"><br>
+
           <div class="invalid-feedback">
             이메일을 입력해주세요.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="password">비밀번호</label>
+          <input type="password" th:field="*{password}" class="form-control" id="password" required>
+          <div class="invalid-feedback">
+            비밀번호를 입력해주세요.
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="phone">전화번호</label>
+          <input type="text" th:field="*{phone}" class="form-control" id="phone" required>
+          <div class="invalid-feedback">
+            전화번호를 입력해주세요.
           </div>
         </div>
 
         <div class="mb-3">
           <label for="sample6_address">주소</label><br>
-          <input type="text" id="sample6_postcode" th:field="*{zipcode}" placeholder="우편번호">
-          <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-          <input type="text" id="sample6_address" th:field="*{city}" class="form-control" placeholder="주소"><br>
-          <label for="sample6_detailAddress">상세주소<span class="text-muted">&nbsp;(필수 아님)</span></label>
-          <input type="text" id="sample6_detailAddress" th:field="*{street}" class="form-control" placeholder="상세주소">
-          <input type="text" id="sample6_extraAddress" class="form-control" placeholder="참고항목">
+            <input type="text" id="sample6_postcode" th:field="*{zipcode}" placeholder="우편번호">
+            <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
+            <input type="text" id="sample6_address" th:field="*{city}" class="form-control" placeholder="주소"><br>
+            <label for="sample6_detailAddress">상세주소<span class="text-muted">&nbsp;(필수 아님)</span></label>
+            <input type="text" id="sample6_detailAddress" th:field="*{street}" class="form-control" placeholder="상세주소">
+            <input type="text" id="sample6_extraAddress" class="form-control" placeholder="참고항목">
 
-          <div class="invalid-feedback">
-            주소를 입력해주세요.
-          </div>
-        </div>
-
-
-        <div class="mb-3">
-        </div>
-
-        <div class="row">
-          <div class="col-md-8 mb-3">
-            <label for="root">가입 경로</label>
-            <select class="custom-select d-block w-100" id="root" th:field="*{brand}" >
-              <option value="선호 브랜드">선호 브랜드</option>
-              <option th:each="difficultyValue : ${T(com.chikichar.chikichar.model.Brand).values()}"
-                      th:value="${difficultyValue.getValue()}"
-                      th:text="${difficultyValue.getValue()}">
-                val
-              </option>
-<!--              <option th:each="brand : ${form.brand}" th:value="${brand}">검색</option>-->
-            </select>
             <div class="invalid-feedback">
-              가입 경로를 선택해주세요.
+              주소를 입력해주세요.
             </div>
           </div>
-          <div class="col-md-4 mb-3">
-            <label for="code">추천인 코드</label>
-            <input type="text" class="form-control" id="code" placeholder="" required>
-            <div class="invalid-feedback">
-              추천인 코드를 입력해주세요.
+
+
+          <div class="mb-3">
+          </div>
+
+          <div class="row">
+            <div class="col-md-8 mb-3">
+              <label for="root">선호 브랜드</label>
+              <select class="custom-select d-block w-100" id="root" th:field="*{brand}">
+                <option value="선호 브랜드">선호 브랜드</option>
+                <option th:each="brand : ${T(com.chikichar.chikichar.model.Brand).values()}"
+                        th:value="${brand}"
+                        th:text="${brand.getValue()}">
+                  val
+                </option>
+                <!--              <option th:each="brand : ${form.brand}" th:value="${brand}">검색</option>-->
+              </select>
+              <div class="invalid-feedback">
+                선호 브랜드를 선택해주세요.
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <input type="hidden" class="form-control" th:field="*{memberRole}" value="USER">
+
             </div>
           </div>
+          <hr class="mb-4">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="aggrement" required>
+            <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
+          </div>
+          <div class="mb-4"></div>
+          <button class="btn btn-primary btn-lg btn-block" type="submit">가입 완료</button>
         </div>
-        <hr class="mb-4">
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="aggrement" required>
-          <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
-        </div>
-        <div class="mb-4"></div>
-        <button class="btn btn-primary btn-lg btn-block" type="submit">가입 완료</button>
       </form>
     </div>
   </div>
@@ -175,61 +193,63 @@
   </th:block>
 </th:block>
 <script>
+  let email = document.getElementById("email");
+  //TODO 유효성검사에 flag값 추가
+  let nicknameFlag = false;
+  let emailFlag = false;
+  function validNickname(){
+    let nickname = document.getElementById("nickname").value;
+    if(nickname == ''){
+      alert("공백입니다.")
+      return
+    }
+    axios({
+      method: 'get',
+      url: '/nickname-check'+'?nickname='+nickname,
+      data: {
 
-//  function sample4_execDaumPostcode() {
-//    new daum.Postcode({
-//      oncomplete: function(data) {
-//        // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-//
-//        // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
-//        // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-//        let roadAddr = data.roadAddress; // 도로명 주소 변수
-//        let extraRoadAddr = ''; // 참고 항목 변수
-//
-//        // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-//        // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-//        if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-//          extraRoadAddr += data.bname;
-//        }
-//        // 건물명이 있고, 공동주택일 경우 추가한다.
-//        if(data.buildingName !== '' && data.apartment === 'Y'){
-//          extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-//        }
-//        // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-//        if(extraRoadAddr !== ''){
-//          extraRoadAddr = ' (' + extraRoadAddr + ')';
-//        }
-//
-//        // 우편번호와 주소 정보를 해당 필드에 넣는다.
-//        document.getElementById('sample4_postcode').value = data.zonecode;
-//        document.getElementById("sample4_roadAddress").value = roadAddr;
-//        document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
-//
-//        // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
-//        if(roadAddr !== ''){
-//          document.getElementById("sample4_extraAddress").value = extraRoadAddr;
-//        } else {
-//          document.getElementById("sample4_extraAddress").value = '';
-//        }
-//
-//        var guideTextBox = document.getElementById("guide");
-//        // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
-//        if(data.autoRoadAddress) {
-//          var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
-//          guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
-//          guideTextBox.style.display = 'block';
-//
-//        } else if(data.autoJibunAddress) {
-//          var expJibunAddr = data.autoJibunAddress;
-//          guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
-//          guideTextBox.style.display = 'block';
-//        } else {
-//          guideTextBox.innerHTML = '';
-//          guideTextBox.style.display = 'none';
-//        }
-//      }
-//    }).open();
-//  }
+      }
+    })
+            .then(response=>{
+              if(response.data === false){
+                alert("사용가능한 닉네임")
+                flag = true;
+              }else{
+                alert("중복")
+              }
+              console.log(response);
+            })
+            .catch(error=>{
+              document.getElementById('boom').innerText='error';
+              console.log(error);
+            })
+
+  }function validEmail(){
+    let email = document.getElementById("email").value;
+    if(email == ''){
+      alert("공백입니다")
+    }
+    axios({
+      method: 'get',
+      url: '/email-check'+'?email='+email,
+      data: {
+
+      }
+    })
+            .then(response=>{
+              if(response.data === false){
+                alert("사용가능한 이메일")
+              }else{
+                alert("중복")
+              }
+              console.log(response);
+            })
+            .catch(error=>{
+              document.getElementById('boom').innerText='error';
+              console.log(error);
+            })
+
+  }
   window.addEventListener('load', () => {
     const forms = document.getElementsByClassName('validation-form');
 
