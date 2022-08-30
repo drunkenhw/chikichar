@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/fragments/frame::setContent(~{this::content})}">
+  <th:block th:fragment="content">
+    <h1> Board List
+      <span>
+        </span>
+    </h1>
+
+      <div class="input-group">
+        <input type="hidden" name="page" value="1">
+        <div class="input-group-prepend">
+          <select class="form-control custom-select" name="type" style="border-radius: 0;">
+
+          </select>
+        </div>
+        <div id="button-addon4" class="input-group-append">
+          <button class="btn btn-outline-secondary searchBtn" type="button">Search</button>
+          <button class="btn btn-outline-secondary clearBtn" type="button">Clear</button>
+        </div>
+      </div>
+    </form>
+
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col">bno</th>
+        <th scope="col">Title</th>
+        <th scope="col">Writer</th>
+        <th scope="col">RegDate</th>
+      </tr>
+      </thead>
+
+      <style>
+        .tr-list{cursor: pointer;}
+        .tr-list:hover{background-color: #d6e7ff;}
+      </style>
+
+
+
+
+
+    <!-- 부트스트랩 -->
+    <div id="myModal" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modal title</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Modal body text goes here.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <!-- <button type="button" class="btn btn-primary"> Save changes </button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script th:inline="javascript">
+      window.onload = function(){
+        var msg = /*[[${msg}]]*/ "msg";
+
+        if (msg) {
+
+          const bno = msg.split(" ")[0];
+          const noti = msg.split(" ")[1];
+
+          console.log(msg);
+          var myModal = new bootstrap.Modal(document.getElementById('myModal'),
+                  { backdrop: true })
+          document.querySelector(".modal-title").textContent=noti+' 완료'
+          document.querySelector(".modal-body").innerHTML=
+                  `<p>${bno}번 글이 ${noti}되었습니다.</p>`
+          myModal.show();
+        }
+
+        const searchForm = document.querySelector('#searchForm');
+        const btnSrch = document.querySelector('.searchBtn');
+        const btnClear = document.querySelector('.clearBtn');
+        const selectType = document.querySelector("select[name='type']");
+
+        btnSrch.onclick = () => document.querySelector('#searchForm').submit();
+        btnClear.onclick = function(){
+          document.querySelector("select[name='type']").options[0].selected=true;
+          document.querySelector("input[name='keyword']").value="";
+        }
+        selectType.onchange = function(){
+          if(selectType.options[0].selected!=true){
+            document.querySelector("input[name='keyword']").disabled = false;
+          } else {
+            document.querySelector("input[name='keyword']").value = "";
+            document.querySelector("input[name='keyword']").disabled = true;
+          }
+        }
+      }
+    </script>
+
+  </th:block>
+</th:block>
+</html>
+

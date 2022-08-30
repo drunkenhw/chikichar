@@ -32,9 +32,9 @@ public class LocalMemberLoginFilter extends AbstractAuthenticationProcessingFilt
 
 
     @Override
-        public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
-
+        log.info("LocalMemberFilter");
         if (!isPostAndJson(request)) {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         }
