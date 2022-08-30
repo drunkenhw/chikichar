@@ -33,29 +33,37 @@ public class LocalMemberLoginFilter extends AbstractAuthenticationProcessingFilt
 
     @Override
         public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-            throws AuthenticationException, IOException {
+            throws AuthenticationException {
 
         if (!isPostAndJson(request)) {
-                throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
-            }
-            LoginRequestDto emailAndPassword = getEmailAndPassword(request);
-            String email = emailAndPassword.getEmail();
-            String password = emailAndPassword.getPassword();
+            throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
+        }
 
-        if (email == null || password == null) {
+        LoginRequestDto emailAndPassword = getEmailAndPassword(request);
+
+        String email = emailAndPassword.getEmail();
+        String password = emailAndPassword.getPassword();
+
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);
+        return super.getAuthenticationManager().authenticate(authRequest);
+        }
+
+    private LoginRequestDto getEmailAndPassword(HttpServletRequest request) {
+        try {
+            LoginRequestDto emailAndPassword = objectMapper
+                    .readValue(StreamUtils.copyToString(
+                            request.getInputStream(), StandardCharset.UTF_8), LoginRequestDto.class);;
+        return emailAndPassword;
+
+        } catch (IOException e) {
             throw new AuthenticationServiceException("아이디, 혹은 패스워드를 입력하세요");
         }
-            UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);
-            return super.getAuthenticationManager().authenticate(authRequest);
-        }
+    }
 
     private boolean isPostAndJson(HttpServletRequest request) {
         return request.getMethod().equals(HTTP_POST) || request.getContentType().equals(APPLICATION_JSON);
     }
 
-    private LoginRequestDto getEmailAndPassword(HttpServletRequest request) throws IOException {
-        return objectMapper
-                .readValue(StreamUtils.copyToString(request.getInputStream(), StandardCharset.UTF_8), LoginRequestDto.class);
-    }
+
 
 }
