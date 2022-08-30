@@ -42,7 +42,7 @@ public class MemberRequestDto {
 
     private Brand brand;
 
-    private MemberRole memberRole;
+    private String memberRole;
 
     public Address getAddress(){
         return new Address(city, street, zipcode);
@@ -57,7 +57,7 @@ public class MemberRequestDto {
                 .phone(phone)
                 .nickname(nickname)
                 .address(new Address(city, street, zipcode))
-                .memberRole(memberRole)
+                .memberRole(MemberRole.USER)
                 .socialType(SocialType.LOCAL)
                 .build();
     }

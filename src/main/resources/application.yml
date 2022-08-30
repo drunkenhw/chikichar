@@ -32,8 +32,6 @@ spring:
     livereload:
       enabled: 'true'
 
-  jwt:
-    secret-key: 'adssdadasdaeijqriqejriejqirjeiwjrwqieiqjeiqwejiqwjeiqjweijqweijqwiejqwiejiq'
 
   profiles:
     include: oauth
