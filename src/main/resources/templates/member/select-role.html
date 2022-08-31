@@ -1,0 +1,40 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chikichar</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+
+    </style>
+</head>
+
+<body>
+<th:block th:replace="~{fragments/frame::setContent(~{this::content})}">
+    <th:block th:fragment="content">
+        <div class="px-4 py-5 my-5 text-center">
+            <img class="d-block mx-auto mb-4" th:src="@{/logo/Chikichar.png}" alt=""  width="300px" height="300px">
+            <h1 class="display-5 fw-bold">Chikichar 회원가입</h1>
+            <div class="col-lg-6 mx-auto">
+                <p class="lead mb-4">안녕하세요 chikichar 입니다.
+                회원은 두 가지로 분류 됩니다.</p>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <button type="button" class="btn btn-primary btn-lg px-4 gap-3" th:onclick="|location.href='@{/join?role=user}'|">일반 회원 가입</button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg px-4" th:onclick="|location.href='@{/join?role=company}'|">업체 회원 가입</button>
+                </div>
+            </div>
+        </div>
+
+    </th:block>
+</th:block>
+
+</body>
+
+</html>

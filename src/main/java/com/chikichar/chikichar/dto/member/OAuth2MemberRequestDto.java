@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
@@ -15,12 +16,11 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class OAuth2MemberRequestDto {
 
-    @NotBlank(message = "이름은 필수 입력 항목입니다.")
-    private String name;
 
     @NotBlank(message = "닉네임은 필수 입력 항목입니다.")
     private String nickname;
-
+    @NotBlank(message = "이름은 필수 입력 항목입니다.")
+    private String name;
     @NotBlank(message = "전화번호는 필수 입력 항목입니다.")
     private String phone;
 
@@ -29,13 +29,7 @@ public class OAuth2MemberRequestDto {
     private String street;
 
     private String zipcode;
-
-
+    @NotNull(message = "선호 브랜드는 필수 선택 항목입니다.")
     private Brand brand;
-
-
-
-
-
 
 }

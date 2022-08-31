@@ -1,5 +1,6 @@
 package com.chikichar.chikichar.controller.member;
 
+import com.chikichar.chikichar.controller.api.member.MemberApiController;
 import com.chikichar.chikichar.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

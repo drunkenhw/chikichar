@@ -1,5 +1,6 @@
 package com.chikichar.chikichar.security.handler;
 
+import com.chikichar.chikichar.model.MemberRole;
 import com.chikichar.chikichar.security.UserPrincipal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
@@ -21,10 +22,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
 
-        if(principal.getMember().getNickname() == null){
-            redirectStrategy.sendRedirect(request,response,"/modify");
+        if (principal.getMember().getMemberRole() == MemberRole.UN_MODIFY) {
+            redirectStrategy.sendRedirect(request, response, "/modify");
+        } else {
+            redirectStrategy.sendRedirect(request, response, "/");
         }
-        redirectStrategy.sendRedirect(request,response,"/");
-
     }
 }

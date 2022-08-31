@@ -1,0 +1,212 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chikichar - Join</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+
+        .need {
+            color: #ff4f59;
+        }
+
+        .input-form {
+            max-width: 500px;
+
+            margin-top: 80px;
+            padding: 32px;
+
+            background: #fff;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+            -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+            -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
+        }
+    </style>
+</head>
+
+<body>
+<th:block th:replace="~{fragments/frame::setContent(~{this::content})}">
+    <th:block th:fragment="content">
+
+        <div class="container">
+            <div class="input-form-background row">
+                <div class="input-form col-md-12 mx-auto">
+                    <h4 class="mb-3">소셜 로그인 회원 정보 수정</h4>
+                    <span style="color:red;"> * 은 필수 항목 입니다.</span><br>
+
+                    <form th:action="@{/modify}" th:object="${form}" method="post">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name">이름</label><span class="need">&nbsp;*</span>
+                                <input type="text" th:field="*{name}" class="form-control" id="name" placeholder=""
+                                       value="" required>
+                                <div class="invalid-feedback">
+                                    이름을 입력해주세요.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="nickname">닉네임</label><span class="need">&nbsp;*</span>
+                                <input type="text" th:field="*{nickname}" class="form-control" id="nickname"
+                                       placeholder="" value=""
+                                       required>
+                                <input type="button" onclick="validParam('nickname')" value="닉네임 중복확인"><br>
+                                <div class="invalid-feedback">
+                                    닉네임을 입력해주세요.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone">전화번호</label><span class="need">&nbsp;*</span>
+                            <input type="text" th:field="*{phone}" class="form-control" id="phone" required>
+                            <div class="invalid-feedback">
+                                전화번호를 입력해주세요.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="sample6_address">주소</label><br>
+                            <input type="text" id="sample6_postcode" th:field="*{zipcode}" placeholder="우편번호">
+                            <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
+                            <input type="text" id="sample6_address" th:field="*{city}" class="form-control"
+                                   placeholder="주소"><br>
+                            <label for="sample6_detailAddress">상세주소</label>
+                            <input type="text" id="sample6_detailAddress" th:field="*{street}" class="form-control"
+                                   placeholder="상세주소">
+                            <input type="text" id="sample6_extraAddress" class="form-control" placeholder="참고항목">
+
+                            <div class="invalid-feedback">
+                                주소를 입력해주세요.
+                            </div>
+                        </div>
+
+
+                        <div class="mb-3">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="brand">선호 브랜드</label><span class="need">&nbsp;*</span>
+                                <select class="custom-select d-block w-100" id="brand" th:field="*{brand}">
+                                    <option value="">선택</option>
+                                    <option th:each="brand : ${T(com.chikichar.chikichar.model.Brand).values()}"
+                                            th:value="${brand}"
+                                            th:text="${brand.getValue()}">
+                                    </option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    선호 브랜드를 선택해주세요.
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <input type="hidden" class="form-control" name="memberRole" value="USER">
+                                <input type="hidden" id="nickname-flag" value="">
+                            </div>
+                        </div>
+                        <hr class="mb-4">
+                        <!--                        <div class="custom-control custom-checkbox">-->
+                        <!--                            <input type="checkbox" class="custom-control-input" id="aggrement" required>-->
+                        <!--                            <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>-->
+                        <!--                        </div>-->
+                        <div class="mb-4"></div>
+                        <button class="btn btn-primary btn-lg btn-block" onclick="loginValid()" type="submit">가입 완료
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        <script th:src="@{/js/address.js}"></script>
+
+
+    </th:block>
+</th:block>
+<script th:inline="javascript">
+    function loginValid() {
+
+        let nicknameFlag = document.getElementById("nickname-flag").value;
+        let nickname = document.getElementById("nickname").value;
+        let brand = document.getElementById("brand").value;
+        let phone = document.getElementById("phone").value;
+        console.log(nicknameFlag + 'nicknameflag')
+        console.log(nickname + 'nic')
+        console.log(brand + "b")
+        console.log(phone + "p")
+
+        console.log(brand)
+        if (nicknameFlag === false) {
+            alert("닉네임 중복확인은 필수입니다.")
+            return
+        } else if (brand === '') {
+            alert("브랜드를 골라")
+            return false;
+
+        } else if (phone.trim() === '') {
+            alert("전화번호 입력")
+            return
+
+        } else if (nickname.trim() === '') {
+            alert("닉네임 입력")
+            return
+
+        }
+    }
+
+    function validParam(param) {
+        let paramValue = document.getElementById(param).value;
+
+        if (paramValue.trim() === '') {
+            alert("공백입니다.")
+            return
+        }
+        axios({
+            method: 'get',
+            url: '/' + param + '-check' + '?' + param + '=' + paramValue,
+            data: {}
+        }).then(response => {
+            if (response.data === false) {
+                alert("사용가능한 " + param + "입니다.")
+                document.getElementById(param + '-flag').value = true;
+            } else {
+                alert("중복")
+                document.getElementById(param + '-flag').value = false;
+
+            }
+            console.log(response);
+        })
+            .catch(error => {
+                console.log(error);
+            })
+
+    }
+
+
+    // window.addEventListener('load', () => {
+    //     const forms = document.getElementsByClassName('validation-form');
+    //
+    //     Array.prototype.filter.call(forms, (form) => {
+    //         form.addEventListener('submit', function (event) {
+    //             if (form.checkValidity() === false) {
+    //                 event.preventDefault();
+    //                 event.stopPropagation();
+    //             }
+    //
+    //             form.classList.add('was-validated');
+    //         }, false);
+    //     });
+    // }, false);
+</script>
+</body>
+
+</html>

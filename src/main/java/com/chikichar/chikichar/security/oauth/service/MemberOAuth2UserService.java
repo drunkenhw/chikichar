@@ -64,7 +64,7 @@ public class MemberOAuth2UserService extends DefaultOAuth2UserService {
         Member user = Member.builder()
                 .email(userInfo.getEmail())
                 .name(userInfo.getName())
-                .memberRole(MemberRole.USER)
+                .memberRole(MemberRole.UN_MODIFY)
                 .password(UUID.randomUUID().toString())
                 .phone(userInfo.getPhone())
                 .brand(Brand.ETC)

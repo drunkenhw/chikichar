@@ -65,6 +65,7 @@
   <header class="p-3 bg-dark text-white" th:fragment="fragment-header">
     <div class="container">
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/"> <img style="margin-right: 10px" th:src="@{/logo/Chikichar.png}" alt=""  width="50Px" height="50px"></a>
         <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
           chikichar
         </a>
@@ -83,7 +84,7 @@
 
         <div class="text-end">
           <button type="button" class="btn btn-outline-light me-2" th:onclick="|location.href='@{/login}'|">Login</button>
-          <button type="button" class="btn btn-warning" th:onclick="|location.href='@{/join}'|">Sign-up</button>
+          <button type="button" class="btn btn-warning" th:onclick="|location.href='@{/role-select}'|">Sign-up</button>
         </div>
       </div>
     </div>

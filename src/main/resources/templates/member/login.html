@@ -7,15 +7,74 @@
 <body>
 <th:block th:replace="~{fragments/frame::setContent(~{this::content})}">
     <th:block th:fragment="content">
-        <form action="/login" method="post">
 
-            <input type="text" name="email">
-            <input type="password" name="password">
-            <button type="submit">login</button>
+        <div class="card align-middle" style="width:20rem; border-radius:20px;">
+            <div class="card-title" style="margin-top:30px;">
+                <h2 class="card-title text-center" style="color:#113366;">Login</h2>
+            </div>
+            <div class="card-body">
+                <form class="form-signin" method="POST">
+                    <label for="email" class="sr-only">Email</label>
+                    <input type="email" id="email" class="form-control" placeholder="Email" name="username" required
+                           autofocus><BR>
+                    <label for="password" class="sr-only">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Password" name="password"
+                           required><br>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="remember-me"> remember
+                        </label>
+                    </div>
+                    <button id="btn-Yes" class="loginbtn btn btn-lg btn-primary btn-block" type="submit"
+                            style="width: 150px">Login
+                    </button>
+                    <br>
+                    <a href="/oauth2/authorization/google"><img class="loginbtn btn-img" th:src="@{/button/google.png}"></a><br>
+                    <a href="/oauth2/authorization/naver"><img class="loginbtn btn-img" th:src="@{/button/naver.png}"></a><br>
+                    <a href="/oauth2/authorization/kakao"><img class="loginbtn btn-img" th:src="@{/button/kakao.png}"></a><br>
 
-        </form>
+                </form>
+
+            </div>
+        </div>
+
+        <div class="modal">
+        </div>
+        <!-- Optional JavaScript -->
+
     </th:block>
 </th:block>
 </body>
+<style>
+    .btn-img {
+        width: 150px;
+        height: 40px;
+    }
 
+    .loginbtn {
+       display: grid;
+        place-content: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .card {
+        width: 100%;
+        padding-right: var(--bs-gutter-x, 0.75rem);
+        padding-left: var(--bs-gutter-x, 0.75rem);
+        margin-right: auto;
+        margin-left: auto;
+        max-width: 680px;
+
+        margin-top: 80px;
+        margin-bottom: 80px;
+        background: #fff;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+        -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
+    }
+</style>
 </html>

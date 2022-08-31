@@ -20,10 +20,11 @@ public class SecurityConfig {
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+        http.csrf().disable();
         http.authorizeRequests()
                 .antMatchers("/**.js").permitAll();
-        http.formLogin();
-        http.oauth2Login().successHandler(new LoginSuccessHandler());
+        http.formLogin().loginPage("/login").permitAll();
+        http.oauth2Login().loginPage("/login").successHandler(new LoginSuccessHandler());
         return http.build();
     }
 
