@@ -1,5 +1,6 @@
 package com.chikichar.chikichar.dto;
 
+import com.chikichar.chikichar.entity.ArticleImage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,14 +17,12 @@ import java.util.List;
 public class NormalBoardArticleDto {
 
     private String nickname;
-    private String boardName;
     private String title;
     private String content;
     private int viewCount;
-    private int commentCount;
+    private Long commentCount;
     private LocalDateTime regDate;
-    private LocalDateTime modDate;
-    private List<ArticleImageDto> imageList = new ArrayList<>();
+    private ArticleImage articleImage;
 
 
 }

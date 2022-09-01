@@ -2,10 +2,7 @@ package com.chikichar.chikichar.entity;
 
 import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.BaseTimeEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -19,6 +16,7 @@ import javax.persistence.*;
  */
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Article extends BaseTimeEntity {
 

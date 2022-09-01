@@ -1,21 +1,26 @@
 package com.chikichar.chikichar.repository;
 
+import com.chikichar.chikichar.dto.NormalBoardArticleDto;
 import com.chikichar.chikichar.entity.*;
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.BoardType;
 import com.chikichar.chikichar.model.MemberRole;
+import com.chikichar.chikichar.repository.custom.ArticleQuerydslRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 
 import javax.transaction.Transactional;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
-class RepositoryTest {
+class AllRepositoryTest {
     @Autowired
     private  ArticleRepository articleRepository;
     @Autowired
@@ -33,8 +38,10 @@ class RepositoryTest {
 
     @Test
     @Transactional
+    @Commit
     @DisplayName("더미 데이터 삽입 테스트")
     public void dummyTest(){
+
         Member member = Member.builder()
                 .email("dumm3y@dummy.com")
                 .name("han")
@@ -80,11 +87,21 @@ class RepositoryTest {
                 .path("//23//s")
                 .build();
         ArticleImage saveImage = articleImageRepository.save(articleImage);
+        ArticleImage articleImage1 = ArticleImage.builder()
+                .article(saveArticle)
+                .name("grim")
+                .uuid("$#@$@DFSERWER#@$@")
+                .path("//23//s")
+                .build();
+        ArticleImage saveImage2 = articleImageRepository.save(articleImage1);
 
         Recommend recommend =Recommend.of(saveMember,saveArticle);
         Recommend saveRecommend = recommendRepository.save(recommend);
 
-
+        List<Article> allByBoard = articleRepository.findAllByBoardId(board.getId());
+        for (Article article1 : allByBoard) {
+            System.out.println("article1 = " + article1);
+        }
 
         assertThat(saveMember.getId()).isEqualTo(member.getId());
         assertThat(saveArticle.getId()).isEqualTo(article.getId());
@@ -94,7 +111,6 @@ class RepositoryTest {
         assertThat(saveRecommend.getId()).isEqualTo(recommend.getId());
 
     }
-
 
 
 }
