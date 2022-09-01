@@ -10,7 +10,7 @@ public abstract class OAuth2UserInfo {
 
     protected Map<String ,Object> attr;
     protected final static String EMAIL = "email";
-    protected final static String NAME = "NAME";
+    protected final static String NAME = "name";
 
     public OAuth2UserInfo(Map<String, Object> attr) {
         this.attr = attr;

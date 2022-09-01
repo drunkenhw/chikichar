@@ -12,16 +12,16 @@ import static javax.persistence.EnumType.*;
 
 
 /**
- *  id = 회원 번호 (index)
- *  email = 회원 email < 로그인 시 사용 (아이디)
- *  memberRole = 일반, 업체, 관리자
- *  name = 일반 회원은 자기이름, 업체 회원은 업체 이름 사용
- *  point = 회원 포인트 (할인 가능)
+ * id = 회원 번호 (index)
+ * email = 회원 email < 로그인 시 사용 (아이디)
+ * memberRole = 일반, 업체, 관리자
+ * name = 일반 회원은 자기이름, 업체 회원은 업체 이름 사용
+ * point = 회원 포인트 (할인 가능)
  */
 
 @Entity
 @Getter
-@ToString(exclude = {"articles","comments","recommends"})
+@ToString(exclude = {"articles", "comments", "recommends"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
 
@@ -83,24 +83,37 @@ public class Member extends BaseTimeEntity {
 
     }
 
-    public void modifyMember( String nickname, String phone, Address address, Brand brand){
+    public void modifyMember(String nickname, String phone, Address address, Brand brand, MemberRole memberRole) {
         this.nickname = nickname;
         this.phone = phone;
         this.address = address;
         this.brand = brand;
+        this.memberRole = memberRole;
+
+    }
+    public void OAuth2ModifyMember(String name,String nickname, String phone, Address address, Brand brand, MemberRole memberRole) {
+        this.nickname = nickname;
+        this.phone = phone;
+        this.address = address;
+        this.brand = brand;
+        this.memberRole = memberRole;
 
     }
 
 
-    public void changePassword(String password){
+    public void changePassword(String password) {
         this.password = password;
     }
-    public void pointUp(){
+
+    public void pointUp() {
         this.point += 1;
     }
-    public void pointDown() { this.point -= 1;}
 
-    public void ban(){
+    public void pointDown() {
+        this.point -= 1;
+    }
+
+    public void ban() {
         this.memberRole = MemberRole.BAN;
     }
 

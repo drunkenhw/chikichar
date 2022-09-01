@@ -1,4 +1,4 @@
-package com.chikichar.chikichar.controller.member;
+package com.chikichar.chikichar.controller.api.member;
 
 
 import com.chikichar.chikichar.dto.member.MemberRequestDto;

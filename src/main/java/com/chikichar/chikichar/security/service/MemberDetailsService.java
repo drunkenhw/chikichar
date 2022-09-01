@@ -22,12 +22,13 @@ public class MemberDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("MemberDetailsService");
+        log.info("username={}",username);
 
         Optional<Member> findMember = memberRepository.findByEmail(username);
         if(findMember.isEmpty()){
             throw new UsernameNotFoundException("이메일을 확인하세요");
         }
-        log.info("MemberDetailsService");
+        log.info("findMember ={}",findMember.get());
         return UserPrincipal.create(findMember.get());
     }
 }

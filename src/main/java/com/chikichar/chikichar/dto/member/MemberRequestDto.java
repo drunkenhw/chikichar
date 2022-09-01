@@ -11,6 +11,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import static com.chikichar.chikichar.model.MemberRole.toEnum;
+
 
 @Data
 @AllArgsConstructor
@@ -57,7 +59,7 @@ public class MemberRequestDto {
                 .phone(phone)
                 .nickname(nickname)
                 .address(new Address(city, street, zipcode))
-                .memberRole(MemberRole.USER)
+                .memberRole(MemberRole.valueOf(memberRole))
                 .socialType(SocialType.LOCAL)
                 .build();
     }

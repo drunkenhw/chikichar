@@ -6,6 +6,7 @@ import com.chikichar.chikichar.dto.member.OAuth2MemberRequestDto;
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.dto.member.MemberRequestDto;
 import com.chikichar.chikichar.model.Address;
+import com.chikichar.chikichar.model.MemberRole;
 import com.chikichar.chikichar.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +20,8 @@ import java.util.NoSuchElementException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly=true)
-public class MemberServiceImpl implements MemberService{
+@Transactional(readOnly = true)
+public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -42,12 +43,14 @@ public class MemberServiceImpl implements MemberService{
 
     @Transactional
     @Override
-    public void modifyInfo(Member member,MemberRequestDto memberRequestDto) {
+    public void modifyInfo(Member member, MemberRequestDto memberRequestDto) {
         //TODO Exception custom
 
         member.changePassword(passwordEncoder.encode(memberRequestDto.getPassword()));
-        member.modifyMember(memberRequestDto.getNickname(),memberRequestDto.getPhone(),
-                memberRequestDto.getAddress(),memberRequestDto.getBrand());
+        member.modifyMember(
+                memberRequestDto.getNickname(), memberRequestDto.getPhone(),
+                memberRequestDto.getAddress(), memberRequestDto.getBrand()
+                ,MemberRole.valueOf(memberRequestDto.getMemberRole()));
         memberRepository.save(member);
 
 
@@ -68,13 +71,13 @@ public class MemberServiceImpl implements MemberService{
     public String findEmail(String name, String phone) {
         //TODO Exception Custom
         return memberRepository.findEmailByNameAndPhone(name, phone)
-                .orElseThrow(()->new IllegalArgumentException("해당 정보가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 정보가 존재하지 않습니다."));
     }
 
     @Transactional
     @Override
     public void changePassword(Member member, ChangePasswordDto changePasswordDto) {
-        if(isNotMatchPassword(member, changePasswordDto)){
+        if (isNotMatchPassword(member, changePasswordDto)) {
             throw new IllegalArgumentException("원래 비밀번호가 맞지 않습니다");
         }
         member.changePassword(passwordEncoder.encode(changePasswordDto.getChangePassword()));
@@ -90,11 +93,13 @@ public class MemberServiceImpl implements MemberService{
     public void oAuthMemberAddProfile(Member member, OAuth2MemberRequestDto OAuth2MemberRequestDto) {
 
         //TODO 메서드 완성해야함
-        member.modifyMember(
+        member.OAuth2ModifyMember(
+                OAuth2MemberRequestDto.getName(),
                 OAuth2MemberRequestDto.getNickname(),
                 OAuth2MemberRequestDto.getPhone(),
-                new Address(OAuth2MemberRequestDto.getCity(),OAuth2MemberRequestDto.getStreet(),OAuth2MemberRequestDto.getZipcode()),
-                OAuth2MemberRequestDto.getBrand());
+                new Address(OAuth2MemberRequestDto.getCity(), OAuth2MemberRequestDto.getStreet(), OAuth2MemberRequestDto.getZipcode()),
+                OAuth2MemberRequestDto.getBrand(),
+                MemberRole.USER);
         memberRepository.save(member);
     }
 
