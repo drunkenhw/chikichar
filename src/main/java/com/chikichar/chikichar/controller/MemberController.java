@@ -18,7 +18,8 @@ import javax.validation.Valid;
 public class MemberController {
     private final MemberService memberService;
     @GetMapping("/")
-    public String index(){
+    public String index(@ModelAttribute("user") @CurrentUser Member member){
+
         return "index";
     }
 
@@ -30,6 +31,9 @@ public class MemberController {
     @GetMapping("/join")
     public String join(@RequestParam String role,
             @ModelAttribute("form") MemberRequestDto memberRequestDto) {
+        if(role.equals("select")){
+            return "member/select-role";
+        }
         if(role.equals("company")) {
             return "member/company-join";
         }

@@ -14,6 +14,11 @@
     <style>
 
 
+        .join{
+            width: 100vh;
+            margin-left: auto;
+            margin-right: auto;
+        }
         .input-form {
             max-width: 680px;
 
@@ -28,6 +33,8 @@
             -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
             box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
         }
+
+
     </style>
 </head>
 
@@ -35,8 +42,8 @@
 <th:block th:replace="~{fragments/frame::setContent(~{this::content})}">
     <th:block th:fragment="content">
 
-        <div class="container">
-            <div class="input-form-backgroud row">
+        <div class="join">
+            <div class="input-form-background row">
                 <div class="input-form col-md-12 mx-auto">
                     <h4 class="mb-3">일반 회원가입</h4>
                     <form th:action="@{/join}" th:object="${form}" method="post">
