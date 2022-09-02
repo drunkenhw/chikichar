@@ -1,7 +1,6 @@
 package com.chikichar.chikichar.service;
 
-import com.chikichar.chikichar.EntityBuilder;
-import com.chikichar.chikichar.dto.NormalBoardArticleDto;
+import com.chikichar.chikichar.dto.Board.NormalBoardArticleDto;
 import com.chikichar.chikichar.entity.Article;
 import com.chikichar.chikichar.entity.ArticleImage;
 import com.chikichar.chikichar.entity.Board;
@@ -10,17 +9,18 @@ import com.chikichar.chikichar.repository.ArticleImageRepository;
 import com.chikichar.chikichar.repository.ArticleRepository;
 import com.chikichar.chikichar.repository.BoardRepository;
 import com.chikichar.chikichar.repository.MemberRepository;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static com.chikichar.chikichar.EntityBuilder.*;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
+@Transactional
 @SpringBootTest
 class ArticleServiceImplTest {
     @Autowired
@@ -35,15 +35,16 @@ class ArticleServiceImplTest {
     ArticleImageRepository articleImageRepository;
 
     @Test
+    @DisplayName("BoardDTO를 조회한다.")
     void getList(){
         //given
         Member member = createMember("querydsl", "query");
-        Board board = createBoard();
-        Article article = createArticle(board, member);
-        ArticleImage articleImage = new ArticleImage("a", "b", "c",article);
         memberRepository.save(member);
+        Board board = createBoard();
         boardRepository.save(board);
+        Article article = createArticle(board, member);
         articleRepository.save(article);
+        ArticleImage articleImage =ArticleImage.of("a", "b", "c",article);
         articleImageRepository.save(articleImage);
 
         //when
@@ -52,7 +53,7 @@ class ArticleServiceImplTest {
         assertThat(boardDto.size()).isEqualTo(1);
         assertThat(boardDto.get(0).getNickname()).isEqualTo(member.getNickname());
         assertThat(boardDto.get(0).getTitle()).isEqualTo(article.getTitle());
-        assertThat(boardDto.get(0).getArticleImage().getId()).isEqualTo(articleImage.getId());
+        assertThat(boardDto.get(0).getImagePath()).isEqualTo(articleImage.getPath());
 
     }
 

@@ -1,14 +1,10 @@
 package com.chikichar.chikichar.repository.custom;
 
-import com.chikichar.chikichar.dto.NormalBoardArticleDto;
-import com.chikichar.chikichar.entity.QArticle;
+import com.chikichar.chikichar.dto.Board.NormalBoardArticleDto;
 import com.chikichar.chikichar.entity.QArticleImage;
-import com.chikichar.chikichar.entity.QComment;
-import com.chikichar.chikichar.entity.QMember;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,17 +12,16 @@ import java.util.List;
 import static com.chikichar.chikichar.entity.QArticle.*;
 import static com.chikichar.chikichar.entity.QArticleImage.*;
 import static com.chikichar.chikichar.entity.QComment.*;
-import static com.chikichar.chikichar.entity.QMember.*;
 
 @Repository
 @RequiredArgsConstructor
-public class ArticleQuerydslRepository {
+public class ArticleRepositoryImpl implements ArticleRepositoryQuerydsl {
 
     private final JPAQueryFactory queryFactory;
 
+
     public List<NormalBoardArticleDto> findByBoardId(Long boardId) {
         QArticleImage articleImage1 = new QArticleImage("a");
-        //TODO 쿼리 수정요망
         return queryFactory.select(
                         Projections.bean(NormalBoardArticleDto.class,
                                 article.member.nickname,
@@ -35,11 +30,13 @@ public class ArticleQuerydslRepository {
                                 article.viewCount,
                                 comment.count().as("commentCount"),
                                 article.regDate,
-                                articleImage
+                                articleImage.path.as("imagePath")
                         ))
                 .from(article)
-                .leftJoin(comment).on(comment.article.eq(article))
-                .leftJoin(articleImage).on(articleImage.article.eq(article),
+                .leftJoin(comment)
+                .on(comment.article.eq(article))
+                .leftJoin(articleImage)
+                .on(articleImage.article.eq(article),
                         articleImage.id.eq(
                         queryFactory
                                 .select(articleImage1.id.max())
