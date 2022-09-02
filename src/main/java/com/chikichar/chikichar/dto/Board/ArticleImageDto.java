@@ -1,4 +1,4 @@
-package com.chikichar.chikichar.dto;
+package com.chikichar.chikichar.dto.Board;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

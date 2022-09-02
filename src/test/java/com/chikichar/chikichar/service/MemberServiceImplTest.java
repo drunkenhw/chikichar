@@ -51,7 +51,7 @@ class MemberServiceImplTest {
                 .street("b")
                 .zipcode("b")
                 .brand(Brand.AUDI)
-                .memberRole(MemberRole.USER)
+                .memberRole("USER")
                 .email("aaa@naver.com")
                 .nickname("aa")
                 .password("aaaa")
@@ -77,7 +77,7 @@ class MemberServiceImplTest {
                 .street("b")
                 .zipcode("b")
                 .brand(Brand.AUDI)
-                .memberRole(MemberRole.USER)
+                .memberRole("USER")
                 .email("old@naver.com")
                 .nickname("old")
                 .password("bbbb")
@@ -88,10 +88,12 @@ class MemberServiceImplTest {
         Long saveMemberId = memberService.joinAccount(memberRequestDto);
 
         MemberRequestDto modifyMember = MemberRequestDto.builder()
+                .name("han")
                 .city("b")
                 .street("b")
                 .zipcode("b")
                 .brand(Brand.BMW)
+                .memberRole("USER")
                 .nickname("change")
                 .password("aaaa")
                 .phone("01033334444")
@@ -156,7 +158,7 @@ class MemberServiceImplTest {
                 .brand(Brand.CHEVROLET).city("seoul").name("kim").phone("01021010101")
                 .street("gangnam").nickname("kent").zipcode("1233").build();
         memberService.oAuthMemberAddProfile(member,oAuth2MemberRequestDto);
-        assertThat(member.getAddress().getCity()).isEqualTo("seoul");
+        assertThat(member.getAddress().getStreetAddress()).isEqualTo("seoul");
     }
 
     @Test

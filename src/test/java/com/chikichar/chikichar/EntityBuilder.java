@@ -1,18 +1,20 @@
 package com.chikichar.chikichar;
 
-import com.chikichar.chikichar.entity.Article;
-import com.chikichar.chikichar.entity.Board;
-import com.chikichar.chikichar.entity.Comment;
-import com.chikichar.chikichar.entity.Member;
+import com.chikichar.chikichar.entity.*;
 import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.BoardType;
 import com.chikichar.chikichar.model.Brand;
 import com.chikichar.chikichar.model.MemberRole;
+import com.chikichar.chikichar.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EntityBuilder {
     static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     public static Member createMember(String email, String nickname) {
         return Member.builder()
                 .memberRole(MemberRole.USER)
@@ -43,4 +45,6 @@ public class EntityBuilder {
                 .title("title")
                 .build();
     }
+
+
 }

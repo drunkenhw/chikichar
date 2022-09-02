@@ -13,10 +13,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 
 
+@Transactional
 @SpringBootTest
 class CommentServiceTest {
 
@@ -40,8 +42,10 @@ class CommentServiceTest {
         articleRepository.save(article);
         Comment comment = EntityBuilder.createComment(article,member);
         commentRepository.save(comment);
+        Comment comment1 = EntityBuilder.createComment(article,member);
+        commentRepository.save(comment1);
 
-        assertThat(member.getComments().size()).isEqualTo(1);
+        assertThat(member.getComments().size()).isEqualTo(2);
         System.out.println("member.getComments() = " + member.getComments());
         System.out.println("comment.getMember().getComments() = " + comment.getMember().getComments());
 
