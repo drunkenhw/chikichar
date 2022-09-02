@@ -1,4 +1,4 @@
-package com.chikichar.chikichar.dto;
+package com.chikichar.chikichar.dto.Board;
 
 import com.chikichar.chikichar.entity.ArticleImage;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ public class NormalBoardArticleDto {
     private int viewCount;
     private Long commentCount;
     private LocalDateTime regDate;
-    private ArticleImage articleImage;
+    private String imagePath;
 
 
 }

@@ -18,9 +18,9 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class Address {
     @NotBlank
-    private String city;
+    private String streetAddress;
     @NotBlank
-    private String street;
+    private String detailAddress;
     @NotBlank
     private String zipcode;
 }

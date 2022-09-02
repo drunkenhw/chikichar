@@ -40,12 +40,13 @@ public class Recommend {
     private Recommend(Member member, Article article) {
         this.member = member;
         this.article = article;
-        this.setRecommender(member);
     }
 
     public static Recommend of(Member member,Article article){
+        Recommend recommend = new Recommend(member, article);
+        recommend.setRecommender(member);
         article.getMember().pointUp();
-        return new Recommend(member,article);
+        return recommend;
     }
 
 

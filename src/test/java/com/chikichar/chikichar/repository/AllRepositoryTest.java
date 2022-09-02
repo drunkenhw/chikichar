@@ -1,12 +1,10 @@
 package com.chikichar.chikichar.repository;
 
-import com.chikichar.chikichar.dto.NormalBoardArticleDto;
 import com.chikichar.chikichar.entity.*;
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.BoardType;
 import com.chikichar.chikichar.model.MemberRole;
-import com.chikichar.chikichar.repository.custom.ArticleQuerydslRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +13,8 @@ import org.springframework.test.annotation.Commit;
 
 import javax.transaction.Transactional;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.*;
-
+@Transactional
 @SpringBootTest
 class AllRepositoryTest {
     @Autowired
@@ -37,8 +33,6 @@ class AllRepositoryTest {
     private BoardRepository boardRepository;
 
     @Test
-    @Transactional
-    @Commit
     @DisplayName("더미 데이터 삽입 테스트")
     public void dummyTest(){
 
@@ -46,8 +40,8 @@ class AllRepositoryTest {
                 .email("dumm3y@dummy.com")
                 .name("han")
                 .address(Address.builder()
-                        .city("busan")
-                        .street("street")
+                        .streetAddress("busan")
+                        .detailAddress("street")
                         .zipcode("13213")
                         .build())
                 .password("dsadasdsad")
@@ -60,7 +54,7 @@ class AllRepositoryTest {
          boardRepository.save(board);
 
         Article article = Article.builder()
-                .address(Address.builder().zipcode("12313").street("거리").city("서울").build())
+                .address(Address.builder().zipcode("12313").streetAddress("거리").detailAddress("서울").build())
                 .member(saveMember)
                 .board(board)
                 .title("제목")
@@ -80,28 +74,16 @@ class AllRepositoryTest {
         Comment comment = new Comment(saveArticle,saveMember,"좋아요");
         Comment saveComment = commentRepository.save(comment);
 
-        ArticleImage articleImage = ArticleImage.builder()
-                .article(saveArticle)
-                .name("grim")
-                .uuid("$#@$@DFSERWER#@$@")
-                .path("//23//s")
-                .build();
+        ArticleImage articleImage = ArticleImage.of("grim", "uuid", "path", saveArticle);
+        articleImage.addInArticle(saveArticle);
         ArticleImage saveImage = articleImageRepository.save(articleImage);
-        ArticleImage articleImage1 = ArticleImage.builder()
-                .article(saveArticle)
-                .name("grim")
-                .uuid("$#@$@DFSERWER#@$@")
-                .path("//23//s")
-                .build();
+
+        ArticleImage articleImage1 = ArticleImage.of("grim", "uuid", "path", saveArticle);
+        articleImage1.addInArticle(saveArticle);
         ArticleImage saveImage2 = articleImageRepository.save(articleImage1);
 
         Recommend recommend =Recommend.of(saveMember,saveArticle);
         Recommend saveRecommend = recommendRepository.save(recommend);
-
-        List<Article> allByBoard = articleRepository.findAllByBoardId(board.getId());
-        for (Article article1 : allByBoard) {
-            System.out.println("article1 = " + article1);
-        }
 
         assertThat(saveMember.getId()).isEqualTo(member.getId());
         assertThat(saveArticle.getId()).isEqualTo(article.getId());

@@ -33,11 +33,22 @@ public class ArticleImage {
     @JoinColumn(name = "article_id")
     private Article article;
 
-    @Builder
-    public ArticleImage(String name, String uuid, String path, Article article) {
+    protected ArticleImage(String name, String uuid, String path) {
         this.name = name;
         this.uuid = uuid;
         this.path = path;
+    }
+    public static ArticleImage of(String name, String uuid, String path, Article article){
+        ArticleImage articleImage = new ArticleImage(name, uuid, path);
+        articleImage.addInArticle(article);
+        return articleImage;
+    }
+
+    public void addInArticle(Article article) {
+        if(this.article != null){
+            this.article.getImages().remove(this);
+        }
         this.article = article;
+        article.getImages().add(this);
     }
 }

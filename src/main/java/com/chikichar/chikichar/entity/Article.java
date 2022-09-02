@@ -5,6 +5,8 @@ import com.chikichar.chikichar.model.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * member = 글쓴이
@@ -51,6 +53,9 @@ public class Article extends BaseTimeEntity {
     @Column(name = "location_y")
     private double locationY;
 
+    @OneToMany(mappedBy = "article")
+    private List<ArticleImage> images = new ArrayList<>();
+
 
     @Builder
     public Article(Board board, Member member, String title, String content, int viewCount, Address address, double locationX, double locationY) {
@@ -63,5 +68,6 @@ public class Article extends BaseTimeEntity {
         this.locationX = locationX;
         this.locationY = locationY;
     }
+
 
 }

@@ -158,7 +158,7 @@ class MemberServiceImplTest {
                 .brand(Brand.CHEVROLET).city("seoul").name("kim").phone("01021010101")
                 .street("gangnam").nickname("kent").zipcode("1233").build();
         memberService.oAuthMemberAddProfile(member,oAuth2MemberRequestDto);
-        assertThat(member.getAddress().getCity()).isEqualTo("seoul");
+        assertThat(member.getAddress().getStreetAddress()).isEqualTo("seoul");
     }
 
     @Test
