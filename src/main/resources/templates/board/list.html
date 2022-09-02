@@ -40,17 +40,32 @@
             </tr>
             </thead>
 
-            <tr th:each="article : ${articles}">
+            <tr th:each="article : ${articles.dtoList}">
                 <td th:text="${article.nickname}"></td>
                 <td th:text="${article.title}"></td>
                 <td th:text="${article.viewCount}"></td>
                 <td th:text="${article.commentCount}"></td>
                 <td th:text="${article.imagePath}"></td>
-                <td th:text="${article.regDate}"></td>
+                <td>[[${#temporals.format(article.regDate,'yyyy/MM/dd')}]]</td>
             </tr>
         </table>
-
-
+        <ul class="pagination h-100 justify-content-center align-items-center">
+        <li class="page-item" th:if="${articles.prev}">
+            <a th:href="@{/list(page=${articles.start-1})}"
+               class="page-link"
+               tabindex="-1">Privious</a>
+            </li>
+            <li
+                    th:class="'page-item ' + ${articles.page == page? 'active':''}"
+                    th:each="page: ${articles.pageList}">
+                <a th:href="@{/list(page=${page})}"
+                   class="page-link">[[${page}]]</a>
+            </li>
+            <li class="page-item" th:if="${articles.next}">
+                <a th:href="@{/list(page=${articles.end+1})}"
+                   class="page-link">Next</a>
+            </li>
+        </ul>
         <!-- 부트스트랩 -->
         <div id="myModal" class="modal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
@@ -71,46 +86,6 @@
             </div>
         </div>
 
-        <script th:inline="javascript">
-            window.onload = function () {
-                var msg = /*[[${msg}]]*/ "msg";
-
-                if (msg) {
-
-                    const mno = msg.split(" ")[0];
-                    const noti = msg.split(" ")[1];
-
-                    console.log(msg);
-                    var myModal = new bootstrap.Modal(document.getElementById('myModal'),
-                        {backdrop: true})
-                    document.querySelector(".modal-title").textContent = noti + ' 완료'
-                    document.querySelector(".modal-body").innerHTML =
-                        `<p>${mno}번 글이 ${noti}되었습니다.</p>`
-                    myModal.show();
-                }
-
-                const searchForm = document.querySelector('#searchForm');
-                const btnSrch = document.querySelector('.searchBtn');
-                const btnClear = document.querySelector('.clearBtn');
-                const selectType = document.querySelector("select[name='type']");
-
-                btnSrch.onclick = () => document.querySelector('#searchForm').submit();
-                btnClear.onclick = function () {
-                    document.querySelector("select[name='type']").options[0].selected = true;
-                    document.querySelector("input[name='keyword']").value = "";
-                }
-                selectType.onchange = function () {
-                    if (selectType.options[0].selected != true) {
-                        document.querySelector("input[name='keyword']").disabled = false;
-                        btnSrch.disabled = false;
-                    } else {
-                        document.querySelector("input[name='keyword']").value = "";
-                        document.querySelector("input[name='keyword']").disabled = true;
-                        btnSrch.disabled = true;
-                    }
-                }
-            }
-        </script>
 
     </th:block>
 </th:block>

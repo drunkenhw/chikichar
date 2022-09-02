@@ -6,7 +6,7 @@ import lombok.Data;
 public class BoardSearchType {
 
     private String nickname;
+    private String title;
     private String content;
-    private Integer ageGoe;
-    private Integer ageLoe;
+
 }

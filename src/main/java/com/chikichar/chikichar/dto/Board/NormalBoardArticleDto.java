@@ -1,6 +1,7 @@
 package com.chikichar.chikichar.dto.Board;
 
 import com.chikichar.chikichar.entity.ArticleImage;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,18 +12,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class NormalBoardArticleDto {
 
     private String nickname;
     private String title;
-    private String content;
     private int viewCount;
     private Long commentCount;
     private LocalDateTime regDate;
     private String imagePath;
 
-
+    @QueryProjection
+    public NormalBoardArticleDto(String nickname, String title, int viewCount, Long commentCount, LocalDateTime regDate, String imagePath) {
+        this.nickname = nickname;
+        this.title = title;
+        this.viewCount = viewCount;
+        this.commentCount = commentCount;
+        this.regDate = regDate;
+        this.imagePath = imagePath;
+    }
 }
