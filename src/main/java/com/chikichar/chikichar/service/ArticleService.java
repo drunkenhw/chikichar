@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface ArticleService {
 
-    public Page<NormalBoardArticleDto> printArticleList(BoardSearchType boardSearchType, String boardName, Pageable pageable);
+   Page<NormalBoardArticleDto> printArticleList(BoardSearchType boardSearchType, Pageable pageable);
 }

@@ -18,8 +18,8 @@ public class ArticleServiceImpl implements ArticleService {
     private final ArticleRepository articleRepository;
 
     @Override
-    public Page<NormalBoardArticleDto> printArticleList(BoardSearchType boardSearchType, String boardName, Pageable pageable) {
-       return articleRepository.searchBoardPaging(boardSearchType,boardName,pageable);
+    public Page<NormalBoardArticleDto> printArticleList(BoardSearchType boardSearchType, Pageable pageable) {
+       return articleRepository.searchBoardPaging(boardSearchType,pageable);
 
     }
 }

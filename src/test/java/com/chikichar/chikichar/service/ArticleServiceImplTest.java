@@ -1,6 +1,8 @@
 package com.chikichar.chikichar.service;
 
+import com.chikichar.chikichar.dto.Board.BoardSearchType;
 import com.chikichar.chikichar.dto.Board.NormalBoardArticleDto;
+import com.chikichar.chikichar.dto.page.CustomPageRequest;
 import com.chikichar.chikichar.entity.Article;
 import com.chikichar.chikichar.entity.ArticleImage;
 import com.chikichar.chikichar.entity.Board;
@@ -13,6 +15,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -35,26 +39,39 @@ class ArticleServiceImplTest {
     ArticleImageRepository articleImageRepository;
 
     @Test
-    @DisplayName("BoardDTO를 조회한다.")
-    void getList(){
+    @DisplayName("BoardDTO를 검색조건과 함께 페이지네이션으로 조회한다.")
+    void getList() {
         //given
+        insertDummy();
+
+        //when
+        BoardSearchType boardSearchType = new BoardSearchType();
+        boardSearchType.setContent("content");
+        boardSearchType.setNickname("query");
+        boardSearchType.setTitle("title");
+        boardSearchType.setBoardName("benz");
+
+        CustomPageRequest customPageRequest = new CustomPageRequest();
+        PageRequest pageRequest = customPageRequest.of();
+
+        Page<NormalBoardArticleDto> dto = articleService.printArticleList(boardSearchType, pageRequest);
+
+        //then
+        assertThat(dto.getContent().size()).isEqualTo(2);
+
+    }
+
+    private void insertDummy() {
         Member member = createMember("querydsl", "query");
         memberRepository.save(member);
         Board board = createBoard();
         boardRepository.save(board);
         Article article = createArticle(board, member);
         articleRepository.save(article);
-        ArticleImage articleImage =ArticleImage.of("a", "b", "c",article);
+        Article article1 = createArticle(board, member);
+        articleRepository.save(article1);
+        ArticleImage articleImage = ArticleImage.of("a", "b", "c", article);
         articleImageRepository.save(articleImage);
-
-        //when
-//        List<NormalBoardArticleDto> boardDto = articleService.printArticleList(board.getId());
-//        //then
-//        assertThat(boardDto.size()).isEqualTo(1);
-//        assertThat(boardDto.get(0).getNickname()).isEqualTo(member.getNickname());
-//        assertThat(boardDto.get(0).getTitle()).isEqualTo(article.getTitle());
-//        assertThat(boardDto.get(0).getImagePath()).isEqualTo(articleImage.getPath());
-
     }
 
 }

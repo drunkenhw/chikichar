@@ -8,5 +8,6 @@ public class BoardSearchType {
     private String nickname;
     private String title;
     private String content;
+    private String boardName;
 
 }

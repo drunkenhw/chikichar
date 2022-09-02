@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:replace="~{fragments/frame::setContent(~{this::content})}">
     <th:block th:fragment="content">
-        <h1> 자유 게시판
+        <h1> 김준수 대학합격 기원 게시판
             <span>
           <a th:href="@{/movie/register}" sec:authorize="isAuthenticated()" class="btn btn-outline-primary">REGISTER</a>
         </span>
@@ -34,36 +34,36 @@
                 <th scope="col">제목</th>
                 <th scope="col">조회수</th>
                 <th scope="col">댓글</th>
+                <th scope="col">추천 수</th>
                 <th scope="col">이미지</th>
                 <th scope="col">작성일</th>
 
             </tr>
             </thead>
-
             <tr th:each="article : ${articles.dtoList}">
                 <td th:text="${article.nickname}"></td>
                 <td th:text="${article.title}"></td>
                 <td th:text="${article.viewCount}"></td>
                 <td th:text="${article.commentCount}"></td>
+                <td th:text="${article.recommendCount}"></td>
                 <td th:text="${article.imagePath}"></td>
                 <td>[[${#temporals.format(article.regDate,'yyyy/MM/dd')}]]</td>
             </tr>
         </table>
         <ul class="pagination h-100 justify-content-center align-items-center">
-        <li class="page-item" th:if="${articles.prev}">
-            <a th:href="@{/list(page=${articles.start-1})}"
-               class="page-link"
-               tabindex="-1">Privious</a>
+            <li class="page-item" th:if="${articles.prev}">
+                <a th:href="@{${boardName}(page=${articles.start-1})}"
+                   class="page-link"
+                   tabindex="-1">이전</a>
             </li>
-            <li
-                    th:class="'page-item ' + ${articles.page == page? 'active':''}"
-                    th:each="page: ${articles.pageList}">
-                <a th:href="@{/list(page=${page})}"
+            <li th:class="'page-item ' + ${articles.page == page? 'active':''}"
+                th:each="page: ${articles.pageList}">
+                <a th:href="@{${boardName}(page=${page})}"
                    class="page-link">[[${page}]]</a>
             </li>
             <li class="page-item" th:if="${articles.next}">
-                <a th:href="@{/list(page=${articles.end+1})}"
-                   class="page-link">Next</a>
+                <a th:href="@{${boardName}(page=${articles.end+1})}"
+                   class="page-link">다음</a>
             </li>
         </ul>
         <!-- 부트스트랩 -->

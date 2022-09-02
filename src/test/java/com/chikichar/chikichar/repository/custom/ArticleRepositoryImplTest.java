@@ -38,14 +38,7 @@ class ArticleRepositoryImplTest {
         insertDummyData();
     }
 
-    @Test
-    @DisplayName("Board dto에 맞는 쿼리가 발생한다.")
-    void querydslTest() {
-        List<Board> all = boardRepository.findAll();
-        List<NormalBoardArticleDto> findBoardList = articleRepository.findByBoardId(all.get(0).getId());
 
-        Assertions.assertThat(findBoardList.size()).isEqualTo(3);
-    }
 
     private void insertDummyData(){
         Member member = createMember("email@naver.com", "querytest");

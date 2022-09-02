@@ -4,6 +4,7 @@ import com.chikichar.chikichar.dto.Board.BoardSearchType;
 import com.chikichar.chikichar.dto.Board.NormalBoardArticleDto;
 import com.chikichar.chikichar.dto.Board.QNormalBoardArticleDto;
 import com.chikichar.chikichar.entity.QArticleImage;
+import com.chikichar.chikichar.entity.QRecommend;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -19,6 +20,7 @@ import java.util.List;
 import static com.chikichar.chikichar.entity.QArticle.*;
 import static com.chikichar.chikichar.entity.QArticleImage.*;
 import static com.chikichar.chikichar.entity.QComment.*;
+import static com.chikichar.chikichar.entity.QRecommend.*;
 import static org.springframework.util.StringUtils.hasText;
 
 @Repository
@@ -28,37 +30,8 @@ public class ArticleRepositoryImpl implements ArticleRepositoryQuerydsl {
     private final JPAQueryFactory queryFactory;
 
 
-    public List<NormalBoardArticleDto> findByBoardId(Long boardId) {
-        QArticleImage articleImage1 = new QArticleImage("a");
-        return queryFactory.select(
-                        Projections.bean(NormalBoardArticleDto.class,
-                                article.member.nickname,
-                                article.title,
-                                article.content,
-                                article.viewCount,
-                                comment.count().as("commentCount"),
-                                article.regDate,
-                                articleImage.path.as("imagePath")
-                        ))
-                .from(article)
-                .leftJoin(comment)
-                .on(comment.article.eq(article))
-                .leftJoin(articleImage)
-                .on(articleImage.article.eq(article),
-                        articleImage.id.eq(
-                                queryFactory
-                                        .select(articleImage1.id.max())
-                                        .from(articleImage1)
-                                        .where(articleImage1.article.eq(article))
-                        ))
-                .where(article.board.id.eq(boardId))
-                .groupBy(article)
-                .fetch();
-
-    }
-
     @Override
-    public Page<NormalBoardArticleDto> searchBoardPaging(BoardSearchType searchType, String boardName, Pageable pageable) {
+    public Page<NormalBoardArticleDto> searchBoardPaging(BoardSearchType searchType, Pageable pageable) {
 
         QArticleImage articleImage1 = new QArticleImage("a");
 
@@ -69,20 +42,24 @@ public class ArticleRepositoryImpl implements ArticleRepositoryQuerydsl {
                         article.viewCount,
                         comment.count(),
                         article.regDate,
-                        articleImage.path))
+                        articleImage.path,
+                        recommend.count()
+                        ))
                 .from(article)
                 .leftJoin(comment)
                 .on(comment.article.eq(article))
+                .leftJoin(recommend)
+                .on(recommend.article.eq(article))
                 .leftJoin(articleImage)
                 .on(articleImage.article.eq(article),
+                        // 가장 최근에 등록한 이미지 하나 가져오기
                         articleImage.id.eq(
                                 queryFactory
                                         .select(articleImage1.id.max())
                                         .from(articleImage1)
-                                        .where(articleImage1.article.eq(article))
-                        ))
+                                        .where(articleImage1.article.eq(article))))
                 .where(nicknameContains(searchType.getNickname()),
-                        article.board.name.eq(boardName))
+                        article.board.name.eq(searchType.getBoardName()))
                 .groupBy(article)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -94,7 +71,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryQuerydsl {
                 .where(nicknameContains(searchType.getNickname()),
                         titleContains(searchType.getTitle()),
                         contentContains(searchType.getContent()),
-                        article.board.name.eq(boardName));
+                        article.board.name.eq(searchType.getBoardName()));
         return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
     }
 
