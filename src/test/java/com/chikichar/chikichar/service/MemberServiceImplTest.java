@@ -5,7 +5,6 @@ import com.chikichar.chikichar.dto.member.ChangePasswordDto;
 import com.chikichar.chikichar.dto.member.OAuth2MemberRequestDto;
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.dto.member.MemberRequestDto;
-import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.repository.MemberRepository;
 import com.chikichar.chikichar.model.Brand;
 import com.chikichar.chikichar.model.MemberRole;
@@ -34,18 +33,16 @@ class MemberServiceImplTest {
     MemberRepository memberRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+
     @BeforeEach
-    void createMember(){
-        Member member = EntityBuilder.createMember("before","before");
+    void createMember() {
+        Member member = EntityBuilder.createMember("before", "before");
         memberRepository.save(member);
     }
 
-
-
-
     @Test
-    @DisplayName("회원가입, 탈퇴 테스트")
-    void joinWithdrawalTest(){
+    @DisplayName("회원가입을 성공한다")
+    void joinTest() {
         MemberRequestDto memberRequestDto = MemberRequestDto.builder()
                 .city("b")
                 .street("b")
@@ -62,16 +59,36 @@ class MemberServiceImplTest {
         Long saveMemberId = memberService.joinAccount(memberRequestDto);
         Optional<Member> saveMember = memberRepository.findById(saveMemberId);
         assertThat(saveMember.isPresent()).isEqualTo(true);
+    }
 
-        //탈퇴 테스트
-
-        memberService.deleteAccount(saveMember.get());
-        Optional<Member> deleteMember = memberRepository.findById(saveMemberId);
+    @Test
+    @DisplayName("회원 탈퇴를 성공한다")
+    void deleteAccountTest() {
+        //given
+        MemberRequestDto memberRequestDto = MemberRequestDto.builder()
+                .city("b")
+                .street("b")
+                .zipcode("b")
+                .brand(Brand.AUDI)
+                .memberRole("USER")
+                .email("aaa@naver.com")
+                .nickname("aa")
+                .password("aaaa")
+                .phone("101010100")
+                .name("han")
+                .build();
+        memberService.joinAccount(memberRequestDto);
+        Optional<Member> findMember = memberRepository.findByEmail("aaa@naver.com");
+        //when
+        memberService.deleteAccount(findMember.get());
+        Optional<Member> deleteMember = memberRepository.findByEmail("aaa@naver.com");
+        //then
         assertThat(deleteMember.isPresent()).isEqualTo(false);
     }
+
     @Test
     @DisplayName("DTO로 회원 정보를 수정 한다.")
-    void modifyTest()  {
+    void modifyTest() {
         MemberRequestDto memberRequestDto = MemberRequestDto.builder()
                 .city("b")
                 .street("b")
@@ -102,20 +119,21 @@ class MemberServiceImplTest {
         System.out.println(saveMemberId);
 
         Member member = memberRepository.findById(saveMemberId).orElseThrow();
-        memberService.modifyInfo(member,modifyMember);
+        memberService.modifyInfo(member, modifyMember);
 
         assertThat(member.getNickname()).isEqualTo("change");
     }
 
     @Test
     @DisplayName("이메일이 중복되면 true를 반환한다.")
-    void emailDuplicateTest(){
+    void emailDuplicateTest() {
 
         boolean duplicateEmail = memberService.isDuplicateEmail("before@naver.com");
 
         assertThat(duplicateEmail).isEqualTo(true);
     }
 
+    //TODO 이메일 찾는 방식 변경
 //    @Test
 //    @DisplayName("전화번호, 이름으로 이메일을 반환한다.")
 //    void findEmailTest(){
@@ -126,24 +144,25 @@ class MemberServiceImplTest {
 
     @Test
     @DisplayName("비밀번호를 변경한다.")
-    void changePasswordTest(){
+    void changePasswordTest() {
         Member member = memberRepository.findByEmail("before@naver.com").orElseThrow();
-        ChangePasswordDto changePasswordDto = new ChangePasswordDto("1","2");
+        ChangePasswordDto changePasswordDto = new ChangePasswordDto("1", "2");
         memberService.changePassword(member, changePasswordDto);
-        assertThat(passwordEncoder.matches("2",member.getPassword())).isTrue();
+        assertThat(passwordEncoder.matches("2", member.getPassword())).isTrue();
     }
+
     @Test
     @DisplayName("현재 비밀번호가 맞지않으면 Exception이 발생한다.")
-    void changePasswordExceptionTest(){
+    void changePasswordExceptionTest() {
         Member member = memberRepository.findByEmail("before@naver.com").orElseThrow();
-        ChangePasswordDto changePasswordDto = new ChangePasswordDto("2","3");
-        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class,
-                () -> memberService.changePassword(member, changePasswordDto));
+        ChangePasswordDto changePasswordDto = new ChangePasswordDto("2", "3");
+        Assertions.assertThatThrownBy(() -> memberService.changePassword(member, changePasswordDto))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("Member의 전체 리스트를 조회한다.")
-    public void getMemberList(){
+    public void getMemberList() {
         List<Member> memberList = memberService.getMemberList();
         for (Member member : memberList) {
             System.out.println("member = " + member);
@@ -152,18 +171,18 @@ class MemberServiceImplTest {
 
     @Test
     @DisplayName("소셜 로그인 회원정보를 추가한다.")
-    public void modifyOAuth2(){
+    public void modifyOAuth2() {
         Member member = memberRepository.findByEmail("before@naver.com").orElseThrow();
         OAuth2MemberRequestDto oAuth2MemberRequestDto = OAuth2MemberRequestDto.builder()
                 .brand(Brand.CHEVROLET).city("seoul").name("kim").phone("01021010101")
                 .street("gangnam").nickname("kent").zipcode("1233").build();
-        memberService.oAuthMemberAddProfile(member,oAuth2MemberRequestDto);
+        memberService.oAuthMemberAddProfile(member, oAuth2MemberRequestDto);
         assertThat(member.getAddress().getStreetAddress()).isEqualTo("seoul");
     }
 
     @Test
     @DisplayName("회원을 정지시키면 MemberRole이 BAN이 된다.")
-    void bannedMember(){
+    void bannedMember() {
         Member member = memberRepository.findByEmail("before@naver.com").orElseThrow();
         memberService.banMember(member.getId());
         assertThat(member.getMemberRole()).isEqualTo(MemberRole.BAN);

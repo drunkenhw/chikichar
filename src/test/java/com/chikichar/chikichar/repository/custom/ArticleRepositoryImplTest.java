@@ -1,17 +1,12 @@
 package com.chikichar.chikichar.repository.custom;
 
-import com.chikichar.chikichar.dto.Board.NormalBoardArticleDto;
 import com.chikichar.chikichar.entity.*;
 import com.chikichar.chikichar.repository.*;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 import static com.chikichar.chikichar.EntityBuilder.*;
 
@@ -22,8 +17,6 @@ class ArticleRepositoryImplTest {
     private ArticleRepository articleRepository;
     @Autowired
     private MemberRepository memberRepository;
-    @Autowired
-    private ItemRepository itemRepository;
     @Autowired
     private CommentRepository commentRepository;
     @Autowired

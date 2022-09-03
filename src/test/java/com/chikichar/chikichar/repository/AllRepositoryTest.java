@@ -9,20 +9,20 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 
 import javax.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
+
 @Transactional
 @SpringBootTest
 class AllRepositoryTest {
     @Autowired
-    private  ArticleRepository articleRepository;
+    private ArticleRepository articleRepository;
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
-    private  ItemRepository itemRepository;
+    private ItemRepository itemRepository;
     @Autowired
     private CommentRepository commentRepository;
     @Autowired
@@ -34,7 +34,7 @@ class AllRepositoryTest {
 
     @Test
     @DisplayName("더미 데이터 삽입 테스트")
-    public void dummyTest(){
+    public void dummyTest() {
 
         Member member = Member.builder()
                 .email("dumm3y@dummy.com")
@@ -51,7 +51,7 @@ class AllRepositoryTest {
 
         Board board = new Board("드라이브코스", BoardType.MAP);
 
-         boardRepository.save(board);
+        boardRepository.save(board);
 
         Article article = Article.builder()
                 .address(Address.builder().zipcode("12313").streetAddress("거리").detailAddress("서울").build())
@@ -71,7 +71,7 @@ class AllRepositoryTest {
                 .build();
         Item saveItem = itemRepository.save(item);
 
-        Comment comment = new Comment(saveArticle,saveMember,"좋아요");
+        Comment comment = Comment.of(saveArticle, saveMember, "좋아요");
         Comment saveComment = commentRepository.save(comment);
 
         ArticleImage articleImage = ArticleImage.of("grim", "uuid", "path", saveArticle);
@@ -82,7 +82,7 @@ class AllRepositoryTest {
         articleImage1.addInArticle(saveArticle);
         ArticleImage saveImage2 = articleImageRepository.save(articleImage1);
 
-        Recommend recommend =Recommend.of(saveMember,saveArticle);
+        Recommend recommend = Recommend.of(saveMember, saveArticle);
         Recommend saveRecommend = recommendRepository.save(recommend);
 
         assertThat(saveMember.getId()).isEqualTo(member.getId());

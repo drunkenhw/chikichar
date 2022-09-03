@@ -5,19 +5,14 @@ import com.chikichar.chikichar.entity.Article;
 import com.chikichar.chikichar.entity.Board;
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.entity.Recommend;
-import com.chikichar.chikichar.model.BoardType;
-import com.chikichar.chikichar.model.MemberRole;
 import com.chikichar.chikichar.repository.ArticleRepository;
 import com.chikichar.chikichar.repository.BoardRepository;
 import com.chikichar.chikichar.repository.MemberRepository;
 import com.chikichar.chikichar.repository.RecommendRepository;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -71,8 +66,8 @@ class RecommendServiceImplTest {
         assertThat(firstRecommend).isEqualTo(true);  //처음 추천 시 true 반환
         assertThat(secondRecommend).isEqualTo(false); //두번째 추천 시 false 반환
         assertThat(thirdRecommend).isEqualTo(true); //세번째 추천 시 true 반환
-        List<Recommend> recommends = saveReader.getRecommends();
-        System.out.println("recommends = " + recommends);
+
+        assertThat(saveReader.getRecommendList().size()).isEqualTo(2);
 
     }
 
@@ -95,7 +90,7 @@ class RecommendServiceImplTest {
 
         recommendService.clickRecommend(saveReader, saveArticle.getId());
 
-        assertThat(saveReader.getRecommends().size()).isEqualTo(0);
+        assertThat(saveReader.getRecommendList().size()).isEqualTo(0);
 
     }
 
@@ -117,7 +112,7 @@ class RecommendServiceImplTest {
         recommendService.clickRecommend(saveReader, saveArticle.getId());
 
 
-        assertThat(saveReader.getRecommends().size()).isEqualTo(1);
+        assertThat(saveReader.getRecommendList().size()).isEqualTo(1);
 
     }
 }
