@@ -26,19 +26,22 @@ public class BoardController {
     @GetMapping("/brand")
     public String brandBoard(@CurrentUser Member member){
         if(member != null) {
-            return "redirect:/list/" + member.getBrand();
+            return "redirect:/" + member.getBrand();
         }
-        return "redirect:/list/driver";
+        return "redirect:/driver";
     }
 
-    @GetMapping("/list/{boardName}")
+    @GetMapping("/{boardName}")
     public String getArticleList(@ModelAttribute("searchType") BoardSearchType boardSearchType,
                                  CustomPageRequest pageRequest,
                                  Model model) {
+
         Page<NormalBoardArticleDto> result = articleService.printArticleList(boardSearchType, pageRequest.of());
         CustomPageResponse<NormalBoardArticleDto> pagingDto = new CustomPageResponse<>(result);
-        log.info("pagingDto={}",boardSearchType.getBoardName());
+
         model.addAttribute("articles", pagingDto);
+        model.addAttribute("boardName", boardSearchType.getBoardName());
+
         return "board/list";
 
     }

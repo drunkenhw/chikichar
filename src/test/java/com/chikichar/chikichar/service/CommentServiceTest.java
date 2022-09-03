@@ -33,21 +33,20 @@ class CommentServiceTest {
 
     @Test
     @DisplayName("댓글을 달면 회원의 Comment 리스트에 추가한다.")
-    void memberCommentListTest(){
-        Member member = EntityBuilder.createMember("comment","comment");
+    void memberCommentListTest() {
+        Member member = EntityBuilder.createMember("comment", "comment");
         memberRepository.save(member);
         Board board = EntityBuilder.createBoard();
         boardRepository.save(board);
         Article article = EntityBuilder.createArticle(board, member);
         articleRepository.save(article);
-        Comment comment = EntityBuilder.createComment(article,member);
+
+        Comment comment = Comment.of(article, member,"content1");
         commentRepository.save(comment);
-        Comment comment1 = EntityBuilder.createComment(article,member);
+        Comment comment1 = Comment.of(article, member,"content");
         commentRepository.save(comment1);
 
-        assertThat(member.getComments().size()).isEqualTo(2);
-        System.out.println("member.getComments() = " + member.getComments());
-        System.out.println("comment.getMember().getComments() = " + comment.getMember().getComments());
+        assertThat(member.getCommentList().size()).isEqualTo(2);
 
     }
 }

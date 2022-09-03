@@ -44,7 +44,7 @@ public class RecommendServiceImpl implements RecommendService{
 
     private void cancelRecommend(Article article, Recommend recommend) {
         recommendRepository.delete(recommend);
-        recommend.getMember().getRecommends().remove(recommend);
+        recommend.getMember().getRecommendList().remove(recommend);
         article.getMember().pointDown();
     }
 

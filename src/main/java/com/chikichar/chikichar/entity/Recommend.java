@@ -29,11 +29,11 @@ public class Recommend {
     private Article article;
 
     private void setRecommender(Member member) {
-        if(this.member.getRecommends() != null){
-            this.member.getComments().remove(this);
+        if(this.member.getRecommendList() != null){
+            this.member.getRecommendList().remove(this);
         }
         this.member = member;
-        member.getRecommends().add(this);
+        member.getRecommendList().add(this);
     }
 
 

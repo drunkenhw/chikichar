@@ -23,7 +23,6 @@ public class MemberApiController {
     private final MemberService memberService;
 
 
-
     @GetMapping(value = "/email-check")
     public Boolean emailCheck(String email){
         log.info("email={}" ,email);

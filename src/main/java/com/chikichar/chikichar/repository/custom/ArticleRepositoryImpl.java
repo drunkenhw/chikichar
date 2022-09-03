@@ -19,7 +19,9 @@ import java.util.List;
 
 import static com.chikichar.chikichar.entity.QArticle.*;
 import static com.chikichar.chikichar.entity.QArticleImage.*;
+import static com.chikichar.chikichar.entity.QBoard.board;
 import static com.chikichar.chikichar.entity.QComment.*;
+import static com.chikichar.chikichar.entity.QMember.member;
 import static com.chikichar.chikichar.entity.QRecommend.*;
 import static org.springframework.util.StringUtils.hasText;
 
@@ -40,14 +42,14 @@ public class ArticleRepositoryImpl implements ArticleRepositoryQuerydsl {
                         article.member.nickname,
                         article.title,
                         article.viewCount,
-                        comment.count(),
+                        article.commentList.size(),
                         article.regDate,
-                        articleImage.path,
+                        articleImage.path.coalesce("empty"),
                         recommend.count()
-                        ))
+                ))
                 .from(article)
-                .leftJoin(comment)
-                .on(comment.article.eq(article))
+                .innerJoin(article.member, member)
+                .innerJoin(article.board, board)
                 .leftJoin(recommend)
                 .on(recommend.article.eq(article))
                 .leftJoin(articleImage)
@@ -58,8 +60,12 @@ public class ArticleRepositoryImpl implements ArticleRepositoryQuerydsl {
                                         .select(articleImage1.id.max())
                                         .from(articleImage1)
                                         .where(articleImage1.article.eq(article))))
-                .where(nicknameContains(searchType.getNickname()),
-                        article.board.name.eq(searchType.getBoardName()))
+                .where(
+                        nicknameContains(searchType.getNickname()),
+                        titleContains(searchType.getTitle()),
+                        contentContains(searchType.getContent()),
+                        article.board.name.eq(searchType.getBoardName())
+                )
                 .groupBy(article)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -68,19 +74,23 @@ public class ArticleRepositoryImpl implements ArticleRepositoryQuerydsl {
         JPAQuery<Long> countQuery = queryFactory
                 .select(article.count())
                 .from(article)
-                .where(nicknameContains(searchType.getNickname()),
+                .where(
+                        nicknameContains(searchType.getNickname()),
                         titleContains(searchType.getTitle()),
                         contentContains(searchType.getContent()),
                         article.board.name.eq(searchType.getBoardName()));
+
         return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
     }
 
     private BooleanExpression nicknameContains(String nickname) {
         return hasText(nickname) ? article.member.nickname.contains(nickname) : null;
     }
+
     private BooleanExpression titleContains(String title) {
         return hasText(title) ? article.title.contains(title) : null;
     }
+
     private BooleanExpression contentContains(String content) {
         return hasText(content) ? article.content.contains(content) : null;
     }

@@ -1,7 +1,6 @@
 package com.chikichar.chikichar.service;
 
 import com.chikichar.chikichar.dto.member.ChangePasswordDto;
-import com.chikichar.chikichar.dto.member.MemberResponseDto;
 import com.chikichar.chikichar.dto.member.OAuth2MemberRequestDto;
 import com.chikichar.chikichar.entity.Member;
 import com.chikichar.chikichar.dto.member.MemberRequestDto;
@@ -51,6 +50,7 @@ public class MemberServiceImpl implements MemberService {
                 memberRequestDto.getNickname(), memberRequestDto.getPhone(),
                 memberRequestDto.getAddress(), memberRequestDto.getBrand()
                 ,MemberRole.valueOf(memberRequestDto.getMemberRole()));
+
         memberRepository.save(member);
 
 
@@ -92,15 +92,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void oAuthMemberAddProfile(Member member, OAuth2MemberRequestDto OAuth2MemberRequestDto) {
 
-        //TODO 메서드 완성해야함
         member.OAuth2ModifyMember(
-                OAuth2MemberRequestDto.getName(),
                 OAuth2MemberRequestDto.getNickname(),
                 OAuth2MemberRequestDto.getPhone(),
                 new Address(OAuth2MemberRequestDto.getCity(), OAuth2MemberRequestDto.getStreet(), OAuth2MemberRequestDto.getZipcode()),
                 OAuth2MemberRequestDto.getBrand(),
                 MemberRole.USER);
+
         memberRepository.save(member);
+
     }
 
     @Override

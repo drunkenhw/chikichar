@@ -4,6 +4,7 @@ import com.chikichar.chikichar.model.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -33,18 +34,39 @@ public class Comment extends BaseTimeEntity {
 
     private String content;
 
-    public Comment(Article article, Member member, String content) {
+    private Comment(Article article, Member member, String content) {
         this.article = article;
         this.member = member;
         this.content = content;
-        this.setCommenter(member);
     }
 
+    public static Comment of(Article article, Member member, String content){
+        Comment comment = new Comment(article, member, content);
+        comment.registerInArticle(article);
+        comment.setCommenter(member);
+        System.out.println("of"+member);
+        System.out.println("of"+member.getCommentList());
+        return comment;
+    }
+
+
+
+
     private void setCommenter(Member member) {
-        if(this.member.getComments() != null){
-            this.member.getComments().remove(this);
+        if(this.member.getCommentList() != null){
+            this.member.getCommentList().remove(this);
         }
         this.member = member;
-        member.getComments().add(this);
+        member.getCommentList().add(this);
+        System.out.println(member);
+        System.out.println(member.getCommentList());
     }
+    private void registerInArticle(Article article) {
+        if(this.article.getCommentList() != null){
+            this.article.getCommentList().remove(this);
+        }
+        this.article = article;
+        article.getCommentList().add(this);
+    }
+
 }

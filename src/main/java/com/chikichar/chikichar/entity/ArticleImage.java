@@ -46,9 +46,9 @@ public class ArticleImage {
 
     public void addInArticle(Article article) {
         if(this.article != null){
-            this.article.getImages().remove(this);
+            this.article.getImageList().remove(this);
         }
         this.article = article;
-        article.getImages().add(this);
+        article.getImageList().add(this);
     }
 }
