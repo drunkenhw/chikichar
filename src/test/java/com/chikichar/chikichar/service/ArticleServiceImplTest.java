@@ -73,7 +73,7 @@ class ArticleServiceImplTest {
     @DisplayName("해당 게시판에 글 등록을 한다.")
     void writeArticle(){
         //given
-        Member member = memberRepository.findById(1L).orElseThrow();
+        Member member = memberRepository.findAll().get(0);
         ArticleRequestDto articleRequestDto = ArticleRequestDto.builder()
                 .title("title")
                 .content("content")

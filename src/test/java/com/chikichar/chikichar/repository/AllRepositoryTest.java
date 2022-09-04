@@ -33,7 +33,7 @@ class AllRepositoryTest {
     private BoardRepository boardRepository;
 
     @Test
-    @DisplayName("더미 데이터 삽입 테스트")
+    @DisplayName("더미 데이터를 insert 한다")
     public void dummyTest() {
 
         Member member = Member.builder()

@@ -51,7 +51,7 @@ public class MemberServiceImpl implements MemberService {
                 memberRequestDto.getAddress(), memberRequestDto.getBrand()
                 ,MemberRole.valueOf(memberRequestDto.getMemberRole()));
 
-        memberRepository.save(member);
+//        memberRepository.save(member);
 
 
     }
@@ -81,7 +81,7 @@ public class MemberServiceImpl implements MemberService {
             throw new IllegalArgumentException("원래 비밀번호가 맞지 않습니다");
         }
         member.changePassword(passwordEncoder.encode(changePasswordDto.getChangePassword()));
-        memberRepository.save(member);
+//        memberRepository.save(member);
     }
 
     private boolean isNotMatchPassword(Member member, ChangePasswordDto changePasswordDto) {
@@ -99,7 +99,7 @@ public class MemberServiceImpl implements MemberService {
                 OAuth2MemberRequestDto.getBrand(),
                 MemberRole.USER);
 
-        memberRepository.save(member);
+//        memberRepository.save(member);
 
     }
 

@@ -26,12 +26,12 @@ public class BoardController {
     @GetMapping("/brand")
     public String brandBoard(@CurrentUser Member member){
         if(member != null) {
-            return "redirect:/" + member.getBrand();
+            return "redirect:/board/" + member.getBrand();
         }
-        return "redirect:/driver";
+        return "redirect:/board/driver";
     }
 
-    @GetMapping("/{boardName}")
+    @GetMapping("/board/{boardName}")
     public String getArticleList(@ModelAttribute("searchType") BoardSearchType boardSearchType,
                                  CustomPageRequest pageRequest,
                                  Model model) {

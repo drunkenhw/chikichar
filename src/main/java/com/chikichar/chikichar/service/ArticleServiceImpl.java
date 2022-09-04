@@ -45,8 +45,8 @@ public class ArticleServiceImpl implements ArticleService {
                 .board(board)
                 .member(member)
                 .address(
-                        new Address(dto.getStreetAddress(), dto.getDetailAddress(), dto.getZipcode())
-                ).locationX(dto.getLocationX())
+                        new Address(dto.getStreetAddress(), dto.getDetailAddress(), dto.getZipcode()))
+                .locationX(dto.getLocationX())
                 .locationY(dto.getLocationY())
                 .build();
 
