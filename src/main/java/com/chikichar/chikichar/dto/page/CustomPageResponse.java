@@ -1,7 +1,6 @@
 package com.chikichar.chikichar.dto.page;
 
 import lombok.Data;
-import lombok.ToString;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

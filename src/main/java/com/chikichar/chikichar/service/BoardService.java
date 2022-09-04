@@ -9,4 +9,5 @@ public interface BoardService {
     List<Board> getBoardList();
 
     Long addBoard(String boardName, BoardType boardType);
+
 }

@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ArticleRepositoryQuerydsl {
-    List<NormalBoardArticleDto> findByBoardId(Long boardId);
 
-    Page<NormalBoardArticleDto> searchBoardPaging(BoardSearchType searchType, String boardName, Pageable pageable);
+    Page<NormalBoardArticleDto> searchBoardPaging(BoardSearchType searchType, Pageable pageable);
 }

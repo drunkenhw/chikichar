@@ -37,11 +37,9 @@ public class MemberOAuth2UserService extends DefaultOAuth2UserService {
             throw new InternalAuthenticationServiceException(ex.getMessage(), ex.getCause());
         }
     }
-    //TODO 메서드 이름 변경해야함
     private OAuth2User findMemberBySocialType(SocialType socialType, OAuth2User oAuth2User) {
 
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.getOAuth2UserInfo(socialType, oAuth2User.getAttributes());
-
         Member member = findMemberOrElseCreateMember(socialType, oAuth2UserInfo);
 
         if(member.getSocialType() != socialType){

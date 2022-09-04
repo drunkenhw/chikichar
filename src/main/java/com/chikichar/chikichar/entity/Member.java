@@ -21,7 +21,7 @@ import static javax.persistence.EnumType.*;
 
 @Entity
 @Getter
-@ToString(exclude = {"articles", "comments", "recommends"})
+@ToString(exclude = {"articleList", "commentList", "recommendList"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
 
@@ -58,16 +58,16 @@ public class Member extends BaseTimeEntity {
     private SocialType socialType;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "member")
-    private List<Article> articles = new ArrayList<>();
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Article> articleList = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "member")
-    private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Comment> commentList = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "member")
-    private List<Recommend> recommends = new ArrayList<>();
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Recommend> recommendList = new ArrayList<>();
 
     @Builder
     public Member(String email, String name, String password, String nickname, String phone, Address address, Brand brand, MemberRole memberRole, SocialType socialType) {
@@ -91,7 +91,7 @@ public class Member extends BaseTimeEntity {
         this.memberRole = memberRole;
 
     }
-    public void OAuth2ModifyMember(String name,String nickname, String phone, Address address, Brand brand, MemberRole memberRole) {
+    public void OAuth2ModifyMember(String nickname, String phone, Address address, Brand brand, MemberRole memberRole) {
         this.nickname = nickname;
         this.phone = phone;
         this.address = address;

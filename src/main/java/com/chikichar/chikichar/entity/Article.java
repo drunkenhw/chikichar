@@ -43,22 +43,25 @@ public class Article extends BaseTimeEntity {
     private String  content;
 
     private int viewCount;
-
+    //TODO 추천수, 이미지를 칼럼에 넣는 것 고려해봐야함
     @Embedded
     private Address address;
 
     @Column(name = "location_x")
-    private double locationX;
+    private Double locationX;
 
     @Column(name = "location_y")
-    private double locationY;
+    private Double locationY;
 
-    @OneToMany(mappedBy = "article")
-    private List<ArticleImage> images = new ArrayList<>();
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<ArticleImage> imageList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<Comment> commentList = new ArrayList<>();
 
 
     @Builder
-    public Article(Board board, Member member, String title, String content, int viewCount, Address address, double locationX, double locationY) {
+    public Article(Board board, Member member, String title, String content, int viewCount, Address address, Double locationX, Double locationY) {
         this.board = board;
         this.member = member;
         this.title = title;
@@ -67,6 +70,7 @@ public class Article extends BaseTimeEntity {
         this.address = address;
         this.locationX = locationX;
         this.locationY = locationY;
+
     }
 
 

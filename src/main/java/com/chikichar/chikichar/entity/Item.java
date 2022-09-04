@@ -31,7 +31,6 @@ public class Item {
 
     private String madeAt;
 
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;

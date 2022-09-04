@@ -5,8 +5,6 @@ import com.chikichar.chikichar.model.Address;
 import com.chikichar.chikichar.model.BoardType;
 import com.chikichar.chikichar.model.Brand;
 import com.chikichar.chikichar.model.MemberRole;
-import com.chikichar.chikichar.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -33,7 +31,7 @@ public class EntityBuilder {
     }
 
     public static Comment createComment(Article article, Member member){
-        return new Comment(article, member, "내용");
+        return Comment.of(article, member, "내용");
 
     }
 
