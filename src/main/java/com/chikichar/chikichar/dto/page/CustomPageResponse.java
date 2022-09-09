@@ -10,28 +10,30 @@ import java.util.stream.IntStream;
 
 @Data
 public class CustomPageResponse<T> {
-    private List<T> dtoList;
+    private List<T> pageList;
     private int totalPage;
     private int page;
     private int size;
-    private int start, end;
-    private boolean prev, next;
-    private List<Integer> pageList;
+    private int start;
+    private int end;
+    private boolean prev;
+    private boolean next;
+    private List<Integer> pageNumberList;
 
-    public CustomPageResponse(Page<T> result){
-        dtoList = result.getContent();
+    public CustomPageResponse(Page<T> result) {
+        pageList = result.getContent();
         totalPage = result.getTotalPages();
-        getPageList(result.getPageable());
+        getPageNumberList(result.getPageable());
     }
 
-    private void getPageList(Pageable pageable) {
+    private void getPageNumberList(Pageable pageable) {
         page = pageable.getPageNumber() + 1;
         size = pageable.getPageSize();
-        int tempEnd = (int)(Math.ceil(page/10.0))*10;
-        start = tempEnd -9;
+        int tempEnd = (int) (Math.ceil(page / 10.0)) * 10;
+        start = tempEnd - 9;
         end = Math.min(totalPage, tempEnd);
-        prev = start > 1;
+        prev = pageable.hasPrevious();
         next = totalPage > tempEnd;
-        pageList = IntStream.rangeClosed(start,end).boxed().collect(Collectors.toList());
+        pageNumberList = IntStream.rangeClosed(start, end).boxed().collect(Collectors.toList());
     }
 }

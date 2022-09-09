@@ -62,7 +62,7 @@ class ArticleServiceImplTest {
         PageRequest pageRequest = customPageRequest.of();
 
         //when
-        Page<NormalBoardArticleDto> dto = articleService.printArticleList(boardSearchType, pageRequest);
+        Page<NormalBoardArticleDto> dto = articleService.pagingArticleBySearchType(boardSearchType, pageRequest);
 
         //then
         assertThat(dto.getContent().size()).isEqualTo(2);

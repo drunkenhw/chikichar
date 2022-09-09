@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ArticleService {
 
-   Page<NormalBoardArticleDto> printArticleList(BoardSearchType boardSearchType, Pageable pageable);
+   Page<NormalBoardArticleDto> pagingArticleBySearchType(BoardSearchType boardSearchType, Pageable pageable);
 
    Long writeArticle(Member member, ArticleRequestDto articleRequestDto);
 }
