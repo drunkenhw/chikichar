@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block th:replace="~{fragments/frame::setContent(~{this::content})}">
     <th:block th:fragment="content">
-        <h1> [[${boardName}]]  게시판
+        <h1> [[${boardName}]] 게시판
             <span>
           <a th:href="@{/movie/register}" sec:authorize="isAuthenticated()" class="btn btn-outline-primary">REGISTER</a>
         </span>
@@ -40,7 +40,7 @@
 
             </tr>
             </thead>
-            <tr th:each="article : ${articles.dtoList}">
+            <tr th:each="article : ${articles.getPageList}">
                 <td th:text="${article.nickname}"></td>
                 <td th:text="${article.title}"></td>
                 <td th:text="${article.viewCount}"></td>
@@ -57,7 +57,7 @@
                    tabindex="-1">이전</a>
             </li>
             <li th:class="'page-item ' + ${articles.page == page? 'active':''}"
-                th:each="page: ${articles.pageList}">
+                th:each="page: ${articles.getPageNumberList}">
                 <a th:href="@{${boardName}(page=${page})}"
                    class="page-link">[[${page}]]</a>
             </li>

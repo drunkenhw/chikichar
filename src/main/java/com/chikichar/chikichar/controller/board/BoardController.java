@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Slf4j
 @Controller
@@ -32,11 +31,10 @@ public class BoardController {
     }
 
     @GetMapping("/board/{boardName}")
-    public String getArticleList(@ModelAttribute("searchType") BoardSearchType boardSearchType,
-                                 CustomPageRequest pageRequest,
+    public String getArticleList(@ModelAttribute("searchType") BoardSearchType boardSearchType, CustomPageRequest pageRequest,
                                  Model model) {
 
-        Page<NormalBoardArticleDto> result = articleService.printArticleList(boardSearchType, pageRequest.of());
+        Page<NormalBoardArticleDto> result = articleService.pagingArticleBySearchType(boardSearchType, pageRequest.of());
         CustomPageResponse<NormalBoardArticleDto> pagingDto = new CustomPageResponse<>(result);
 
         model.addAttribute("articles", pagingDto);

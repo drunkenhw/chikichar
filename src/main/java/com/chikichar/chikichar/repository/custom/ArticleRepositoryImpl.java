@@ -83,6 +83,10 @@ public class ArticleRepositoryImpl implements ArticleRepositoryQuerydsl {
         return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
     }
 
+
+
+
+
     private BooleanExpression nicknameContains(String nickname) {
         return hasText(nickname) ? article.member.nickname.contains(nickname) : null;
     }
